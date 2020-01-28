@@ -1,0 +1,37 @@
+{
+    "name": "bluehost/bluehost-maestro",
+    "description": "Give trusted web professionals admin access to your WordPress account. Revoke anytime.",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "William Earnhardt",
+            "email": "wearnhardt@gmail.com"
+        }
+    ],
+    "repositories": [
+        {
+        "type": "composer",
+        "url": "https://satis.wpteamhub.com"
+        }
+    ],
+    "scripts": {
+        "lint": [
+        "vendor/bin/phpcs ."
+        ]
+    },
+    "autoload": {
+        "psr-4": {
+        "Bluehost\\": "inc/"
+        }
+    },
+    "require": {
+        "firebase/php-jwt": "^5.0"
+    },
+    "require-dev": {
+        "bluehost/wp-php-standards": "^1.1"
+    },
+    "config": {
+        "optimize-autoloader": true
+    }
+}
