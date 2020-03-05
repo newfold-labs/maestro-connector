@@ -131,7 +131,7 @@ class Admin {
 					if ( true !== $compatible ) {
 						include $this->partials . 'requirements.php';
 					} elseif ( isset( $_GET['action'] ) && 'revoke' === $_GET['action'] ) {
-						include $this->partials . 'confirm-revoke.php';
+						$this->handle_revoke();
 					} else {
 						include $this->partials . 'add.php';
 					}
@@ -141,6 +141,10 @@ class Admin {
 			</div>
 		</div>
 		<?php
+	}
+
+	public function handle_revoke() {
+		include $this->partials . 'confirm-revoke.php';
 	}
 
 	/**
