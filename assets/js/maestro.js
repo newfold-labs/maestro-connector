@@ -62,7 +62,7 @@ maestro.confirm_maestro = function () {
 			name: maestro.name,
 		},
 	} ).done( function ( response ) {
-		console.log( response );
+		maestro.confirmed( response );
 	} );
 }
 
@@ -71,7 +71,7 @@ maestro.deny_maestro = function () {
 	maestro.set_buttons();
 }
 
-maestro.handle_confirm_response = function ( response ) {
+maestro.confirmed = function ( response ) {
 	var message = '';
 	if ( 'success' === response.status ) {
 		message = maestro.strings.accessGranted;
@@ -86,7 +86,7 @@ maestro.set_message = function( message ) {
 	jQuery( '.message p' ).html( message );
 }
 
-maestro.set_buttons = function ( type ) {
+maestro.set_buttons = function ( type = '' ) {
 	var buttons = '';
 	if ( 'confirm' === type ) {
 		buttons = "<button onclick='maestro.deny_maestro()' class='maestro-button secondary'>" + maestro.strings.giveAccess + "</button>\

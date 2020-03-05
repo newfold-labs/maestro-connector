@@ -57,7 +57,7 @@ class Admin {
 	 */
 	public function add_scripts( $hook ) {
 
-		wp_register_script( 'bluehost-add-maestro', BH_MAESTRO_URL . 'assets/js/add-maestro.js', array( 'jquery' ), BH_MAESTRO_VERSION );
+		wp_register_script( 'bluehost-add-maestro', BH_MAESTRO_URL . 'assets/js/maestro.js', array( 'jquery' ), BH_MAESTRO_VERSION );
 		$data = array(
 			'urls'    => array(
 				'site'        => get_option( 'siteurl' ),
