@@ -37,7 +37,6 @@ class Admin {
 
 		// Ajax hooks for adding maestros
 		add_action( 'wp_ajax_bh-maestro-key-check', array( $this, 'check_key' ) );
-		add_action( 'wp_ajax_bh-maestro-confirm', array( $this, 'add_maestro' ) );
 
 		// Hooks for the user list table
 		add_filter( 'manage_users_columns', array( $this, 'add_user_column' ) );
@@ -278,88 +277,6 @@ class Admin {
 
 		echo wp_json_encode( $info );
 		wp_die();
-	}
-
-	/**
-	 * Ajax callback for adding a maestro based off of key and email
-	 *
-	 * @since 1.0
-	 */
-	public function add_maestro() {
-		$nonce = filter_input( INPUT_POST, 'nonce', FILTER_SANITIZE_STRING );
-		$key   = filter_input( INPUT_POST, 'key', FILTER_SANITIZE_STRING );
-		$email = filter_input( INPUT_POST, 'email', FILTER_SANITIZE_EMAIL );
-		$name  = filter_input( INPUT_POST, 'name', FILTER_SANITIZE_STRING );
-
-		// Make sure we have a valid nonce and a key
-		if ( 1 !== wp_verify_nonce( $nonce, 'bluehost-add-maestro' ) || ! $key ) {
-			return;
-		}
-
-		// Check for an existing user
-		$user = get_user_by( 'email', $email );
-
-		// If user doesn't exist, we need to create one
-		if ( ! $user ) {
-			$userdata = array(
-				'user_pass'    => wp_generate_password( 20, true ),
-				// Create a username using the username for the email address
-				'user_login'   => sanitize_user( substr( $email, 0, strrpos( $email, '@' ) ) ),
-				'user_email'   => $email,
-				'display_name' => $name, // @fix display name isn't coming in correctly
-				'role'         => 'administrator',
-			);
-			$id       = wp_insert_user( $userdata );
-			$user     = get_userdata( $id );
-		}
-
-		// Make sure they are an administrator
-		$user->set_role( 'administrator' );
-
-		// Store the supplied Maestro key
-		add_maestro_key( $user->ID, $key );
-		// Save information about who approved the connection and when
-		add_user_meta( $user->ID, 'bh_maestro_added_by', wp_get_current_user()->user_login, true );
-		add_user_meta( $user->ID, 'bh_maestro_added_date', time(), true );
-
-		// Generate our access token
-		$jwt          = new Token();
-		$access_token = $jwt->generate_token( $key, $user->ID );
-
-		// Send the token to the Maestro Platform
-		$body = array(
-			'otp'        => $key,
-			'wp-secret'  => $access_token,
-			'websiteUrl' => get_option( 'siteurl' ),
-		);
-
-		$args = array(
-			'body'        => wp_json_encode( $body ),
-			'headers'     => array( 'Content-Type' => 'application/json' ),
-			'timeout'     => 10,
-			'data_format' => 'body',
-		);
-
-		$response = wp_remote_post( 'https://webpro.test/wp-json/bluehost/token', $args );
-
-		// Save the token returned from Maestro
-		// This token only allows the site to notify the platform when a Maestro user's access has been revoked
-		$maestro_token = 'maestro_token';
-		// @todo Remove placeholder token and use platform response
-		// $maestro_token = json_decode( $response['body'] )->token;
-		if ( $maestro_token ) {
-			$encryption      = new Encryption();
-			$encrypted_token = $encryption->encrypt( $maestro_token );
-			add_user_meta( $user->ID, 'bh_maestro_token', $encrypted_token, true );
-		}
-
-		$response = array(
-			'status' => 'success',
-		);
-
-		echo wp_json_encode( $response );
-		wp_die();
-
 	}
 
 	/**
