@@ -100,6 +100,10 @@ function get_maestro_info( $key ) {
 
 	// @todo Reach out to platform to get web pro information
 	// $response = wp_remote_post( 'http:webpro.test/wp-json/bluehost/maestro/', $args );
+	// @optimize Store this response in a short-lived transient // Maybe 1 minute?
+	// We're going to fire this twice in quick succession.
+	// 		- Once to get the data prior to confirmation
+	// 		- The second time to verify the email passed to the REST API matches what the platform responded with
 
 	// return $response['body'];
 	// @todo Remove temp test data
