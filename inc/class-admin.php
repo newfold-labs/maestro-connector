@@ -3,6 +3,7 @@
 namespace Bluehost\Maestro;
 
 use WP_Error;
+use WP_User_Query;
 
 /**
  * Class for handling admin pages and functionality for the plugin
@@ -246,6 +247,22 @@ class Admin {
 		// Make sure we have a valid nonce and a key
 		if ( 1 !== wp_verify_nonce( $nonce, 'maestro_check_key' ) || ! $key ) {
 			return;
+		}
+
+		$query = new WP_User_Query(
+			array(
+				'meta_key'   => 'bh_maestro_key',
+				'meta_value' => $key,
+			),
+		);
+
+		if ( $query->get_total() !== 0 ) {
+			$response = array(
+				'status'  => 'failed',
+				'message' => __( 'You have already added this web pro to your site.', 'bluehost-maestro' ),
+			);
+			echo wp_json_encode( $response );
+			wp_die();
 		}
 
 		// Reach out to the Maestro platform to determine Maestro to grant access to
