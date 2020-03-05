@@ -56,7 +56,7 @@ class Admin {
 	 */
 	public function add_scripts( $hook ) {
 
-		wp_register_script( 'bluehost-add-maestro', BH_MAESTRO_URL . 'assets/js/add-maestro.js', array( 'jquery' ) );
+		wp_register_script( 'bluehost-add-maestro', BH_MAESTRO_URL . 'assets/js/add-maestro.js', array( 'jquery' ), BH_MAESTRO_VERSION );
 		$data = array(
 			'siteURL'   => get_option( 'siteurl' ),
 			'assetsDir' => BH_MAESTRO_URL . '/assets',
@@ -68,7 +68,7 @@ class Admin {
 		// Only add specific assets to the add-maestro page
 		if ( 'users_page_bluehost-maestro' === $hook ) {
 			wp_enqueue_style( 'google-open-sans', 'https://fonts.googleapis.com/css?family=Open+Sans:300,400,600&display=swap', array() );
-			wp_enqueue_style( 'bluehost-maestro', BH_MAESTRO_URL . 'assets/css/bh-maestro.css', array( 'google-open-sans' ) );
+			wp_enqueue_style( 'bluehost-maestro', BH_MAESTRO_URL . 'assets/css/bh-maestro.css', array( 'google-open-sans' ), BH_MAESTRO_VERSION );
 			wp_enqueue_script( 'bluehost-add-maestro' );
 		}
 
