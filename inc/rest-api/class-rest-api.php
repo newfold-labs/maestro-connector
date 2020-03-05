@@ -65,9 +65,10 @@ class REST_API {
 			// Return the WP_Error for why the token wansn't validated
 			return $token;
 		}
+		$decoded_token = $token->decode_token( $jwt );
 
 		// Token is valid, so let's set the current user
-		wp_set_current_user( $token->data->user->id );
+		wp_set_current_user( $decoded_token->data->user->id );
 
 		return true;
 	}
