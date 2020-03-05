@@ -58,10 +58,18 @@ class Admin {
 
 		wp_register_script( 'bluehost-add-maestro', BH_MAESTRO_URL . 'assets/js/add-maestro.js', array( 'jquery' ), BH_MAESTRO_VERSION );
 		$data = array(
-			'siteURL'   => get_option( 'siteurl' ),
-			'assetsDir' => BH_MAESTRO_URL . '/assets',
-			'ajaxURL'   => admin_url( 'admin-ajax.php' ),
-			'nonce'     => wp_create_nonce( 'bluehost-add-maestro' ),
+			'urls'  => array(
+				'site'      => get_option( 'siteurl' ),
+				'assets'    => BH_MAESTRO_URL . '/assets',
+				'ajax'      => admin_url( 'admin-ajax.php' ),
+				'restAPI'   => rest_url( '/bluehost/maestro/v1' ),
+				'usersList' => admin_url( 'users.php' ),
+			),
+			'nonces'  => array(
+				'ajax' => wp_create_nonce( 'maestro_check_key' ),
+				'rest' => wp_create_nonce( 'wp_rest' ),
+			),
+			'strings' => $this->get_translated_strings(),
 		);
 		wp_localize_script( 'bluehost-add-maestro', 'maestro', $data );
 
@@ -236,7 +244,7 @@ class Admin {
 		$key   = filter_input( INPUT_POST, 'key', FILTER_SANITIZE_STRING );
 
 		// Make sure we have a valid nonce and a key
-		if ( 1 !== wp_verify_nonce( $nonce, 'bluehost-add-maestro' ) || ! $key ) {
+		if ( 1 !== wp_verify_nonce( $nonce, 'maestro_check_key' ) || ! $key ) {
 			return;
 		}
 
