@@ -2,19 +2,25 @@ jQuery( document ).ready( function( $ ) {
 
 	$( '.maestro-key-form .submit' ).click( function( e ) {
 		e.preventDefault();
-		$(this).html( '<img src="' + maestro.urls.assets + '/images/loading.svg" />' );
+
 		var key = $( '.maestro-key-form .key' ).val();
 
 		$.ajax( {
-			type: 'POST',
-			dataType: 'json',
 			url: maestro.urls.ajax,
+			method: 'POST',
 			data: {
 				action: 'bh-maestro-key-check',
 				key: key,
 				nonce: maestro.nonces.ajax
 			},
-			success: maestro.handle_key_response
+			beforeSend: function() {
+				$( '.maestro-key-form .submit' ).html( '<img src="' + maestro.urls.assets + '/images/loading.svg" />' );
+			},
+			complete: function() {
+				$( '.maestro-key-form .submit' ).html( maestro.strings.next );
+			}
+		} ).done( function ( response ) {
+			maestro.handle_key_response( response );
 		} );
 
 	} );
@@ -22,26 +28,24 @@ jQuery( document ).ready( function( $ ) {
 } );
 
 maestro.handle_key_response = function ( response ) {
-	maestro.key = response.key;
-	maestro.name = response.name;
-	maestro.email = response.email;
-	maestro.location = response.location;
-	var htmlString = '';
-	if ( 'success' === response.status) {
-		var htmlString = "<p style='font-size:150%;'>Let's double-check this: Make sure the name<br />below matches the name of your web pro.</p>\
-			<div class='maestro-info' style='margin-bottom: 20px;'>\
-				<strong>Name:</strong> " + response.name + " <br />\
-				<strong>Email:</strong> " + response.email + "<br />\
-				<strong>Location:</strong> " + response.location + "<br />\
-			</div>\
-			<div class='confirm-maestro'>\
-				<button onclick='maestro.deny_maestro()' class='maestro-button secondary'>Don't give access</button>\
-				<button onclick='maestro.confirm_maestro()' class='maestro-button primary'>Give access</button>\
-			</div>";
-	} else {
-
+	response = JSON.parse( response );
+	if ( 'failed' === response.status ) {
+		maestro.set_message( response.message );
+		maestro.set_buttons();
 	}
-	jQuery( '.maestro-content' ).html( htmlString );
+	if ( 'success' === response.status) {
+		maestro.key = response.key;
+		maestro.name = response.name;
+		maestro.email = response.email;
+		maestro.location = response.location;
+
+		maestro.set_message( maestro.strings.confirmMessage );
+		var htmlString = "<div class='name'><span>" + maestro.strings.name + ":</span> <span>" + response.name + "</span></div>\
+				<div class='email'><span>" + maestro.strings.email + ":</span> <span>" + response.email + "</span></div>\
+				<div class='location'><span>" + maestro.strings.location + ":</span> <span>" + response.location + "</span></div>";
+		jQuery( '.details' ).html( htmlString );
+		maestro.set_buttons( 'confirm' );
+	}
 }
 
 maestro.confirm_maestro = function () {
@@ -63,26 +67,33 @@ maestro.confirm_maestro = function () {
 }
 
 maestro.deny_maestro = function () {
-	message = '<p class="thin">Got it. That web professional does not have access to your site.</p>';
-	jQuery( '.maestro-content' ).html( message );
-	maestro.add_buttons();
+	maestro.set_message( maestro.strings.accessDeclined );
+	maestro.set_buttons();
 }
 
 maestro.handle_confirm_response = function ( response ) {
 	var message = '';
 	if ( 'success' === response.status ) {
-		message = "You've successfully given your web professional administrative access to your site.";
+		message = maestro.strings.accessGranted;
 	} else {
-		message = 'An error occured.';
+		message = maestro.strings.genericError;
 	}
-	jQuery( '.maestro-content' ).html( '<p class="thin">' + message + '</p>' );
-	maestro.add_buttons();
+	maestro.set_message( message );
+	maestro.set_buttons();
 }
 
-maestro.add_buttons = function () {
-	var buttons = '<div class="buttons">\
-		<a href="' + maestro.urls.usersList + '/wp-admin/users.php" class="maestro-button secondary">View all Users</a>\
-		<a href="' + window.location.href + '" class="maestro-button primary">Add a Web Pro</a>\
-	</div>';
-	jQuery( '.maestro-content p' ).after( buttons );
+maestro.set_message = function( message ) {
+	jQuery( '.message p' ).html( message );
+}
+
+maestro.set_buttons = function ( type ) {
+	var buttons = '';
+	if ( 'confirm' === type ) {
+		buttons = "<button onclick='maestro.deny_maestro()' class='maestro-button secondary'>" + maestro.strings.giveAccess + "</button>\
+				<button onclick='maestro.confirm_maestro()' class='maestro-button primary'>" + maestro.strings.dontGiveAccess + "</button>";
+	} else {
+		buttons = '<a href="' + maestro.urls.usersList + '" class="maestro-button secondary">' + maestro.strings.viewAllUsers + '</a>\
+			<a href="' + maestro.urls.maestroPage + '" class="maestro-button primary">' + maestro.strings.addWebPro + '</a>';
+	}
+	jQuery( '.maestro-content .actions' ).html( buttons );
 }
