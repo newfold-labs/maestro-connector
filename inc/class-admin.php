@@ -268,6 +268,7 @@ class Admin {
 		// Reach out to the Maestro platform to determine Maestro to grant access to
 		$info = get_maestro_info( $key );
 
+		// @todo Add error handling for response from platform
 		$info['status'] = 'success';
 
 		echo wp_json_encode( $info );
@@ -339,6 +340,7 @@ class Admin {
 		// Save the token returned from Maestro
 		// This token only allows the site to notify the platform when a Maestro user's access has been revoked
 		$maestro_token = 'maestro_token';
+		// @todo Remove placeholder token and use platform response
 		// $maestro_token = json_decode( $response['body'] )->token;
 		if ( $maestro_token ) {
 			$encryption      = new Encryption();
