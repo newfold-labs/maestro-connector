@@ -246,28 +246,6 @@ class Admin {
 		$info['status'] = 'success';
 
 		echo wp_json_encode( $info );
-
-		// if ( is_wp_error( $info ) ) {
-		// 	$response = array( 'status' => 'fail' );
-		// } else {
-		// 	$response           = $info;
-		// 	$response['status'] = 'success';
-
-		// 	$confirmation  = sprintf( '<p class="thin">%s</p>', __( "Let's double-check this: Make sure the name below matches the name of your web pro.", 'bluehost-maestro' ) );
-		// 	$deny_button   = sprintf( "<button data-approved='0' onclick='maestro.deny_maestro()' class='maestro-button secondary'>%s</button>", __( "Don't give access", 'bluehost-maestro' ) );
-		// 	$accept_button = sprintf( "<button data-approved='1' onclick='maestro.confirm_maestro()' class='maestro-button primary'>%s</button>", __( 'Give access', 'bluehost-maestro' ) );
-
-		// 	$response['content']  = $confirmation;
-		// 	$response['content'] += '
-		// 		<div class="maestro-info bold">
-		// 			<div class="name"><span>' . __( 'Name', 'bluehost-maestro' ) . ':</span> <span>' . esc_html( $info['name'] ) . '</span></div>
-		// 			<div class="email"><span>' . __( 'Email', 'bluehost-maestro' ) . ':</span> <span>' . esc_html( $info['email'] ) . '</span></div>
-		// 			<div class="location"><span>' . __( 'Location', 'bluehost-maestro' ) . ':</span> <span>' . esc_html( $info['location'] ) . '</span></div>
-		// 		</div>
-		// 		<div class="confirm-maestro">' . $deny_button . $accept_button . '</div>';
-		// }
-
-		// echo wp_json_encode( $response );
 		wp_die();
 	}
 
