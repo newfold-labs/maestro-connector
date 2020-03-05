@@ -428,6 +428,19 @@ class Admin {
 	 * @return array List of translated strings
 	 */
 	public function get_translated_strings() {
-		return array();
+		return array(
+			'name'           => __( 'Name', 'bluehost-maestro' ),
+			'email'          => __( 'Email', 'bluehost-maestro' ),
+			'location'       => __( 'Location', 'bluehost-maestro' ),
+			'next'           => __( 'Next', 'bluehost-maestro' ),
+			'viewAllUsers'   => __( 'View all Users', 'bluehost-maestro' ),
+			'addWebPro'      => __( 'Add a Web Pro', 'bluehost-maestro' ),
+			'giveAccess'     => __( 'Give access', 'bluehost-maestro' ),
+			'dontGiveAccess' => __( "Don't give access", 'bluehost-maestro' ),
+			'confirmMessage' => __( "Let's double-check this: Make sure the name below matches the name of your web pro.", 'bluehost-maestro' ),
+			'accessGranted'  => __( "You've successfully given your web professional administrative access to your site.", 'bluehost-maestro' ),
+			'accessDeclined' => __( 'Got it. That web professional does not have access to your site.', 'bluehost-maestro' ),
+			'genericError'   => __( 'An error occured.', 'bluehost-maestro' ),
+		);
 	}
 }
