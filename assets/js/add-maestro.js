@@ -2,14 +2,18 @@ jQuery( document ).ready( function( $ ) {
 
 	$( '.maestro-key-form .submit' ).click( function( e ) {
 		e.preventDefault();
-		$(this).html( '<img src="' + maestro.assetsDir + '/images/loading.svg" />' );
+		$(this).html( '<img src="' + maestro.urls.assets + '/images/loading.svg" />' );
 		var key = $( '.maestro-key-form .key' ).val();
 
 		$.ajax( {
 			type: 'POST',
 			dataType: 'json',
-			url: maestro.ajaxURL,
-			data: { action: 'bh-maestro-key-check', key: key, nonce: maestro.nonce },
+			url: maestro.urls.ajax,
+			data: {
+				action: 'bh-maestro-key-check',
+				key: key,
+				nonce: maestro.nonces.ajax
+			},
 			success: maestro.handle_key_response
 		} );
 
@@ -41,12 +45,20 @@ maestro.handle_key_response = function ( response ) {
 }
 
 maestro.confirm_maestro = function () {
+
 	jQuery.ajax( {
-		type: 'POST',
-		dataType: 'json',
-		url: maestro.ajaxURL,
-		data: { action: 'bh-maestro-confirm', approve: true, key: maestro.key, nonce: maestro.nonce, email: maestro.email },
-		success: maestro.handle_confirm_response
+		url: maestro.urls.restAPI + '/webpros',
+		method: 'POST',
+		beforeSend: function ( xhr ) {
+			xhr.setRequestHeader( 'X-WP-Nonce', maestro.nonces.rest );
+		},
+		data: {
+			maestro_key: maestro.key,
+			email: maestro.email,
+			name: maestro.name,
+		},
+	} ).done( function ( response ) {
+		console.log( response );
 	} );
 }
 
@@ -69,7 +81,7 @@ maestro.handle_confirm_response = function ( response ) {
 
 maestro.add_buttons = function () {
 	var buttons = '<div class="buttons">\
-		<a href="' + maestro.siteURL + '/wp-admin/users.php" class="maestro-button secondary">View all Users</a>\
+		<a href="' + maestro.urls.usersList + '/wp-admin/users.php" class="maestro-button secondary">View all Users</a>\
 		<a href="' + window.location.href + '" class="maestro-button primary">Add a Web Pro</a>\
 	</div>';
 	jQuery( '.maestro-content p' ).after( buttons );
