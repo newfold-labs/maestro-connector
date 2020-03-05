@@ -53,8 +53,13 @@ class REST_API {
 			return $status;
 		}
 
-		// Validate the provided JWT
-		$jwt   = $this->get_authorization_header();
+		$jwt = $this->get_authorization_header();
+
+		// If no auth header included, bail to allow a different auth method
+		if ( is_null( $jwt ) ) {
+			return null;
+		}
+
 		$token = new Token();
 		if ( ! $token->validate_token( $jwt ) ) {
 			// Return the WP_Error for why the token wansn't validated
