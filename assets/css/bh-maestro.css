@@ -65,19 +65,19 @@
 .boat-bg {
 	display: none;
 }
-.maestro-info {
+.details {
 	margin-bottom: 40px;
 	line-height: 30px;
 }
-.maestro-info span {
+.details span {
 	display: inline-block;
 }
-.maestro-info div span:first-of-type {
+.details div span:first-of-type {
 	width: 75px;
 	margin-right: 25px;
 	color: #999;
 }
-.maestro-info div span:last-of-type {
+.details div span:last-of-type {
 	color: #5B5B5B;
 }
 .thin {
