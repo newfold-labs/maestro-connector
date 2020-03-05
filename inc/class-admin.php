@@ -387,4 +387,15 @@ class Admin {
 			require $this->partials . 'user-profile-section.php';
 		}
 	}
+
+	/**
+	 * Returns an array of translated strings to be used in JavaScript
+	 *
+	 * @since 1.0
+	 *
+	 * @return array List of translated strings
+	 */
+	public function get_translated_strings() {
+		return array();
+	}
 }
