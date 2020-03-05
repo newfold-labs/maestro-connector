@@ -59,12 +59,13 @@ class Admin {
 
 		wp_register_script( 'bluehost-add-maestro', BH_MAESTRO_URL . 'assets/js/add-maestro.js', array( 'jquery' ), BH_MAESTRO_VERSION );
 		$data = array(
-			'urls'  => array(
-				'site'      => get_option( 'siteurl' ),
-				'assets'    => BH_MAESTRO_URL . '/assets',
-				'ajax'      => admin_url( 'admin-ajax.php' ),
-				'restAPI'   => rest_url( '/bluehost/maestro/v1' ),
-				'usersList' => admin_url( 'users.php' ),
+			'urls'    => array(
+				'site'        => get_option( 'siteurl' ),
+				'assets'      => BH_MAESTRO_URL . '/assets',
+				'ajax'        => admin_url( 'admin-ajax.php' ),
+				'restAPI'     => rest_url( '/bluehost/maestro/v1' ),
+				'usersList'   => admin_url( 'users.php' ),
+				'maestroPage' => add_query_arg( 'page', 'bluehost-maestro', admin_url( 'users.php' ) ),
 			),
 			'nonces'  => array(
 				'ajax' => wp_create_nonce( 'maestro_check_key' ),
