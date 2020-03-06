@@ -62,7 +62,9 @@ maestro.confirmMaestro = function () {
 			name: maestro.name,
 		},
 	} ).done( function ( response ) {
-		maestro.confirmed( response );
+		maestro.setMessage( maestro.strings.accessGranted );
+		maestro.setDetails( '' );
+		maestro.setButtons();
 	} );
 }
 
@@ -72,18 +74,12 @@ maestro.denyMaestro = function () {
 	maestro.setButtons();
 }
 
-maestro.confirmed = function ( response ) {
-	maestro.setMessage( maestro.strings.accessGranted );
-	maestro.setDetails( '' );
-	maestro.setButtons();
+maestro.setMessage = function( message ) {
+	jQuery( '.message p' ).html( message );
 }
 
 maestro.setDetails = function ( message ) {
 	jQuery( '.details').html( message );
-}
-
-maestro.setMessage = function( message ) {
-	jQuery( '.message p' ).html( message );
 }
 
 maestro.setButtons = function ( type = '' ) {
