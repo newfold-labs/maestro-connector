@@ -95,5 +95,5 @@ maestro.setButtons = function ( type = '' ) {
 		buttons = '<a href="' + maestro.urls.usersList + '" class="maestro-button secondary">' + maestro.strings.viewAllUsers + '</a>\
 			<a href="' + maestro.urls.maestroPage + '" class="maestro-button primary">' + maestro.strings.addWebPro + '</a>';
 	}
-	jQuery( '.maestro-content .actions' ).html( buttons );
+	jQuery( '.actions' ).html( buttons );
 }
