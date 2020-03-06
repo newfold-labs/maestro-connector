@@ -73,7 +73,6 @@ maestro.denyMaestro = function () {
 }
 
 maestro.confirmed = function ( response ) {
-	console.log(response);
 	maestro.setMessage( maestro.strings.accessGranted );
 	maestro.setDetails( '' );
 	maestro.setButtons();
