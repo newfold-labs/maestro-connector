@@ -20,18 +20,18 @@ jQuery( document ).ready( function( $ ) {
 				$( '.maestro-key-form .submit' ).html( maestro.strings.next );
 			}
 		} ).done( function ( response ) {
-			maestro.handle_key_response( response );
+			maestro.verifyWebPro( response );
 		} );
 
 	} );
 
 } );
 
-maestro.handle_key_response = function ( response ) {
+maestro.verifyWebPro = function ( response ) {
 	response = JSON.parse( response );
 	if ( 'failed' === response.status ) {
-		maestro.set_message( response.message );
-		maestro.set_buttons();
+		maestro.setMessage( response.message );
+		maestro.setButtons();
 	}
 	if ( 'success' === response.status) {
 		maestro.key = response.key;
@@ -39,16 +39,16 @@ maestro.handle_key_response = function ( response ) {
 		maestro.email = response.email;
 		maestro.location = response.location;
 
-		maestro.set_message( maestro.strings.confirmMessage );
+		maestro.setMessage( maestro.strings.confirmMessage );
 		var htmlString = "<div class='name'><span>" + maestro.strings.name + ":</span> <span>" + response.name + "</span></div>\
 				<div class='email'><span>" + maestro.strings.email + ":</span> <span>" + response.email + "</span></div>\
 				<div class='location'><span>" + maestro.strings.location + ":</span> <span>" + response.location + "</span></div>";
-		jQuery( '.details' ).html( htmlString );
-		maestro.set_buttons( 'confirm' );
+		maestro.setDetails( htmlString );
+		maestro.setButtons( 'confirm' );
 	}
 }
 
-maestro.confirm_maestro = function () {
+maestro.confirmMaestro = function () {
 
 	jQuery.ajax( {
 		url: maestro.urls.restAPI + '/webpros',
@@ -66,31 +66,32 @@ maestro.confirm_maestro = function () {
 	} );
 }
 
-maestro.deny_maestro = function () {
-	maestro.set_message( maestro.strings.accessDeclined );
-	maestro.set_buttons();
+maestro.denyMaestro = function () {
+	maestro.setMessage( maestro.strings.accessDeclined );
+	maestro.setDetails( '' );
+	maestro.setButtons();
 }
 
 maestro.confirmed = function ( response ) {
-	var message = '';
-	if ( 'success' === response.status ) {
-		message = maestro.strings.accessGranted;
-	} else {
-		message = maestro.strings.genericError;
-	}
-	maestro.set_message( message );
-	maestro.set_buttons();
+	console.log(response);
+	maestro.setMessage( maestro.strings.accessGranted );
+	maestro.setDetails( '' );
+	maestro.setButtons();
 }
 
-maestro.set_message = function( message ) {
+maestro.setDetails = function ( message ) {
+	jQuery( '.details').html( message );
+}
+
+maestro.setMessage = function( message ) {
 	jQuery( '.message p' ).html( message );
 }
 
-maestro.set_buttons = function ( type = '' ) {
+maestro.setButtons = function ( type = '' ) {
 	var buttons = '';
 	if ( 'confirm' === type ) {
-		buttons = "<button onclick='maestro.deny_maestro()' class='maestro-button secondary'>" + maestro.strings.giveAccess + "</button>\
-				<button onclick='maestro.confirm_maestro()' class='maestro-button primary'>" + maestro.strings.dontGiveAccess + "</button>";
+		buttons = "<button onclick='maestro.denyMaestro()' class='maestro-button secondary'>" + maestro.strings.dontGiveAccess + "</button>\
+				<button onclick='maestro.confirmMaestro()' class='maestro-button primary'>" + maestro.strings.giveAccess + "</button>";
 	} else {
 		buttons = '<a href="' + maestro.urls.usersList + '" class="maestro-button secondary">' + maestro.strings.viewAllUsers + '</a>\
 			<a href="' + maestro.urls.maestroPage + '" class="maestro-button primary">' + maestro.strings.addWebPro + '</a>';
