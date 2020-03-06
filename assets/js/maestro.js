@@ -75,11 +75,11 @@ maestro.denyMaestro = function () {
 }
 
 maestro.setMessage = function( message ) {
-	jQuery( '.message p' ).html( message );
+	jQuery( '.maestro-content .message p' ).html( message );
 }
 
 maestro.setDetails = function ( message ) {
-	jQuery( '.details').html( message );
+	jQuery( '.maestro-content .details' ).html( message );
 }
 
 maestro.setButtons = function ( type = '' ) {
@@ -91,5 +91,5 @@ maestro.setButtons = function ( type = '' ) {
 		buttons = '<a href="' + maestro.urls.usersList + '" class="maestro-button secondary">' + maestro.strings.viewAllUsers + '</a>\
 			<a href="' + maestro.urls.maestroPage + '" class="maestro-button primary">' + maestro.strings.addWebPro + '</a>';
 	}
-	jQuery( '.actions' ).html( buttons );
+	jQuery( '.maestro-content .actions' ).html( buttons );
 }
