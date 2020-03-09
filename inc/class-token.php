@@ -127,7 +127,7 @@ class Token {
 
 		$data = array(
 			'maestro_key'  => $this->webpro->key,
-			'reference_id' => $this->webpro->ref_id,
+			'reference_id' => $this->webpro->reference_id,
 			'user'         => array(
 				'id'         => $this->webpro->user->ID,
 				'user_login' => $this->webpro->user->user_login,
