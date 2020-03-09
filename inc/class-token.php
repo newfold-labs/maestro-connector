@@ -2,6 +2,7 @@
 
 namespace Bluehost\Maestro;
 
+use Exception;
 use Firebase\JWT\JWT;
 use WP_Error;
 
@@ -18,6 +19,15 @@ class Token {
 	 * @var string
 	 */
 	protected $secret_key;
+
+	/**
+	 * The webpro for whom the token is associated with
+	 *
+	 * @since 1.0
+	 *
+	 * @var Web_Pro
+	 */
+	protected $webpro;
 
 	/**
 	 * String to use as the meta_key for storing a JWT ID in usermeta
@@ -51,46 +61,36 @@ class Token {
 	 *
 	 * @since 1.0
 	 *
-	 * @param string $maestro_key The key generated from the Bluehost Maestro dashboard to connect a site
-	 * @param int    $user_id     The ID of the user the token is issued for
-	 * @param int    $expires     Unix timestamp representing time the token expires (optional)
-	 * @param bool   $jti         Generate a unique identifier which makes this a single-use token (optional)
-	 * @param array  $data        Array of additional data to encode into the token (optional)
+	 * @param Web_Pro $webpro      The web pro object for whom the token is issued
+	 * @param int     $user_id     The ID of the user the token is issued for
+	 * @param int     $expires     Unix timestamp representing time the token expires (optional)
+	 * @param bool    $jti         Generate a unique identifier which makes this a single-use token (optional)
+	 * @param array   $data        Array of additional data to encode into the token (optional)
 	 *
 	 * @return string|WP_Error
 	 */
-	public function generate_token( $maestro_key, $user_id, $expires = YEAR_IN_SECONDS, $jti = false, $data = array() ) {
+	public function generate_token( $webpro, $expires = YEAR_IN_SECONDS, $jti = false, $data = array() ) {
 
-		$user = get_userdata( $user_id );
-
-		if ( ! $user ) {
-			return new WP_Error(
-				'user_not_found',
-				__( 'User not found.' )
-			);
-		}
+		$this->webpro = $webpro;
 
 		// Generate JWT token.
-		$payload = $this->generate_payload( $maestro_key, $user, $expires, $jti, $data );
+		$payload = $this->generate_payload( $expires, $jti, $data );
 		$token   = JWT::encode( $payload, $this->secret_key );
-
-		// Save the maestro key as usermeta
-		// Note this will overwrite any existing Maestro key, rendering any previously issued tokens invalid if the key is different
-		update_maestro_key( $user_id, $maestro_key );
 
 		// If this is a single-use token, we'll store a user meta value that gets deleted on validation
 		if ( $jti ) {
-			// @optimize Explore using a stronger random string generation for the JTI claim
-			// This is ok for now because we have several layers of security on top of this,
-			// but we could possibly use a better random string generation function here
+			// @optimize We could ensure the JTI is unique to better comply with RFC7519,
+			// but there should almost never be more than one active single-use token
+			// at a time, so it probably meets the "negligible probability" standard.
 			$jwt_id = wp_generate_password( 32, false );
 
-			// Try to add it, while forcing it to be unique
-			$response = add_user_meta( $user->ID, $this->jti_meta_key, $jwt_id, true );
+			// Try to add it, while forcing it to be unique to the user
+			$response = add_user_meta( $webpro->user->ID, $this->jti_meta_key, $jwt_id, true );
 
-			// If it exists, lets update the existing one to overwrite it. We should never have 2 active at one time
+			// If it exists, lets update the existing one to overwrite it.
+			// We should never have 2 active for a single user at one time.
 			if ( ! $response ) {
-				$response = update_user_meta( $user->ID, $this->jti_meta_key, $jwt_id );
+				$response = update_user_meta( $webpro->user->ID, $this->jti_meta_key, $jwt_id );
 			}
 		}
 
@@ -102,15 +102,13 @@ class Token {
 	/**
 	 * Compile information for the the JWT token.
 	 *
-	 * @param string          $key        The key generated from the Bluehost Maestro dashboard to connect a site
-	 * @param WP_User|Object  $user       The WP_User object for the user the token is assigned to.
 	 * @param int             $expires    The number of seconds until the token expires.
 	 * @param string          $jti        Optional unique identifier string. Forces token to be single-use.
 	 * @param array           $extra_data Optional array of additional data to encode into the data portion of the token
 	 *
 	 * @return array|WP_Error
 	 */
-	public function generate_payload( $key, $user, $expires, $jti = '', $extra_data = array() ) {
+	public function generate_payload( $expires, $jti = '', $extra_data = array() ) {
 
 		$time = time();
 
@@ -128,11 +126,12 @@ class Token {
 		}
 
 		$data = array(
-			'maestro_key' => $key,
-			'user'        => array(
-				'id'         => $user->ID,
-				'user_login' => $user->user_login,
-				'user_email' => $user->user_email,
+			'maestro_key'  => $this->webpro->key,
+			'reference_id' => $this->webpro->ref_id,
+			'user'         => array(
+				'id'         => $this->webpro->user->ID,
+				'user_login' => $this->webpro->user->user_login,
+				'user_email' => $this->webpro->user->user_email,
 			),
 		);
 
@@ -154,7 +153,7 @@ class Token {
 	public function decode_token( $token ) {
 		try {
 			return JWT::decode( $token, $this->secret_key, array( 'HS256' ) );
-		} catch ( \Exception $e ) {
+		} catch ( Exception $e ) {
 			// Return caught exception as a WP_Error.
 			return new WP_Error(
 				'token_error',
@@ -179,22 +178,65 @@ class Token {
 			return $jwt;
 		}
 
-		// Determine if the Maestro Key is valid
-		$maestro_key = $this->validate_key( $jwt );
-		if ( is_wp_error( $maestro_key ) ) {
-			return $maestro_key;
+		if ( ! isset( $token->data->user->id ) ) {
+			return new WP_Error(
+				'missing_token_user_id',
+				__( 'Token user must have an ID.' )
+			);
 		}
 
-		// Determine if the token issuer is valid.
-		$issuer_valid = $this->validate_issuer( $jwt );
-		if ( is_wp_error( $issuer_valid ) ) {
-			return $issuer_valid;
+		try {
+			$this->webpro = new Web_Pro(
+				array(
+					'user_id' => $jwt->data->user->id,
+				)
+			);
+		} catch ( Exception $e ) {
+			// @todo maybe return exception from web pro creation
+			return new WP_Error(
+				'invalid_token_webpro',
+				__( 'Web Pro is invalid.' ),
+			);
 		}
 
-		// Determine if the token user is valid.
-		$user_valid = $this->validate_user( $jwt );
-		if ( is_wp_error( $user_valid ) ) {
-			return $user_valid;
+		// Determine if the user_login is valid.
+		if ( $jwt->data->user->user_login !== $this->webpro->user->user_login ) {
+			return new WP_Error(
+				'invalid_token_user_login',
+				__( 'Token user_login is invalid.' )
+			);
+		}
+
+		// Determine if the email is valid.
+		if ( $jwt->data->user->user_email !== $this->webro->user->user_email ) {
+			return new WP_Error(
+				'invalid_token_user_email',
+				__( 'Token user_email is invalid.' )
+			);
+		}
+
+		// Determine if the Maestro Key is valid.
+		if ( $this->webpro->key !== $jwt->data->maestro_key ) {
+			return new WP_Error(
+				'invalid_token_maestro_key',
+				__( 'Maestro key is invalid.' ),
+			);
+		}
+
+		// Determine if the reference ID is valid.
+		if ( $this->webpro->reference_id !== $jwt->data->reference_id ) {
+			return new WP_Error(
+				'invalid_token_reference_id',
+				__( 'Reference ID is invalid.' )
+			);
+		}
+
+		// Determine if the token issuer matches this site.
+		if ( get_bloginfo( 'url' ) !== $jwt->iss ) {
+			return new WP_Error(
+				'invalid_token_issuer',
+				__( 'Token issuer is invalid.' )
+			);
 		}
 
 		// Determine if the token has expired.
@@ -214,85 +256,6 @@ class Token {
 
 		// If we make it here, then it's valid. Return the decoded token
 		return $jwt;
-	}
-
-	/**
-	 * Verify a suppliled Bluehost Maestro key matches one previously stored on the site
-	 */
-	public function validate_key( $token ) {
-
-		// Match the key to the supplied user ID
-		$key = get_user_meta( $token->data->user->id, 'bh_maestro_key', true );
-		if ( $key !== $token->data->maestro_key ) {
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
-	 * Determine if the token issuer is valid.
-	 *
-	 * @since 1.0
-	 *
-	 * @param string $issuer The decoded token
-	 *
-	 * @return bool|WP_Error
-	 */
-	public function validate_issuer( $token ) {
-
-		if ( get_bloginfo( 'url' ) !== $token->iss ) {
-			return new WP_Error(
-				'invalid_token_issuer',
-				__( 'Token issuer is invalid.' )
-			);
-		}
-
-		return true;
-	}
-
-	/**
-	 * Determine if the user data included in the token is valid.
-	 *
-	 * @since 1.0
-	 *
-	 * @param object $token The decoded token.
-	 *
-	 * @return bool|WP_Error
-	 */
-	public function validate_user( $token ) {
-
-		if ( ! isset( $token->data->user->id ) ) {
-			return new WP_Error(
-				'missing_token_user_id',
-				__( 'Token user must have an ID.' )
-			);
-		}
-
-		$userdata = get_userdata( $token->data->user->id );
-
-		if ( false === $userdata ) {
-			return new WP_Error(
-				'invalid_token_wp_user',
-				__( 'Token user is invalid.' )
-			);
-		}
-
-		if ( $token->data->user->user_login !== $userdata->user_login ) {
-			return new WP_Error(
-				'invalid_token_user_login',
-				__( 'Token user_login is invalid.' )
-			);
-		}
-
-		if ( $token->data->user->user_email !== $userdata->user_email ) {
-			return new WP_Error(
-				'invalid_token_user_email',
-				__( 'Token user_email is invalid.' )
-			);
-		}
-
-		return true;
 	}
 
 	/**
