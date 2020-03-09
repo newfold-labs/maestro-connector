@@ -21,6 +21,14 @@ class Admin {
 	private $partials = MAESTRO_PATH . 'inc/partials/';
 
 	/**
+	 * The admin page hook suffix
+	 *
+	 * @since 1.0
+	 * @var string;
+	 */
+	protected $page_hook = '';
+
+	/**
 	 * Constructor
 	 *
 	 * Registers all our required hooks for the wp-admin
@@ -29,11 +37,11 @@ class Admin {
 	 */
 	public function __construct() {
 
-		// Set up required JS/CSS
-		add_action( 'admin_enqueue_scripts', array( $this, 'add_scripts' ) );
-
 		// Register the primary admin page
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+
+		// Set up required JS/CSS
+		add_action( 'admin_enqueue_scripts', array( $this, 'add_scripts' ) );
 
 		// Ajax hooks for adding maestros
 		add_action( 'wp_ajax_bh-maestro-key-check', array( $this, 'check_key' ) );
@@ -45,6 +53,23 @@ class Admin {
 		// Hooks for the user profile section
 		add_action( 'edit_user_profile', array( $this, 'user_profile_section' ) );
 		add_action( 'show_user_profile', array( $this, 'user_profile_section' ) );
+	}
+
+	/**
+	 * Register the admin page
+	 *
+	 * @since 1.0
+	 */
+	public function admin_menu() {
+		$this->page_hook = add_submenu_page(
+			'users.php',
+			__( 'Bluehost Maestro' ),
+			__( 'Bluehost Maestro' ),
+			'manage_options',
+			'bluehost-maestro',
+			array( $this, 'admin_page' ),
+			4,
+		);
 	}
 
 	/**
@@ -75,7 +100,7 @@ class Admin {
 		wp_localize_script( 'maestro', 'maestro', $data );
 
 		// Only add specific assets to the add-maestro page
-		if ( 'users_page_bluehost-maestro' === $hook ) {
+		if ( $this->page_hook === $hook ) {
 			wp_enqueue_style( 'google-open-sans', 'https://fonts.googleapis.com/css?family=Open+Sans:300,400,600&display=swap', array() );
 			wp_enqueue_style( 'maestro', MAESTRO_URL . 'assets/css/bh-maestro.css', array( 'google-open-sans' ), MAESTRO_VERSION );
 			wp_enqueue_script( 'maestro' );
