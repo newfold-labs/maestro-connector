@@ -53,7 +53,7 @@ class REST_API {
 			return $status;
 		}
 
-		$jwt = $this->get_authorization_header();
+		list( $jwt ) = sscanf( $this->get_authorization_header(), 'Bearer %s' );
 
 		// If no auth header included, bail to allow a different auth method
 		if ( is_null( $jwt ) ) {
