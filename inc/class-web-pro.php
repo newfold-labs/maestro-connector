@@ -155,10 +155,15 @@ class Web_Pro {
 	 * @since 1.0
 	 *
 	 * @return array|false Array of data if valid, false if key is invalid
-	 *
-	 * @todo Cache the platform response
 	 */
 	private function verify_key( $key ) {
+
+		$trans_key = 'bh_maestro_' . md5( $key );
+
+		// md5 to make sure the key isn't too long for the option_name column
+		$response = get_transient( $trans_key );
+
+		if ( ! $response ) {
 		$url = add_query_arg(
 			array(
 				'sessionToken' => $key,
@@ -168,6 +173,8 @@ class Web_Pro {
 		);
 
 		$response = wp_remote_get( $url );
+			set_transient( $trans_key, $response, 300 ); // Cache for 5 minutes
+		}
 
 		// If it is valid, the platform will return a 200 status code
 		if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
