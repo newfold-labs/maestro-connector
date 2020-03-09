@@ -40,23 +40,31 @@ add_action( 'rest_api_init', __NAMESPACE__ . '\\rest_init' );
 /**
  * Plugin activation callback. Registers option to redirect on next admin load.
  *
+ * Saves user ID to ensure it only redirects for the user who activated the plugin
+ *
  * @since 1.0
  */
 function activate() {
-	add_option( 'bh_maestro_activation_redirect', true );
+	// Don't do redirects when multiple plugins are bulk activated
+	if (
+		( isset( $_REQUEST['action'] ) && 'activate-selected' === $_REQUEST['action'] ) &&
+		( isset( $_POST['checked'] ) && count( $_POST['checked'] ) > 1 ) ) {
+		return;
+	}
+	add_option( 'bh_maestro_activation_redirect', wp_get_current_user()->ID );
 }
 
 /**
- * Redirects the user on plugin activation
+ * Redirects the user after plugin activation
  *
  * @since 1.0
  */
 function activation_redirect() {
-	// Make sure we're supposed to redirect
-	if ( get_option( 'bh_maestro_activation_redirect', false ) ) {
-		// Make sure we don't do it again
+	// Make sure it's the correct user
+	if ( intval( get_option( 'bh_maestro_activation_redirect', false ) ) === wp_get_current_user()->ID ) {
+		// Make sure we don't redirect again after this one
 		delete_option( 'bh_maestro_activation_redirect' );
-		wp_safe_redirect( admin_url( '/users.php?page=bluehost-maestro' ) );
+		wp_safe_redirect( admin_url( 'users.php?page=bluehost-maestro' ) );
 		exit;
 	}
 }
