@@ -14,7 +14,7 @@ add_action( 'wp_ajax_bh-maestro-sso', __NAMESPACE__ . '\\authenticate_sso' );
  */
 function authenticate_sso() {
 
-	$jwt = filter_input( INPUT_GET, 'bh_maestro_token', FILTER_SANITIZE_STRING );
+	$jwt = filter_input( INPUT_GET, 'token', FILTER_SANITIZE_STRING );
 
 	// Can't continue without a token
 	if ( ! $jwt ) {
