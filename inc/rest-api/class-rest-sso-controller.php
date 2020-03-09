@@ -52,21 +52,11 @@ class REST_SSO_Controller extends \WP_REST_Controller {
 		// User is also already verified as a Maestro using the permission callback
 		$user = wp_get_current_user();
 
-		// We want to use the existing saved maestro key to encode into the token
-		$key = get_maestro_key( $user->ID );
-		if ( ! $key ) {
-			return new \WP_Error(
-				'rest_maestro_not_authorized',
-				__( 'Bluehost Maestro user not authorized' ),
-				array(
-					'status' => 403,
-				)
-			);
-		}
+		$webpro = new Web_Pro( $user->ID );
 
 		// Create a temporary single-use JWT; expires in 30 seconds
 		$token = new Token();
-		$jwt   = $token->generate_token( $key, $user->ID, 30, true, array( 'type' => 'sso' ) );
+		$jwt   = $token->generate_token( $webpro, 30, true, array( 'type' => 'sso' ) );
 
 		if ( is_wp_error( $jwt ) ) {
 			return $jwt;
@@ -87,8 +77,8 @@ class REST_SSO_Controller extends \WP_REST_Controller {
 	 * Verify permission to access this endopint
 	 *
 	 * By registering a permission callback, we already limit the endpoint to authenticated users,
-	 * but we should also verify the actual current user making the request is a maestro. Regular
-	 * admins shouldn't be able to use this endpoint. They should log in like normal.
+	 * but we should also verify the actual current user making the request is a connected Web Pro.
+	 * Regular admins shouldn't be able to use this endpoint. They should log in like normal.
 	 *
 	 * @since 1.0
 	 *
@@ -96,9 +86,10 @@ class REST_SSO_Controller extends \WP_REST_Controller {
 	 */
 	public function check_permission() {
 
-		$user = wp_get_current_user();
+		$user   = wp_get_current_user();
+		$webpro = new Web_Pro( $user->ID );
 
-		return is_user_maestro( $user->ID );
+		return $webpro->is_connected();
 
 	}
 
