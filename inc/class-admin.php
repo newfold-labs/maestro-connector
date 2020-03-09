@@ -284,6 +284,8 @@ class Admin {
 	 *
 	 * @since 1.0
 	 *
+	 * @param array $columns The currently visible columns
+	 *
 	 * @return array The columns
 	 */
 	public function add_user_column( $columns ) {
