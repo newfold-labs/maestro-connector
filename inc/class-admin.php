@@ -18,7 +18,7 @@ class Admin {
 	 * @since 1.0
 	 * @var string;
 	 */
-	private $partials = BH_MAESTRO_PATH . 'inc/partials/';
+	private $partials = MAESTRO_PATH . 'inc/partials/';
 
 	/**
 	 * Constructor
@@ -56,11 +56,11 @@ class Admin {
 	 */
 	public function add_scripts( $hook ) {
 
-		wp_register_script( 'bluehost-add-maestro', BH_MAESTRO_URL . 'assets/js/maestro.js', array( 'jquery' ), BH_MAESTRO_VERSION );
+		wp_register_script( 'maestro', MAESTRO_URL . 'assets/js/maestro.js', array( 'jquery' ), MAESTRO_VERSION );
 		$data = array(
 			'urls'    => array(
 				'site'        => get_option( 'siteurl' ),
-				'assets'      => BH_MAESTRO_URL . '/assets',
+				'assets'      => MAESTRO_URL . '/assets',
 				'ajax'        => admin_url( 'admin-ajax.php' ),
 				'restAPI'     => rest_url( '/bluehost/maestro/v1' ),
 				'usersList'   => admin_url( 'users.php' ),
@@ -72,13 +72,13 @@ class Admin {
 			),
 			'strings' => $this->get_translated_strings(),
 		);
-		wp_localize_script( 'bluehost-add-maestro', 'maestro', $data );
+		wp_localize_script( 'maestro', 'maestro', $data );
 
 		// Only add specific assets to the add-maestro page
 		if ( 'users_page_bluehost-maestro' === $hook ) {
 			wp_enqueue_style( 'google-open-sans', 'https://fonts.googleapis.com/css?family=Open+Sans:300,400,600&display=swap', array() );
-			wp_enqueue_style( 'bluehost-maestro', BH_MAESTRO_URL . 'assets/css/bh-maestro.css', array( 'google-open-sans' ), BH_MAESTRO_VERSION );
-			wp_enqueue_script( 'bluehost-add-maestro' );
+			wp_enqueue_style( 'maestro', MAESTRO_URL . 'assets/css/bh-maestro.css', array( 'google-open-sans' ), MAESTRO_VERSION );
+			wp_enqueue_script( 'maestro' );
 		}
 
 	}
@@ -96,7 +96,7 @@ class Admin {
 			$title,
 			$title,
 			'manage_options',
-			'bluehost-maestro',
+			MAESTRO_SLUG,
 			array( $this, 'admin_page' ),
 			4,
 		);
@@ -123,7 +123,7 @@ class Admin {
 		?>
 		<div class="wrap maestro-container">
 			<div class="maestro-page">
-				<img class="logo" src="<?php echo BH_MAESTRO_URL . 'assets/images/bh-maestro-logo.svg'; ?>" />
+				<img class="logo" src="<?php echo MAESTRO_URL . 'assets/images/bh-maestro-logo.svg'; ?>" />
 				<div class="maestro-content">
 					<?php
 					$compatible = $this->check_requirements();
@@ -315,7 +315,7 @@ class Admin {
 	 */
 	public function user_column_details( $value, $column_name, $user_id ) {
 		if ( 'maestro' === $column_name && is_user_maestro( $user_id ) ) {
-			$logo_url   = BH_MAESTRO_URL . '/assets/images/bh-maestro-logo.svg';
+			$logo_url   = MAESTRO_URL . '/assets/images/bh-maestro-logo.svg';
 			$revoke_url = admin_url();
 
 			$value  = '<img style="max-width: 80%;" src="' . esc_url( $logo_url ) . '" />';

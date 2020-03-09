@@ -17,10 +17,10 @@
 
 namespace Bluehost\Maestro;
 
-define( 'BH_MAESTRO_VERSION', '1.0' );
-define( 'BH_MAESTRO_FILE', __FILE__ );
-define( 'BH_MAESTRO_PATH', plugin_dir_path( __FILE__ ) );
-define( 'BH_MAESTRO_URL', plugin_dir_url( __FILE__ ) );
+define( 'MAESTRO_VERSION', '1.0' );
+define( 'MAESTRO_FILE', __FILE__ );
+define( 'MAESTRO_PATH', plugin_dir_path( __FILE__ ) );
+define( 'MAESTRO_URL', plugin_dir_url( __FILE__ ) );
 
 // Composer autoloader
 require __DIR__ . '/vendor/autoload.php';
