@@ -400,7 +400,7 @@ class Web_Pro {
 		//     - A reference ID returned from the platform
 		//     - A revoke token saved in usermeta returned from the platform
 		if ( $this->get_key() && $this->reference_id ) {
-			if ( get_user_meta( $this->user->ID, $this->revoke_token_key, true ) ) {
+			if ( $this->user && get_user_meta( $this->user->ID, $this->revoke_token_key, true ) ) {
 				return true;
 			}
 		}
