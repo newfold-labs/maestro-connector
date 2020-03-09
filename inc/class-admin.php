@@ -216,9 +216,11 @@ class Admin {
 			$response['message'] = __( "Let's double-check this: Make sure the name below matches the name of your web pro." );
 		}
 
-		$response['name']     = $webpro->first_name . ' ' . $webpro->last_name;
-		$response['email']    = $webpro->email;
-		$response['location'] = $webpro->location;
+		$response['name']         = $webpro->first_name . ' ' . $webpro->last_name;
+		$response['email']        = $webpro->email;
+		$response['reference_id'] = $webpro->reference_id;
+		$response['location']     = $webpro->location;
+		$response['key']          = $key;
 
 		echo wp_json_encode( $response );
 		wp_die();
