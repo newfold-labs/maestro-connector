@@ -29,27 +29,20 @@ jQuery( document ).ready( function( $ ) {
 
 maestro.verifyWebPro = function ( response ) {
 	response = JSON.parse( response );
-	if ( 'failed' === response.status ) {
+	maestro.setMessage( response.message );
+	if ( 'invalid_key' !== response.status ) {
+		maestro.webpro = response;
 		maestro.setMessage( response.message );
-		maestro.setButtons();
-	}
-	if ( 'success' === response.status) {
-		maestro.key = response.key;
-		maestro.name = response.name;
-		maestro.email = response.email;
-		maestro.location = response.location;
-
-		maestro.setMessage( maestro.strings.confirmMessage );
-		var htmlString = "<div class='name'><span>" + maestro.strings.name + ":</span> <span>" + response.name + "</span></div>\
+		var details = "<div class='name'><span>" + maestro.strings.name + ":</span> <span>" + response.first_name + ' ' + response.last_name + "</span></div>\
 				<div class='email'><span>" + maestro.strings.email + ":</span> <span>" + response.email + "</span></div>\
 				<div class='location'><span>" + maestro.strings.location + ":</span> <span>" + response.location + "</span></div>";
-		maestro.setDetails( htmlString );
-		maestro.setButtons( 'confirm' );
+		maestro.setDetails( details );
 	}
+	var buttons = ( 'success' === response.status ) ? 'confirm' : '';
+	maestro.setButtons( buttons );
 }
 
 maestro.confirmMaestro = function () {
-
 	jQuery.ajax( {
 		url: maestro.urls.restAPI + '/webpros',
 		method: 'POST',
@@ -57,9 +50,11 @@ maestro.confirmMaestro = function () {
 			xhr.setRequestHeader( 'X-WP-Nonce', maestro.nonces.rest );
 		},
 		data: {
-			maestro_key: maestro.key,
-			email: maestro.email,
-			name: maestro.name,
+			reference_id: maestro.webpro.reference_id,
+			maestro_key: maestro.webpro.key,
+			email: maestro.webpro.email,
+			first_name: maestro.webpro.first_name,
+			last_name: maestro.webpro.last_name,
 		},
 	} ).done( function ( response ) {
 		maestro.setMessage( maestro.strings.accessGranted );
@@ -78,18 +73,28 @@ maestro.setMessage = function( message ) {
 	jQuery( '.maestro-content .message p' ).html( message );
 }
 
-maestro.setDetails = function ( message ) {
-	jQuery( '.maestro-content .details' ).html( message );
+maestro.setDetails = function ( details ) {
+	jQuery( '.maestro-content .details' ).html( details );
+}
+
+maestro.getButton = function ( text, type = 'button', action = '', classes = '' ) {
+	var btn;
+	if ( 'link' === type ) {
+		btn = jQuery( '<a/>' ).attr( 'href', action );
+	} else {
+		btn = jQuery( '<button/>' ).attr( 'onclick', action );
+	}
+	return btn.addClass( 'maestro-button ' + classes ).text( text );
 }
 
 maestro.setButtons = function ( type = '' ) {
-	var buttons = '';
+	var primary, secondary;
 	if ( 'confirm' === type ) {
-		buttons = "<button onclick='maestro.denyMaestro()' class='maestro-button secondary'>" + maestro.strings.dontGiveAccess + "</button>\
-				<button onclick='maestro.confirmMaestro()' class='maestro-button primary'>" + maestro.strings.giveAccess + "</button>";
+		secondary = maestro.getButton( maestro.strings.dontGiveAccess, 'button', 'maestro.denyMaestro()', 'secondary' );
+		primary = maestro.getButton( maestro.strings.giveAccess, 'button', 'maestro.confirmMaestro()' + '', 'primary' );
 	} else {
-		buttons = '<a href="' + maestro.urls.usersList + '" class="maestro-button secondary">' + maestro.strings.viewAllUsers + '</a>\
-			<a href="' + maestro.urls.maestroPage + '" class="maestro-button primary">' + maestro.strings.addWebPro + '</a>';
+		secondary = maestro.getButton( maestro.strings.viewAllUsers, 'link', maestro.urls.usersList, 'secondary' );
+		primary = maestro.getButton( maestro.strings.addWebPro, 'link', maestro.urls.maestroPage, 'primary' );
 	}
-	jQuery( '.maestro-content .actions' ).html( buttons );
+	jQuery( '.maestro-content .actions' ).html('').prepend( [secondary, primary] );
 }
