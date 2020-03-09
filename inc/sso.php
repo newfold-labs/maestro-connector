@@ -45,12 +45,12 @@ function authenticate_sso() {
 		);
 	}
 
+	$user = get_userdata( $data->data->user->id );
 	// Log in the user specified in the decoded token.
-	wp_set_current_user( $data->user->id );
-	wp_set_auth_cookie( $data->user->id, false, true );
+	wp_set_current_user( $user->id );
+	wp_set_auth_cookie( $user->id, false );
 
-	$user = get_userdata( $data->user->id );
-	do_action( 'wp_login', $data->user->user_login, $user );
+	do_action( 'wp_login', $user->user_login, $user );
 
 	// Add to a short log of SSO logins
 	log_sso( $user );
