@@ -73,10 +73,6 @@ class Token {
 
 		$this->webpro = $webpro;
 
-		// Generate JWT token.
-		$payload = $this->generate_payload( $expires, $jti, $data );
-		$token   = JWT::encode( $payload, $this->secret_key );
-
 		// If this is a single-use token, we'll store a user meta value that gets deleted on validation
 		if ( $jti ) {
 			// @optimize We could ensure the JTI is unique to better comply with RFC7519,
@@ -93,6 +89,10 @@ class Token {
 				$response = update_user_meta( $webpro->user->ID, $this->jti_meta_key, $jwt_id );
 			}
 		}
+
+		// Generate JWT token.
+		$payload = $this->generate_payload( $expires, $jwt_id, $data );
+		$token   = JWT::encode( $payload, $this->secret_key );
 
 		// Returns the generated token
 		return $token;
