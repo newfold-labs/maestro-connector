@@ -109,37 +109,6 @@ class Admin {
 	}
 
 	/**
-	 * Register the top-level admin menu page
-	 *
-	 * @since 1.0
-	 */
-	public function admin_menu() {
-
-		$title = __( 'Bluehost Maestro' );
-		add_submenu_page(
-			'users.php',
-			$title,
-			$title,
-			'manage_options',
-			'bluehost-maestro',
-			array( $this, 'admin_page' ),
-			4,
-		);
-	}
-
-	/**
-	 * Wrapped call to wp_verify_nonce to simplify nonce checking
-	 *
-	 * @since 1.0
-	 *
-	 * @param string $nonce  The nonce to check
-	 * @param string $action The action used when creating the nonce
-	 */
-	public function verify_nonce( $nonce, $action ) {
-		return ( 1 === wp_verify_nonce( $nonce, $action ) );
-	}
-
-	/**
 	 * Callback to render the admin page
 	 *
 	 * @since 1.0
@@ -167,66 +136,13 @@ class Admin {
 		<?php
 	}
 
-	public function handle_revoke() {
-		include $this->partials . 'confirm-revoke.php';
-	}
-
 	/**
-	 * Handles the logic and actions of the admin page
+	 * Handle a revoke action on the admin page
 	 *
 	 * @since 1.0
 	 */
-	public function parse_action() {
-		// Without a supplied action, we'll show the default Add Maestro form
-		if ( ! $_GET['action'] ) {
-			include $this->partials . 'add.php';
-			return;
-		}
-
-		// Sanitize the paramaters
-		$nonce   = filter_input( INPUT_GET, '_wpnonce', FILTER_SANITIZE_STRING );
-		$action  = filter_input( INPUT_GET, 'action', FILTER_SANITIZE_STRING );
-		$user_id = filter_input( INPUT_GET, 'user_id', FILTER_SANITIZE_NUMBER_INT );
-
-		// Check the nonce. We'll do it here becuase we use the same generic error message for all action types.
-		switch ( $action ) {
-			case 'confirm-add':
-			case 'add':
-				$valid_nonce = $this->verify_nonce( $nonce, 'bluehost-add-maestro' );
-				break;
-			case 'confirm-revoke':
-			case 'revoke':
-				$valid_nonce = $this->verify_nonce( $nonce, 'bluehost-revoke-maestro' );
-				break;
-		}
-
-		// For troubleshooting
-		$valid_nonce = true;
-
-		// Invalid or missing nonce. Show the error message and return.
-		if ( ! $valid_nonce ) {
-			?>
-			<p class="thin"><?php _e( 'Maestro was unable to comlete your request.' ); ?></p>
-			<?php
-			return;
-		}
-
-		// Valid nonce and an action, let's run the logic
-		switch ( $action ) {
-			case 'confirm-add':
-				include $this->partials . 'confirm-add.php';
-				break;
-			case 'add':
-				include $this->partials . 'added.php';
-				break;
-			case 'confirm-revoke':
+	public function handle_revoke() {
 				include $this->partials . 'confirm-revoke.php';
-				break;
-			case 'revoke':
-				include $this->partials . 'revoked.php';
-				break;
-		}
-
 	}
 
 	/**
