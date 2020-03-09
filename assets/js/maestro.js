@@ -33,7 +33,7 @@ maestro.verifyWebPro = function ( response ) {
 	if ( 'invalid_key' !== response.status ) {
 		maestro.webpro = response;
 		maestro.setMessage( response.message );
-		var details = "<div class='name'><span>" + maestro.strings.name + ":</span> <span>" + response.first_name + ' ' + response.last_name + "</span></div>\
+		var details = "<div class='name'><span>" + maestro.strings.name + ":</span> <span>" + response.name + "</span></div>\
 				<div class='email'><span>" + maestro.strings.email + ":</span> <span>" + response.email + "</span></div>\
 				<div class='location'><span>" + maestro.strings.location + ":</span> <span>" + response.location + "</span></div>";
 		maestro.setDetails( details );
@@ -53,8 +53,6 @@ maestro.confirmMaestro = function () {
 			reference_id: maestro.webpro.reference_id,
 			maestro_key: maestro.webpro.key,
 			email: maestro.webpro.email,
-			first_name: maestro.webpro.first_name,
-			last_name: maestro.webpro.last_name,
 		},
 	} ).done( function ( response ) {
 		maestro.setMessage( maestro.strings.accessGranted );
