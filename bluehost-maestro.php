@@ -60,7 +60,7 @@ function activate() {
  */
 function activation_redirect() {
 	// Make sure it's the correct user
-	if ( intval( get_option( 'bh_maestro_activation_redirect', false ) ) === wp_get_current_user()->ID ) {
+	if ( is_user_logged_in() && intval( get_option( 'bh_maestro_activation_redirect', false ) ) === wp_get_current_user()->ID ) {
 		// Make sure we don't redirect again after this one
 		delete_option( 'bh_maestro_activation_redirect' );
 		wp_safe_redirect( admin_url( 'users.php?page=bluehost-maestro' ) );
