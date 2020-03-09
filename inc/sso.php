@@ -40,7 +40,7 @@ function authenticate_sso() {
 		failed_sso_attempts( 1 );
 		do_action( 'bh_maestro_sso_fail' );
 		wp_die(
-			__( 'Invalid token.', 'bluehost-maestro' ),
+			__( 'Invalid token.' ),
 			403
 		);
 	}

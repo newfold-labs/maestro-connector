@@ -167,7 +167,7 @@ function revoke_maestro( $user_id ) {
 	if ( ! is_user_maestro( $user_id ) ) {
 		return new WP_Error(
 			'user_not_maestro',
-			__( 'User is not a web pro', 'bluehost-maestro' )
+			__( 'User is not a web pro' )
 		);
 	}
 
@@ -177,7 +177,7 @@ function revoke_maestro( $user_id ) {
 	if ( ! $deleted ) {
 		return new WP_Error(
 			'maestro_revoke_failed',
-			__( 'Failed to revoke Maestro connection', 'bluehost-maestro' )
+			__( 'Failed to revoke Maestro connection' )
 		);
 	}
 

@@ -66,7 +66,7 @@ class Token {
 		if ( ! $user ) {
 			return new WP_Error(
 				'user_not_found',
-				__( 'User not found.', 'bluehost-maestro' )
+				__( 'User not found.' )
 			);
 		}
 
@@ -158,7 +158,7 @@ class Token {
 			// Return caught exception as a WP_Error.
 			return new WP_Error(
 				'token_error',
-				__( 'Invalid token.', 'bluehost-maestro' )
+				__( 'Invalid token.' )
 			);
 		}
 	}
@@ -244,7 +244,7 @@ class Token {
 		if ( get_bloginfo( 'url' ) !== $token->iss ) {
 			return new WP_Error(
 				'invalid_token_issuer',
-				__( 'Token issuer is invalid.', 'bluehost-maestro' )
+				__( 'Token issuer is invalid.' )
 			);
 		}
 
@@ -265,7 +265,7 @@ class Token {
 		if ( ! isset( $token->data->user->id ) ) {
 			return new WP_Error(
 				'missing_token_user_id',
-				__( 'Token user must have an ID.', 'bluehost-maestro' )
+				__( 'Token user must have an ID.' )
 			);
 		}
 
@@ -274,21 +274,21 @@ class Token {
 		if ( false === $userdata ) {
 			return new WP_Error(
 				'invalid_token_wp_user',
-				__( 'Token user is invalid.', 'bluehost-maestro' )
+				__( 'Token user is invalid.' )
 			);
 		}
 
 		if ( $token->data->user->user_login !== $userdata->user_login ) {
 			return new WP_Error(
 				'invalid_token_user_login',
-				__( 'Token user_login is invalid.', 'bluehost-maestro' )
+				__( 'Token user_login is invalid.' )
 			);
 		}
 
 		if ( $token->data->user->user_email !== $userdata->user_email ) {
 			return new WP_Error(
 				'invalid_token_user_email',
-				__( 'Token user_email is invalid.', 'bluehost-maestro' )
+				__( 'Token user_email is invalid.' )
 			);
 		}
 
@@ -309,14 +309,14 @@ class Token {
 		if ( ! isset( $token->exp ) ) {
 			return new WP_Error(
 				'missing_token_expiration',
-				__( 'Token must have an expiration.', 'bluehost-maestro' )
+				__( 'Token must have an expiration.' )
 			);
 		}
 
 		if ( time() > $token->exp ) {
 			return new WP_Error(
 				'token_expired',
-				__( 'Token has expired.', 'bluehost-maestro' )
+				__( 'Token has expired.' )
 			);
 		}
 
@@ -340,7 +340,7 @@ class Token {
 		if ( ! isset( $token->jti ) ) {
 			return new WP_Error(
 				'missing_token_jti',
-				__( 'Token must have a unique identifier.', 'bluehost-maestro' )
+				__( 'Token must have a unique identifier.' )
 			);
 		}
 
@@ -348,7 +348,7 @@ class Token {
 		if ( get_user_meta( $token->data->user->id, $this->jti_meta_key, true ) !== $token->jti ) {
 			return new WP_Error(
 				'jti_not_valid',
-				__( 'Token identifier is not valid.', 'bluehost-maestro' )
+				__( 'Token identifier is not valid.' )
 			);
 		}
 

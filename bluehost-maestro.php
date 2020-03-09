@@ -7,7 +7,7 @@
  * Requires PHP: 5.4
  * Author: Bluehost
  * Author URI: https://www.bluehost.com/
- * Text Domain: bluehost-maestro
+ * Text Domain: maestro
  * Domain Path: /languages
  * License: GPLv2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html

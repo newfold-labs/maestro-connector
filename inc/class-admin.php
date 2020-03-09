@@ -90,13 +90,13 @@ class Admin {
 	 */
 	public function admin_menu() {
 
-		$title = __( 'Bluehost Maestro', 'bluehost-maestro' );
+		$title = __( 'Bluehost Maestro' );
 		add_submenu_page(
 			'users.php',
 			$title,
 			$title,
 			'manage_options',
-			MAESTRO_SLUG,
+			'bluehost-maestro',
 			array( $this, 'admin_page' ),
 			4,
 		);
@@ -181,7 +181,7 @@ class Admin {
 		// Invalid or missing nonce. Show the error message and return.
 		if ( ! $valid_nonce ) {
 			?>
-			<p class="thin"><?php _e( 'Maestro was unable to comlete your request.', 'bluehost-maestro' ); ?></p>
+			<p class="thin"><?php _e( 'Maestro was unable to comlete your request.' ); ?></p>
 			<?php
 			return;
 		}
@@ -215,23 +215,23 @@ class Admin {
 
 		// Requires HTTPS
 		if ( ! is_ssl() ) {
-			return new WP_Error( 'https-not-detected', __( 'Maestro requires HTTPS.', 'bluehost-maestro' ) );
+			return new WP_Error( 'https-not-detected', __( 'Maestro requires HTTPS.' ) );
 		}
 
 		// Requires WordPress 4.7 or higher
 		global $wp_version;
 		if ( version_compare( $wp_version, '4.7', '<' ) ) {
-			return new WP_Error( 'wp-version-incompatibile', __( 'Maestro requires WordPress version 4.7 or higher.', 'bluehost-maestro' ) );
+			return new WP_Error( 'wp-version-incompatibile', __( 'Maestro requires WordPress version 4.7 or higher.' ) );
 		}
 
 		// Requires PHP version 5.3 or higher
 		if ( version_compare( phpversion(), '5.3', '<' ) ) {
-			return new WP_Error( 'php-version-incompatible', __( 'Maestro requires PHP version 5.3 or higher.', 'bluehost-maestro' ) );
+			return new WP_Error( 'php-version-incompatible', __( 'Maestro requires PHP version 5.3 or higher.' ) );
 		}
 
 		// Make sure the site has secure keys configured
 		if ( ! defined( 'SECURE_AUTH_KEY' ) || '' === SECURE_AUTH_KEY ) {
-			return new WP_Error( 'secure-auth-key-not-set', __( 'You must have a SECURE_AUTH_KEY configured in wp-config.php', 'bluehost-maestro' ) );
+			return new WP_Error( 'secure-auth-key-not-set', __( 'You must have a SECURE_AUTH_KEY configured in wp-config.php' ) );
 		}
 
 		return true;
@@ -263,7 +263,7 @@ class Admin {
 		if ( $query->get_total() !== 0 ) {
 			$response = array(
 				'status'  => 'failed',
-				'message' => __( 'You have already added this web pro to your site.', 'bluehost-maestro' ),
+				'message' => __( 'You have already added this web pro to your site.' ),
 			);
 			echo wp_json_encode( $response );
 			wp_die();
@@ -346,18 +346,18 @@ class Admin {
 	 */
 	public function get_translated_strings() {
 		return array(
-			'name'           => __( 'Name', 'bluehost-maestro' ),
-			'email'          => __( 'Email', 'bluehost-maestro' ),
-			'location'       => __( 'Location', 'bluehost-maestro' ),
-			'next'           => __( 'Next', 'bluehost-maestro' ),
-			'viewAllUsers'   => __( 'View all Users', 'bluehost-maestro' ),
-			'addWebPro'      => __( 'Add a Web Pro', 'bluehost-maestro' ),
-			'giveAccess'     => __( 'Give access', 'bluehost-maestro' ),
-			'dontGiveAccess' => __( "Don't give access", 'bluehost-maestro' ),
-			'confirmMessage' => __( "Let's double-check this: Make sure the name below matches the name of your web pro.", 'bluehost-maestro' ),
-			'accessGranted'  => __( "You've successfully given your web professional administrative access to your site.", 'bluehost-maestro' ),
-			'accessDeclined' => __( 'Got it. That web professional does not have access to your site.', 'bluehost-maestro' ),
-			'genericError'   => __( 'An error occured.', 'bluehost-maestro' ),
+			'name'           => __( 'Name' ),
+			'email'          => __( 'Email' ),
+			'location'       => __( 'Location' ),
+			'next'           => __( 'Next' ),
+			'viewAllUsers'   => __( 'View all Users' ),
+			'addWebPro'      => __( 'Add a Web Pro' ),
+			'giveAccess'     => __( 'Give access' ),
+			'dontGiveAccess' => __( "Don't give access" ),
+			'confirmMessage' => __( "Let's double-check this: Make sure the name below matches the name of your web pro." ),
+			'accessGranted'  => __( "You've successfully given your web professional administrative access to your site." ),
+			'accessDeclined' => __( 'Got it. That web professional does not have access to your site.' ),
+			'genericError'   => __( 'An error occured.' ),
 		);
 	}
 }

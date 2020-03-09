@@ -57,7 +57,7 @@ class REST_SSO_Controller extends \WP_REST_Controller {
 		if ( ! $key ) {
 			return new \WP_Error(
 				'rest_maestro_not_authorized',
-				__( 'Bluehost Maestro user not authorized', 'bluehost-maestro' ),
+				__( 'Bluehost Maestro user not authorized' ),
 				array(
 					'status' => 403,
 				)

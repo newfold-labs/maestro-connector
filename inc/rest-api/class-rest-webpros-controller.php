@@ -120,7 +120,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 		if ( ! current_user_can( 'edit_users' ) ) {
 			return new WP_Error(
 				'rest_maestro_forbidden',
-				__( 'Sorry, you are not allowed to access this endpoint.', 'bluehost-maestro' ),
+				__( 'Sorry, you are not allowed to access this endpoint.' ),
 				array( 'status' => rest_authorization_required_code() ),
 			);
 		}
@@ -141,7 +141,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 		if ( ! current_user_can( 'create_users' ) ) {
 			return new WP_Error(
 				'rest_maestro_cannot_approve_connection',
-				__( 'Sorry, you are not allowed to grant access to web pros.', 'bluehost-maestro' ),
+				__( 'Sorry, you are not allowed to grant access to web pros.' ),
 				array( 'status' => rest_authorization_required_code() ),
 			);
 		}
@@ -303,7 +303,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 		if ( ! $deleted ) {
 			return new WP_Error(
 				'maestro_revoke_failed',
-				__( 'Failed to revoke Maestro status', 'bluehost-maestro' ),
+				__( 'Failed to revoke Maestro status' ),
 				array( 'status' => 500 ),
 			);
 		}
@@ -330,7 +330,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 		if ( is_wp_error( $user ) ) {
 			return new WP_Error(
 				'maestro_rest_not_webpro',
-				__( 'You are not an authorized web pro.', 'bluehost-maestro' ),
+				__( 'You are not an authorized web pro.' ),
 				array( 'status' => 401 ),
 			);
 		}
@@ -358,7 +358,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 		if ( is_wp_error( $user ) ) {
 			return new WP_Error(
 				'maestro_rest_not_webpro',
-				__( 'You are not an authorized web pro.', 'bluehost-maestro' ),
+				__( 'You are not an authorized web pro.' ),
 				array( 'status' => 401 ),
 			);
 		}
@@ -386,7 +386,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 		if ( is_wp_error( $user ) ) {
 			return new WP_Error(
 				'maestro_rest_not_webpro',
-				__( 'You are not an authorized web pro.', 'bluehost-maestro' ),
+				__( 'You are not an authorized web pro.' ),
 				array( 'status' => 401 ),
 			);
 		}
@@ -636,20 +636,20 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 					'required'    => true,
 				),
 				'added_by'    => array(
-					'description' => __( 'The user who approved the Maestro connection.', 'bluehost-maestro' ),
+					'description' => __( 'The user who approved the Maestro connection.' ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 					'readonly'    => true, // This can only be set programmatically
 				),
 				'added_time'  => array(
-					'description' => __( 'Time when the Maestro connection was approved.', 'bluehost-maestro' ),
+					'description' => __( 'Time when the Maestro connection was approved.' ),
 					'type'        => 'string',
 					'format'      => 'date-time',
 					'context'     => array( 'view', 'edit' ),
 					'readonly'    => true, // This can only be set programmatically
 				),
 				'maestro_key' => array(
-					'description' => __( 'The maestro identifier key for the webpro.', 'bluehost-maestro' ),
+					'description' => __( 'The maestro identifier key for the webpro.' ),
 					'type'        => 'string',
 					'context'     => array(), // Maestro key doesn't get displayed
 					'required'    => true,
