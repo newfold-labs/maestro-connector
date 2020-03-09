@@ -178,7 +178,7 @@ class Token {
 			return $jwt;
 		}
 
-		if ( ! isset( $token->data->user->id ) ) {
+		if ( ! isset( $jwt->data->user->id ) ) {
 			return new WP_Error(
 				'missing_token_user_id',
 				__( 'Token user must have an ID.' )
@@ -204,7 +204,7 @@ class Token {
 		}
 
 		// Determine if the email is valid.
-		if ( $jwt->data->user->user_email !== $this->webro->user->user_email ) {
+		if ( $jwt->data->user->user_email !== $this->webpro->user->user_email ) {
 			return new WP_Error(
 				'invalid_token_user_email',
 				__( 'Token user_email is invalid.' )
