@@ -170,7 +170,7 @@ class Web_Pro {
 		$response = wp_remote_get( $url );
 
 		// If it is valid, the platform will return a 200 status code
-		if ( '200' !== wp_remote_retrieve_response_code( $response ) ) {
+		if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
 			return false;
 		}
 		return json_decode( $response['body'] );
