@@ -2,8 +2,8 @@
 
 namespace Bluehost\Maestro;
 
+use Exception;
 use WP_Error;
-use WP_User_Query;
 
 /**
  * Class for handling admin pages and functionality for the plugin
@@ -142,7 +142,7 @@ class Admin {
 	 * @since 1.0
 	 */
 	public function handle_revoke() {
-				include $this->partials . 'confirm-revoke.php';
+		include $this->partials . 'confirm-revoke.php';
 	}
 
 	/**
@@ -182,6 +182,9 @@ class Admin {
 	/**
 	 * Ajax callback for getting Maestro info from a key
 	 *
+	 * We do this via ajax to avoid sending the platform request in JS since we
+	 * also have to check the DB to ensure the Web Pro isn't already connected.
+	 *
 	 * @since 1.0
 	 */
 	public function check_key() {
@@ -194,29 +197,30 @@ class Admin {
 			return;
 		}
 
-		$query = new WP_User_Query(
-			array(
-				'meta_key'   => 'bh_maestro_key',
-				'meta_value' => $key,
-			),
-		);
+		$response = array();
 
-		if ( $query->get_total() !== 0 ) {
-			$response = array(
-				'status'  => 'failed',
-				'message' => __( 'You have already added this web pro to your site.' ),
-			);
+		try {
+			$webpro = new Web_Pro( array( 'key' => $key ) );
+		} catch ( Exception $e ) {
+			$response['status']  = 'invalid_key';
+			$response['message'] = __( 'This Maestro key is not valid.' );
 			echo wp_json_encode( $response );
 			wp_die();
 		}
 
-		// Reach out to the Maestro platform to determine Maestro to grant access to
-		$info = get_maestro_info( $key );
+		if ( $webpro->is_connected() ) {
+			$response['status']  = 'user_exists';
+			$response['message'] = __( 'You have already added this web pro to your site.' );
+		} else {
+			$response['status']  = 'success';
+			$response['message'] = __( "Let's double-check this: Make sure the name below matches the name of your web pro." );
+		}
 
-		// @todo Add error handling for response from platform
-		$info['status'] = 'success';
+		$response['name']     = $webpro->first_name . ' ' . $webpro->last_name;
+		$response['email']    = $webpro->email;
+		$response['location'] = $webpro->location;
 
-		echo wp_json_encode( $info );
+		echo wp_json_encode( $response );
 		wp_die();
 	}
 
@@ -257,14 +261,38 @@ class Admin {
 	 * @return string The new value to be used in the column
 	 */
 	public function user_column_details( $value, $column_name, $user_id ) {
-		if ( 'maestro' === $column_name && is_user_maestro( $user_id ) ) {
+
+		$webpro = new Web_Pro( array( 'user_id' => $user_id ) );
+
+		if ( 'maestro' === $column_name && $webpro->is_connected() ) {
 			$logo_url   = MAESTRO_URL . '/assets/images/bh-maestro-logo.svg';
-			$revoke_url = admin_url();
+			$revoke_url = $this->get_revoke_url( $user_id );
 
 			$value  = '<img style="max-width: 80%;" src="' . esc_url( $logo_url ) . '" />';
 			$value .= '<div class="row-actions"><a href="' . esc_url( $revoke_url ) . '">Revoke Access</a></div>';
 		}
+
 		return $value;
+	}
+
+	/**
+	 * Returns an admin page URL to revoke connection for a user
+	 *
+	 * @since 1.0
+	 *
+	 * @param int $user_id The ID of the user to revoke Maestro connection
+	 *
+	 * @return string The URL to the admin page with required query parameters
+	 */
+	public function get_revoke_url( $user_id ) {
+
+		$query_args = array(
+			'id'       => $user_id,
+			'action'   => 'revoke',
+			'_wpnonce' => wp_create_nonce( 'revoke-webpro' ),
+		);
+
+		return add_query_arg( $query_args, admin_url( 'users.php?page=bluehost-maestro' ) );
 	}
 
 	/**
@@ -275,7 +303,11 @@ class Admin {
 	 * @param WP_User $user The WP_User object for the user who's profile that is being viewed
 	 */
 	public function user_profile_section( $user ) {
-		if ( is_user_maestro( $user->ID ) ) {
+
+		$webpro = new Web_Pro( array( $user->ID ) );
+
+		if ( $webpro->is_connected() ) {
+			$revoke_url = $this->get_revoke_url( $user->ID );
 			require $this->partials . 'user-profile-section.php';
 		}
 	}
