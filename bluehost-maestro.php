@@ -26,7 +26,6 @@ define( 'MAESTRO_URL', plugin_dir_url( __FILE__ ) );
 require __DIR__ . '/vendor/autoload.php';
 
 // Other required files
-require __DIR__ . '/inc/functions.php';
 require __DIR__ . '/inc/sso.php';
 
 // Set up the activation redirect
