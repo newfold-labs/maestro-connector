@@ -164,7 +164,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 			return $webpro;
 		}
 
-		$webpro   = $this->prepare_item_for_response( $webpro->user, $request );
+		$webpro   = $this->prepare_item_for_response( $webpro, $request );
 		$response = rest_ensure_response( $webpro );
 
 		return $response;
@@ -188,7 +188,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 
 		$webpro->connect();
 
-		$response = $this->prepare_item_for_response( $webpro->user, $request );
+		$response = $this->prepare_item_for_response( $webpro, $request );
 		$response = rest_ensure_response( $response );
 
 		$response->set_status( 201 );
@@ -217,7 +217,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 
 		$webpro->set_key( $request['maestro_key'] );
 
-		$response = $this->prepare_item_for_response( $webpro->user, $request );
+		$response = $this->prepare_item_for_response( $webpro, $request );
 		$response = rest_ensure_response( $response );
 
 		return $response;
