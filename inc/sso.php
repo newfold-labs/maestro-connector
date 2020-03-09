@@ -68,7 +68,7 @@ function authenticate_sso() {
  * @param WP_User $user The user who is doing an SSO login
  */
 function log_sso( $user ) {
-	$log = maybe_unserialize( get_option( 'bh_maestro_sso_log', '' ) );
+	$log = maybe_unserialize( get_option( 'bh_maestro_sso_log', array() ) );
 
 	if ( count( $log ) > 9 ) {
 		array_pop( $log );
