@@ -426,7 +426,7 @@ class Web_Pro {
 
 		// Generate the access token
 		$jwt          = new Token();
-		$access_token = $jwt->generate_token( $this->key, $this->user->ID );
+		$access_token = $jwt->generate_token( $this );
 
 		// Send the token to the Maestro Platform
 		$body = array(
