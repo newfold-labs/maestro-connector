@@ -331,7 +331,7 @@ class Web_Pro {
 	 * @return string|false Either the Maestro key or false if one is not saved
 	 */
 	private function get_key() {
-		if ( ! $this->key ) {
+		if ( empty( $this->key ) ) {
 			$this->key = get_user_meta( $this->user->ID, $this->key_key, true );
 			// If for some reason the key is null or empty string, go ahead and delete it to clean up
 			if ( is_null( $this->key ) || '' === $this->key ) {
