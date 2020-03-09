@@ -200,7 +200,7 @@ class Admin {
 		$response = array();
 
 		try {
-			$webpro = new Web_Pro( array( 'key' => $key ) );
+			$webpro = new Web_Pro( $key );
 		} catch ( Exception $e ) {
 			$response['status']  = 'invalid_key';
 			$response['message'] = __( 'This Maestro key is not valid.' );
@@ -262,7 +262,7 @@ class Admin {
 	 */
 	public function user_column_details( $value, $column_name, $user_id ) {
 
-		$webpro = new Web_Pro( array( 'user_id' => $user_id ) );
+		$webpro = new Web_Pro( $user_id );
 
 		if ( 'maestro' === $column_name && $webpro->is_connected() ) {
 			$logo_url   = MAESTRO_URL . '/assets/images/bh-maestro-logo.svg';
@@ -304,7 +304,7 @@ class Admin {
 	 */
 	public function user_profile_section( $user ) {
 
-		$webpro = new Web_Pro( array( $user->ID ) );
+		$webpro = new Web_Pro( $user->ID );
 
 		if ( $webpro->is_connected() ) {
 			$revoke_url = $this->get_revoke_url( $user->ID );

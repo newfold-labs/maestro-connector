@@ -186,11 +186,7 @@ class Token {
 		}
 
 		try {
-			$this->webpro = new Web_Pro(
-				array(
-					'user_id' => $jwt->data->user->id,
-				)
-			);
+			$this->webpro = new Web_Pro( $jwt->data->user->id );
 		} catch ( Exception $e ) {
 			// @todo maybe return exception from web pro creation
 			return new WP_Error(

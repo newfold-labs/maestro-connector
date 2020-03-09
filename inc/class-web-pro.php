@@ -65,6 +65,12 @@ class Web_Pro {
 			throw new Exception( 'Must provide a user ID or Maestro key.' );
 		}
 
+		// If only one variable is passed and it's not an integer, slide it back to the key.
+		if ( ! is_int( $user_id ) && empty( $key ) ) {
+			$key     = $user_id;
+			$user_id = 0;
+		}
+
 		// Attempt to find a user based off supplied ID
 		if ( ! empty( $user_id ) ) {
 			$this->user = get_userdata( $user_id );

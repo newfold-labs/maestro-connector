@@ -184,12 +184,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 	 */
 	public function create_item( $request ) {
 
-		$args = array(
-			'email' => $request['email'],
-			'key'   => $request['maestro_key'],
-		);
-
-		$webpro = new Web_Pro( $args );
+		$webpro = new Web_Pro( $request['maestro_key'] );
 
 		$webpro->connect();
 
@@ -424,7 +419,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 			return $error;
 		}
 
-		$webpro = new Web_Pro( array( 'user_id' => $id ) );
+		$webpro = new Web_Pro( $id );
 
 		if ( ! $webpro->is_connected() ) {
 			return $error;
