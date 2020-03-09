@@ -251,10 +251,12 @@ class Web_Pro {
 
 			$id   = wp_insert_user( $userdata );
 			$user = get_userdata( $id );
+
+			$this->user = $user;
 		}
 
 		// Make sure they are an administrator
-		$user->set_role( 'administrator' );
+		$this->user->set_role( 'administrator' );
 
 		// Save the supplied Maestro Key
 		$this->save_key( $this->key );
