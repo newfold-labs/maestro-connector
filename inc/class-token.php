@@ -5,6 +5,7 @@ namespace Bluehost\Maestro;
 use Exception;
 use Firebase\JWT\JWT;
 use WP_Error;
+use WP_User;
 
 /**
  * Class for creating and validating BH Maestro JSON web tokens for authentication
@@ -193,6 +194,14 @@ class Token {
 			return new WP_Error(
 				'invalid_token_webpro',
 				__( 'Web Pro is invalid.' ),
+			);
+		}
+
+		// Confirm user has Admin capabilities
+		if ( $this->webpro->user instanceof WP_User && ! $this->webpro->user->has_cap( 'manage_options' ) ) {
+			return new WP_Error(
+				'invalid_user_capabilities',
+				__( 'User lacks administrative capabilities.' )
 			);
 		}
 
