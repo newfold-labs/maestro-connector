@@ -331,7 +331,7 @@ class Admin {
 			$revoke_url = $this->get_revoke_url( $user_id );
 
 			$value  = '<img style="max-width: 80%;" src="' . esc_url( $logo_url ) . '" />';
-			$value .= '<div class="row-actions"><a href="' . esc_url( $revoke_url ) . '">Revoke Access</a></div>';
+			$value .= '<div class="row-actions"><a href="' . esc_url( $revoke_url ) . '">' . __( 'Revoke Access' ) . '</a></div>';
 		}
 
 		return $value;
