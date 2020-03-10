@@ -289,12 +289,13 @@ class Admin {
 	public function get_revoke_url( $user_id ) {
 
 		$query_args = array(
+			'page'     => 'bluehost-maestro',
 			'id'       => $user_id,
 			'action'   => 'revoke',
 			'_wpnonce' => wp_create_nonce( 'revoke-webpro' ),
 		);
 
-		return add_query_arg( $query_args, admin_url( 'users.php?page=bluehost-maestro' ) );
+		return add_query_arg( $query_args, admin_url( 'users.php' ) );
 	}
 
 	/**
