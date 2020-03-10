@@ -51,7 +51,7 @@ maestro.confirmMaestro = function () {
 		},
 		data: {
 			reference_id: maestro.webpro.reference_id,
-			maestro_key: maestro.webpro.key,
+			magic_key: maestro.webpro.key,
 			email: maestro.webpro.email,
 		},
 	} ).done( function ( response ) {

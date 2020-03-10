@@ -173,7 +173,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 	/**
 	 * Create a new Maestro platform connection
 	 *
-	 * Verifies a supplied maestro_key & email against the Maestro platform,
+	 * Verifies a supplied magic_key & email against the Maestro platform,
 	 * generates a JWT, and sends the access token to the platform.
 	 *
 	 * @since 1.0
@@ -184,7 +184,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 	 */
 	public function create_item( $request ) {
 
-		$webpro = new Web_Pro( $request['maestro_key'] );
+		$webpro = new Web_Pro( $request['magic_key'] );
 
 		$webpro->connect();
 
@@ -198,7 +198,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 	}
 
 	/**
-	 * Update maestro key for an existing web pro
+	 * Update connection key for an existing web pro
 	 *
 	 * This endpoint is used to invalidate a previously issued JWT and generate a new one.
 	 *
@@ -215,7 +215,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 			return $webpro;
 		}
 
-		$webpro->set_key( $request['maestro_key'] );
+		$webpro->set_key( $request['magic_key'] );
 
 		$response = $this->prepare_item_for_response( $webpro, $request );
 		$response = rest_ensure_response( $response );
@@ -227,7 +227,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 	 * Revokes a maestro platform connection
 	 *
 	 * This does a few things:
-	 *   - Deletes the stored maestro_key, which invalidates previously issued tokens
+	 *   - Deletes the stored magic_key, which invalidates previously issued tokens
 	 *   - Demotes the user to a subscriber role
 	 *   - Sends a request to the Maestro platform to notify that the old token is now invalid
 	 *
@@ -285,7 +285,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 	}
 
 	/**
-	 * Update maestro key for an existing web pro
+	 * Update connection key for an existing web pro
 	 *
 	 * This endpoint is used to invalidate a previously issued JWT and generate a new one.
 	 *
@@ -350,7 +350,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 	 * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
 	 */
 	public function get_items( $request ) {
-		$query = new WP_User_Query( array( 'meta_key' => 'bh_maestro_key' ) );
+		$query = new WP_User_Query( array( 'meta_key' => 'bh_maestro_magic_key' ) );
 
 		foreach ( $query->results as $user ) {
 			$webpro = new Web_Pro( $user->ID );
@@ -476,12 +476,12 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 			'title'      => 'webpro',
 			'type'       => 'object',
 			'properties' => array(
-				'id'          => array(
+				'id'         => array(
 					'description' => __( 'Unique identifier for the user.' ),
 					'type'        => 'integer',
 					'readonly'    => true,
 				),
-				'username'    => array(
+				'username'   => array(
 					'description' => __( 'Login name for the user.' ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
@@ -490,7 +490,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 						'sanitize_callback' => array( $this, 'check_username' ),
 					),
 				),
-				'name'        => array(
+				'name'       => array(
 					'description' => __( 'Display name for the user.' ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
@@ -499,29 +499,29 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 						'sanitize_callback' => 'sanitize_text_field',
 					),
 				),
-				'email'       => array(
+				'email'      => array(
 					'description' => __( 'The email address for the user.' ),
 					'type'        => 'string',
 					'format'      => 'email',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'added_by'    => array(
+				'added_by'   => array(
 					'description' => __( 'The user who approved the Maestro connection.' ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 					'readonly'    => true, // This can only be set programmatically
 				),
-				'added_time'  => array(
+				'added_time' => array(
 					'description' => __( 'Time when the Maestro connection was approved.' ),
 					'type'        => 'string',
 					'format'      => 'date-time',
 					'context'     => array( 'view', 'edit' ),
 					'readonly'    => true, // This can only be set programmatically
 				),
-				'maestro_key' => array(
+				'magic_key'  => array(
 					'description' => __( 'The maestro identifier key for the webpro.' ),
 					'type'        => 'string',
-					'context'     => array(), // Maestro key doesn't get displayed
+					'context'     => array(), // connection key doesn't get displayed
 					'arg_options' => array(
 						'sanitize_callback' => 'sanitize_text_field',
 					),

@@ -99,7 +99,7 @@ class Web_Pro {
 	 *
 	 * @var string
 	 */
-	private $key_key = 'bh_maestro_key';
+	private $key_key = 'bh_maestro_magic_key';
 
 	/**
 	 * The meta key for storing the maestro revoke token
@@ -125,12 +125,12 @@ class Web_Pro {
 	 * @since 1.0
 	 *
 	 * @param int    $user_id The ID of a WordPress user
-	 * @param string $key     A Maestro key assigned to a Web Pro by the platform
+	 * @param string $key     A connection key assigned to a Web Pro by the platform
 	 */
 	public function __construct( $user_id = 0, $key = '' ) {
 
 		if ( ! $user_id && ! $key ) {
-			throw new Exception( 'Must provide a user ID or Maestro key.' );
+			throw new Exception( 'Must provide a user ID or connection key.' );
 		}
 
 		// If only one variable is passed and it's not an integer, slide it back to the key.
@@ -162,13 +162,13 @@ class Web_Pro {
 				// We might already have a key for the user
 				if ( $this->get_key() ) {
 					if ( $this->get_key() !== $key ) {
-						throw new Exception( 'Maestro key does not match existing key.' );
+						throw new Exception( 'Connection key does not match existing key for user.' );
 					}
 				} else {
 					// No existing key, so let's verify this one and make sure it matches the user's email
 					$data = $this->verify_key( $key );
 					if ( ! $data || $this->email !== $data['email'] ) {
-						throw new Exception( 'Maestro key does not match user.' );
+						throw new Exception( 'Web Pro email does not match user email.' );
 					}
 				}
 			}
@@ -183,7 +183,7 @@ class Web_Pro {
 
 		// Bail if we don't have a valid user or a key at this point.
 		if ( ! $this->user && ! $this->key ) {
-			throw new Exception( 'Must provide valid user ID, email or Maestro key.' );
+			throw new Exception( 'Must provide valid user ID, email or connection key.' );
 		}
 
 	}
@@ -288,7 +288,7 @@ class Web_Pro {
 	public function connect() {
 
 		if ( ! $this->key ) {
-			throw new Exception( 'Web Pro must have a Maestro key' );
+			throw new Exception( 'Web Pro must have a connection key to connect.' );
 		}
 
 		// Restrict who can add Maestro connections
@@ -322,7 +322,7 @@ class Web_Pro {
 		// Make sure they are an administrator
 		$this->user->set_role( 'administrator' );
 
-		// Save the supplied Maestro Key
+		// Save the supplied connection Key
 		$this->save_key( $this->key );
 
 		// The platform has a unique ID that we'll save for use in the token and future invalidation notices
@@ -345,13 +345,13 @@ class Web_Pro {
 	}
 
 	/**
-	 * Attempts to set the key for the Web Pro instance
+	 * Attempts to set the connection key for the Web Pro instance
 	 *
 	 * Verifies it against the platform before saving it
 	 *
 	 * @since 1.0
 	 *
-	 * @param string $key The Maestro key to set for the user
+	 * @param string $key The connection key to set for the user
 	 *
 	 * @return string|false The key if successful, false on failure
 	 */
@@ -388,11 +388,11 @@ class Web_Pro {
 	}
 
 	/**
-	 * Get the Maestro key for the web pro
+	 * Get the connection key for the web pro
 	 *
 	 * @since 1.0
 	 *
-	 * @return string|false Either the Maestro key or false if one is not saved
+	 * @return string|false Either the connection key or false if one is not saved
 	 */
 	private function get_key() {
 		if ( empty( $this->key ) ) {
@@ -407,11 +407,11 @@ class Web_Pro {
 	}
 
 	/**
-	 * Save a provided Maestro key
+	 * Save a provided connection key
 	 *
 	 * @since 1.0
 	 *
-	 * @param string $key The Maestro key to save
+	 * @param string $key The connection key to save
 	 *
 	 * @return bool Whether the key saved successfully or not
 	 */
@@ -421,7 +421,7 @@ class Web_Pro {
 	}
 
 	/**
-	 * Delete the stored Maestro key for the web pro
+	 * Delete the stored connection key for the web pro
 	 *
 	 * @since 1.0
 	 *

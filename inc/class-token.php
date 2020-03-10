@@ -128,7 +128,7 @@ class Token {
 		}
 
 		$data = array(
-			'maestro_key'  => $this->webpro->key,
+			'magic_key'    => $this->webpro->key,
 			'reference_id' => $this->webpro->reference_id,
 			'user'         => array(
 				'id'         => $this->webpro->user->ID,
@@ -213,11 +213,11 @@ class Token {
 			);
 		}
 
-		// Determine if the Maestro Key is valid.
-		if ( $this->webpro->key !== $jwt->data->maestro_key ) {
+		// Determine if the connection key is valid.
+		if ( $this->webpro->key !== $jwt->data->magic_key ) {
 			return new WP_Error(
-				'invalid_token_maestro_key',
-				__( 'Maestro key is invalid.' ),
+				'invalid_token_secret_key',
+				__( 'Connection key is invalid.' ),
 			);
 		}
 

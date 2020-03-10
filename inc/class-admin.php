@@ -264,7 +264,7 @@ class Admin {
 			$webpro = new Web_Pro( $key );
 		} catch ( Exception $e ) {
 			$response['status']  = 'invalid_key';
-			$response['message'] = __( 'This Maestro key is not valid.' );
+			$response['message'] = __( 'This secret key is not valid.' );
 			echo wp_json_encode( $response );
 			wp_die();
 		}
