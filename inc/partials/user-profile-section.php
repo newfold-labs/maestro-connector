@@ -11,7 +11,7 @@
 		</tr>
 		<tr class="user-maestro-revoke">
 			<th><?php _e( 'Revoke' ); ?></th>
-			<td><a href="" class="button button-secondary"><?php _e( 'Revoke Maestro Access' ); ?></a></td>
+			<td><a href="<?php echo $revoke_url; ?>" class="button button-secondary"><?php _e( 'Revoke Maestro Access' ); ?></a></td>
 		</tr>
 	</tbody>
 </table>
