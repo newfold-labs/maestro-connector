@@ -40,16 +40,84 @@ class Web_Pro {
 
 	/**
 	 * Email address for the Web Pro originally returned from the platform
+	 *
+	 * @since 1.0
+	 *
+	 * @var string
 	 */
 	public $email;
+
+	/**
+	 * First name for the Web Pro
+	 *
+	 * @since 1.0
+	 *
+	 * @var string
+	 */
 	public $first_name;
+
+	/**
+	 * Last name for the Web Pro
+	 *
+	 * @since 1.0
+	 *
+	 * @var string
+	 */
 	public $last_name;
+
+	/**
+	 * Location for the Web Pro returned from the platform
+	 *
+	 * @since 1.0
+	 *
+	 * @var string
+	 */
 	public $location;
+
+	/**
+	 * User login of the user who approved the connection for the web pro
+	 *
+	 * @since 1.0
+	 *
+	 * @var string
+	 */
 	public $added_by;
+
+	/**
+	 * Unix timestamp when the web pro connection was made
+	 *
+	 * @since 1.0
+	 *
+	 * @var int
+	 */
 	public $added_time;
-	private $key_key          = 'bh_maestro_reference_id';
+
+	/**
+	 * The meta key for storing the maestro connection key
+	 *
+	 * @since 1.0
+	 *
+	 * @var string
+	 */
+	private $key_key = 'bh_maestro_key';
+
+	/**
+	 * The meta key for storing the maestro revoke token
+	 *
+	 * @since 1.0
+	 *
+	 * @var string
+	 */
 	private $revoke_token_key = 'bh_maestro_revoke_token';
-	private $platform           = 'https://api-maestro.webpropanel.com/wp-plugin';
+
+	/**
+	 * The URL of the platform for sending API requests
+	 *
+	 * @since 1.0
+	 *
+	 * @var string
+	 */
+	private $platform = 'https://api-maestro.webpropanel.com/wp-plugin';
 
 	/**
 	 * Constructor
@@ -164,15 +232,15 @@ class Web_Pro {
 		$response = get_transient( $trans_key );
 
 		if ( ! $response ) {
-		$url = add_query_arg(
-			array(
-				'sessionToken' => $key,
-				'websiteUrl'   => get_option( 'siteurl' ),
-			),
-			$this->platform . '/verify'
-		);
+			$url = add_query_arg(
+				array(
+					'sessionToken' => $key,
+					'websiteUrl'   => get_option( 'siteurl' ),
+				),
+				$this->platform . '/verify'
+			);
 
-		$response = wp_remote_get( $url );
+			$response = wp_remote_get( $url );
 			set_transient( $trans_key, $response, 300 ); // Cache for 5 minutes
 		}
 
