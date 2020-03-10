@@ -163,7 +163,7 @@ class Admin {
 		}
 
 		if ( $webpro->is_connected() ) {
-			$query_args = array(
+			$query_args  = array(
 				'page'     => 'bluehost-maestro',
 				'id'       => $id,
 				'action'   => 'dorevoke',
