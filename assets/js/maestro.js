@@ -50,7 +50,6 @@ maestro.confirmMaestro = function () {
 			xhr.setRequestHeader( 'X-WP-Nonce', maestro.nonces.rest );
 		},
 		data: {
-			reference_id: maestro.webpro.reference_id,
 			magic_key: maestro.webpro.key,
 			email: maestro.webpro.email,
 		},

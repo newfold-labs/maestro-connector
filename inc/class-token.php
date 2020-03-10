@@ -128,9 +128,8 @@ class Token {
 		}
 
 		$data = array(
-			'magic_key'    => $this->webpro->key,
-			'reference_id' => $this->webpro->reference_id,
-			'user'         => array(
+			'magic_key' => $this->webpro->key,
+			'user'      => array(
 				'id'         => $this->webpro->user->ID,
 				'user_login' => $this->webpro->user->user_login,
 				'user_email' => $this->webpro->user->user_email,
@@ -218,14 +217,6 @@ class Token {
 			return new WP_Error(
 				'invalid_token_secret_key',
 				__( 'Connection key is invalid.' ),
-			);
-		}
-
-		// Determine if the reference ID is valid.
-		if ( $this->webpro->reference_id !== $jwt->data->reference_id ) {
-			return new WP_Error(
-				'invalid_token_reference_id',
-				__( 'Reference ID is invalid.' )
 			);
 		}
 
