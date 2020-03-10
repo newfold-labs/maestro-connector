@@ -193,11 +193,7 @@ class Web_Pro {
 	 */
 	private function parse_platform_response( $data ) {
 		// We might have an existing user that matches the email
-		// @todo Figure out where to put this email check...this is not the right place
 		$this->user = get_user_by( 'email', $data->email );
-		if ( $this->user && $this->user->user_email !== $data->email ) {
-			throw new Exception( 'User email does not match Maestro platform.' );
-		}
 
 		$this->email        = $data->email;
 		$this->first_name   = $data->firstName;
