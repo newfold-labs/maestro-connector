@@ -3,7 +3,7 @@
 	<tbody>
 		<tr class="user-maestro-added-date">
 			<th><?php _e( 'Date Added' ); ?></th>
-			<td><?php echo esc_html( gmdate( get_option( 'date_format' ), (int) $webpro->added_date ) ); ?></td>
+			<td><?php echo esc_html( gmdate( get_option( 'date_format' ), (int) $webpro->added_time ) ); ?></td>
 		</tr>
 		<tr class="user-maestro-added-by">
 			<th><?php _e( 'Added By' ); ?></th>

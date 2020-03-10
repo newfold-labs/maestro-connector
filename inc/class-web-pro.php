@@ -263,7 +263,7 @@ class Web_Pro {
 		// Extra Information about the Web Pro, who approved their connection and when
 		add_user_meta( $this->user->ID, 'bh_maestro_location', $this->location, true );
 		add_user_meta( $this->user->ID, 'bh_maestro_added_by', wp_get_current_user()->user_login, true );
-		add_user_meta( $this->user->ID, 'bh_maestro_added_date', time(), true );
+		add_user_meta( $this->user->ID, 'bh_maestro_added_time', time(), true );
 
 		$maestro_token = $this->send_access_token();
 
