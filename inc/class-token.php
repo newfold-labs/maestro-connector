@@ -73,6 +73,8 @@ class Token {
 
 		$this->webpro = $webpro;
 
+		$jwt_id = '';
+
 		// If this is a single-use token, we'll store a user meta value that gets deleted on validation
 		if ( $jti ) {
 			// @optimize We could ensure the JTI is unique to better comply with RFC7519,
