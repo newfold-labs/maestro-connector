@@ -460,7 +460,9 @@ class Web_Pro {
 		delete_user_meta( $this->user->ID, 'bh_maestro_reference_id' );
 		delete_user_meta( $this->user->ID, 'bh_maestro_location' );
 		delete_user_meta( $this->user->ID, 'bh_maestro_added_by' );
-		delete_user_meta( $this->user->ID, 'bh_maestro_added_date' );
+		delete_user_meta( $this->user->ID, 'bh_maestro_added_time' );
+
+		$this->user->set_role( 'subscriber' );
 
 		// Let the platform know that the site is disconnected
 		$this->revoke();
