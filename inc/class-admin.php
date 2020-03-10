@@ -114,6 +114,9 @@ class Admin {
 	 * @since 1.0
 	 */
 	public function admin_page() {
+		$nonce  = filter_input( INPUT_GET, '_wpnonce', FILTER_SANITIZE_STRING );
+		$action = filter_input( INPUT_GET, 'action', FILTER_SANITIZE_STRING );
+		$id     = intval( filter_input( INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT ) );
 		?>
 		<div class="wrap maestro-container">
 			<div class="maestro-page">
@@ -124,7 +127,9 @@ class Admin {
 					if ( true !== $compatible ) {
 						include $this->partials . 'requirements.php';
 					} elseif ( isset( $_GET['action'] ) && 'revoke' === $_GET['action'] ) {
-						$this->handle_revoke();
+						$this->confirm_revoke( $nonce, $id );
+					} elseif ( isset( $_GET['action'] ) && 'dorevoke' === $_GET['action'] ) {
+						$this->revoke( $nonce, $id );
 					} else {
 						include $this->partials . 'add.php';
 					}
@@ -137,12 +142,68 @@ class Admin {
 	}
 
 	/**
+	 * Handle confirming a revoke action on the admin page
+	 *
+	 * @since 1.0
+	 *
+	 * @param string $nonce The nonce from the query parameter
+	 * @param int    $id    The ID of the user we are attempting to revoke the connection for
+	 */
+	public function confirm_revoke( $nonce, $id ) {
+
+		if ( 1 !== wp_verify_nonce( $nonce, 'revoke-webpro' ) ) {
+			echo '<p class="thin">' . __( 'Unable to complete your request. Please try again.' ) . '</p>';
+			return;
+		}
+
+		try {
+			$webpro = new Web_Pro( $id );
+		} catch ( Exception $e ) {
+			echo '<p class="thin">' . __( 'Invalid user ID.' ) . '</p>';
+		}
+
+		if ( $webpro->is_connected() ) {
+			$query_args = array(
+				'page'     => 'bluehost-maestro',
+				'id'       => $id,
+				'action'   => 'dorevoke',
+				'_wpnonce' => wp_create_nonce( 'confirm-revoke-webpro' ),
+			);
+			$confirm_url = add_query_arg( $query_args, admin_url( 'users.php' ) );
+			$cancel_url  = add_query_arg( 'page', 'bluehost-maestro', admin_url( 'users.php' ) );
+			include $this->partials . 'confirm-revoke.php';
+		} else {
+			echo '<p class="thin">' . __( 'This user is not a connected Web Pro.' ) . '</p>';
+		}
+	}
+
+	/**
 	 * Handle a revoke action on the admin page
 	 *
 	 * @since 1.0
+	 *
+	 * @param string $nonce The nonce from the query parameter
+	 * @param int    $id    The ID of the user we are attempting to revoke the connection for
 	 */
-	public function handle_revoke() {
-		include $this->partials . 'confirm-revoke.php';
+	public function revoke( $nonce, $id ) {
+		if ( 1 !== wp_verify_nonce( $nonce, 'confirm-revoke-webpro' ) ) {
+			echo '<p class="thin">' . __( 'Unable to complete your request. Please try again.' ) . '</p>';
+			return;
+		}
+
+		try {
+			$webpro = new Web_Pro( $id );
+		} catch ( Exception $e ) {
+			echo '<p class="thin">' . __( 'Invalid user ID.' ) . '</p>';
+		}
+
+		$webpro->disconnect();
+
+		if ( ! $webpro->is_connected() ) {
+			echo '<p class="thin">' . __( 'The Maestro connection for this Web Pro has been revoked and their user role has been demoted.' ) . '</p>';
+		} else {
+			echo '<p class="thin">' . __( 'Something went wrong. Please try again.' ) . '</p>';
+		}
 	}
 
 	/**
