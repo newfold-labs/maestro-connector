@@ -23,6 +23,10 @@ define( 'MAESTRO_PATH', plugin_dir_path( __FILE__ ) );
 define( 'MAESTRO_URL', plugin_dir_url( __FILE__ ) );
 
 // Composer autoloader
+if ( ! is_readable( __DIR__ . '/vendor/autoload.php' ) ) {
+	add_action( 'after_plugin_row_' . plugin_basename( __FILE__ ), __NAMESPACE__ . '\\vendor_notice');
+	return;
+}
 require __DIR__ . '/vendor/autoload.php';
 
 // Other required files
@@ -87,4 +91,21 @@ function admin_init() {
  */
 function rest_init() {
 	$rest_api = new REST_API();
+}
+
+function vendor_notice() {
+	?>
+	<style type="text/css">
+		.plugin-update-tr.active[data-slug="bluehost-maestro"] td, 
+		.plugins .active[data-slug="bluehost-maestro"] th.check-column {
+			border-left-color: #dc3232;
+		}
+	</style>
+	<tr class="active maestro-warning">
+		<td colspan="3">
+			<strong style="color:#dc3232;"><span class="dashicons dashicons-warning"></span> <?php _e( 'Maestro is missing critical files' ); ?></strong>
+			// <span><a href="https://www.bluehost.com/contact"><?php _e( 'Contact Bluehost Support' ); ?> <span class="dashicons dashicons-external"></span> </a></span>
+		</td>
+	</tr>
+	<?php
 }
