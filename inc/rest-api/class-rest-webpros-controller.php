@@ -269,7 +269,8 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 	 */
 	public function get_current_item( $request ) {
 		// Ensure the current user is a webpro before continuing
-		$webpro = $this->get_webpro( wp_get_current_user()->ID );
+		// Add optional 2nd parameter to bypass checking for the revoke token
+		$webpro = $this->get_webpro( wp_get_current_user()->ID, false );
 		if ( is_wp_error( $webpro ) ) {
 			return new WP_Error(
 				'maestro_rest_not_webpro',
@@ -404,7 +405,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 	 *
 	 * @return Web_Pro|WP_Error Web_Pro object if ID is valid, WP_Error otherwise.
 	 */
-	protected function get_webpro( $id ) {
+	protected function get_webpro( $id, $check_revoke = true ) {
 		$error = new WP_Error( 'rest_user_invalid_id', __( 'Invalid user ID.' ), array( 'status' => 404 ) );
 		if ( (int) $id <= 0 ) {
 			return $error;
@@ -421,7 +422,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 
 		$webpro = new Web_Pro( $id );
 
-		if ( ! $webpro->is_connected() ) {
+		if ( ! $webpro->is_connected( $check_revoke ) ) {
 			return $error;
 		}
 

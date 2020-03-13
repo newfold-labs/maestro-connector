@@ -458,13 +458,19 @@ class Web_Pro {
 	 *
 	 * @since 1.0
 	 *
+	 * @param bool Whether to check for the platform revoke token or not
+	 *
 	 * @return bool Connected or not
 	 */
-	public function is_connected() {
-		// To be considered connected, we need:
+	public function is_connected( $check_revoke = true ) {
+		// To generally be considered connected, we need:
 		//     - A key submitted by a site administrator
 		//     - A revoke token saved in usermeta returned from the platform
-		if ( $this->get_key() && $this->user && get_user_meta( $this->user->ID, $this->revoke_token_key, true ) ) {
+		if ( $this->get_key() && $this->user ) {
+			// Allows bypassing the revoke token check when required
+			if ( $check_revoke && get_user_meta( $this->user->ID, $this->revoke_token_key, true ) ) {
+				return true;
+			}
 			return true;
 		}
 		return false;
