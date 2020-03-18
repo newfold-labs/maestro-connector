@@ -68,7 +68,7 @@ class Admin {
 			'manage_options',
 			'bluehost-maestro',
 			array( $this, 'admin_page' ),
-			4,
+			4
 		);
 	}
 
