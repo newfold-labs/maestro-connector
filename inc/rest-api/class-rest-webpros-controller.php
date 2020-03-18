@@ -365,10 +365,6 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 		return rest_ensure_response( $data );
 	}
 
-	public function get_collection_params() {
-		// @todo Build out get_collection_parms() method
-	}
-
 	/**
 	 * Prepares a single webpro's details for response.
 	 *

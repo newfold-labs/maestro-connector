@@ -7,7 +7,6 @@ use WP_User_Query;
 
 /**
  * Class for managing Web Pro connections
- * @todo Check public/private method status
  */
 class Web_Pro {
 
