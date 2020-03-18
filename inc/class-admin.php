@@ -53,6 +53,10 @@ class Admin {
 		// Hooks for the user profile section
 		add_action( 'edit_user_profile', array( $this, 'user_profile_section' ) );
 		add_action( 'show_user_profile', array( $this, 'user_profile_section' ) );
+
+		// Hooks for user changes
+		add_action( 'set_user_role', array( $this, 'role_change' ), 10, 2 );
+		add_action( 'delete_user', array( $this, 'on_delete_user' ), 10, 1 );
 	}
 
 	/**
@@ -372,6 +376,45 @@ class Admin {
 		if ( $webpro->is_connected() ) {
 			$revoke_url = $this->get_revoke_url( $user->ID );
 			require $this->partials . 'user-profile-section.php';
+		}
+	}
+
+	/**
+	 * Hook to disconnect a web pro after being demoted from administrator
+	 *
+	 * @since 1.0
+	 *
+	 * @param int    $user_id   The ID of the user whose role is being changed
+	 * @param string $new_role  The new role being assigned
+	 */
+	public function role_change( $user_id, $new_role ) {
+		try {
+			$webpro = new Web_Pro( $user_id );
+		} catch ( Exception $e ) {
+			return;
+		}
+
+		if ( $webpro->is_connected() && 'administrator' !== $new_role ) {
+			$webpro->disconnect();
+		}
+	}
+
+	/**
+	 * Disconnects a web pro before the user is deleted
+	 *
+	 * @since 1.0
+	 *
+	 * @param int $user_id The ID of the user being deleted
+	 */
+	public function on_delete_user( $user_id ) {
+		try {
+			$webpro = new Web_Pro( $user_id );
+		} catch ( Exception $e ) {
+			return;
+		}
+
+		if ( $webpro->is_connected() ) {
+			$webpro->disconnect();
 		}
 	}
 
