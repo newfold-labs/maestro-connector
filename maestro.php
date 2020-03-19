@@ -24,7 +24,7 @@ define( 'MAESTRO_URL', plugin_dir_url( __FILE__ ) );
 
 // Composer autoloader
 if ( ! is_readable( __DIR__ . '/vendor/autoload.php' ) ) {
-	add_action( 'after_plugin_row_' . plugin_basename( __FILE__ ), __NAMESPACE__ . '\\vendor_notice');
+	add_action( 'after_plugin_row_' . plugin_basename( __FILE__ ), __NAMESPACE__ . '\\vendor_notice' );
 	return;
 }
 require __DIR__ . '/vendor/autoload.php';
@@ -96,7 +96,7 @@ function rest_init() {
 function vendor_notice() {
 	?>
 	<style type="text/css">
-		.plugin-update-tr.active[data-slug="bluehost-maestro"] td, 
+		.plugin-update-tr.active[data-slug="bluehost-maestro"] td,
 		.plugins .active[data-slug="bluehost-maestro"] th.check-column {
 			border-left-color: #dc3232;
 		}
