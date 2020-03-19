@@ -252,10 +252,12 @@ class Web_Pro {
 		// We might have an existing user that matches the email
 		$this->user = get_user_by( 'email', $data->email );
 
+		// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 		$this->email      = $data->email;
 		$this->first_name = $data->firstName;
 		$this->last_name  = $data->lastName;
 		$this->location   = $data->city;
+		// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 		if ( isset( $data->state->name ) ) {
 			$this->location .= ', ' . $data->state->name;
 		}
