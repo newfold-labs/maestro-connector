@@ -385,7 +385,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 			'email'      => $webpro->email,
 			'location'   => $webpro->location,
 			'added_by'   => $webpro->added_by,
-			'added_time' => $webpro->added_time,
+			'added_time' => intval( $webpro->added_time ),
 		);
 
 		return $response;
