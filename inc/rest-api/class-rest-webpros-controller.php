@@ -525,6 +525,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 					'description' => __( 'The email address for the user.' ),
 					'type'        => 'string',
 					'format'      => 'email',
+					'readonly'    => true, // Either exists, or is supplied from the platform based on key
 					'context'     => array( 'view', 'edit' ),
 				),
 				'added_by'   => array(
