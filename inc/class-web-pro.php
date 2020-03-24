@@ -577,7 +577,7 @@ class Web_Pro {
 			'body'        => wp_json_encode( $body ),
 			'headers'     => array(
 				'Content-Type'  => 'application/json',
-				'Authorization' => 'Bearer ' . $this->get_revoke_token,
+				'Authorization' => 'Bearer ' . $this->get_revoke_token(),
 			),
 			'timeout'     => 10,
 			'data_format' => 'body',
