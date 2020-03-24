@@ -4,7 +4,7 @@ info:
   description: REST API routes for SSO and modifying Web Pro connections
   version: 1.0.0
 servers:
-  - url: https://bh.test
+  - url: https://bh.test/wp-json
     description: WordPress Site
 paths:
   /bluehost/maestro/v1/sso:
