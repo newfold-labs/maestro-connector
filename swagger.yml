@@ -1,0 +1,455 @@
+openapi: 3.0.1
+info:
+  title: Bluehost Maestro WordPress Plugin
+  description: REST API routes for SSO and modifying Web Pro connections
+  version: 1.0.0
+servers:
+  - url: https://bh.test
+    description: WordPress Site
+paths:
+  /bluehost/maestro/v1/sso:
+    post:
+      summary: Single Sign On
+      description: Returns a URL that automatically logs a user into the site.
+      security:
+        - JWT: []
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  link:
+                    type: string
+                    format: uri
+                    example: https://example.com/wp-admin/admin-ajax.php?action=bh-maestro-sso&token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvYmgudGVzdCIsImlhdCI6MTU4NDk4OTQyMCwibmJmIjoxNTg0OTg5NDIwLCJleHAiOjE1ODQ5ODk0NTAsImp0aSI6IlVEUVJzeldMSHdzSUJPT3hPWXYzaHlqMUFYRHpyaW8wIiwiZGF0YSI6eyJtYWdpY19rZXkiOiJNLTM1MzUzNS1FRmlrZW9qMzQzNDM5OWZrZW1la21ncjAzMDJPTTNNTU9FMDNmNEtFbGVsZWZmIiwidXNlciI6eyJpZCI6MSwidXNlcl9sb2dpbiI6ImFkbWluIiwidXNlcl9lbWFpbCI6ImRldi1lbWFpbEBmbHl3aGVlbC5sb2NhbCJ9LCJ0eXBlIjoic3NvIn19.NYfRtAllkyTaF8pTQL6MzQLSW8O0lCTltvvPD7iwKFA
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+  /bluehost/maestro/v1/webpros:
+    get:
+      summary: List Web Pros
+      description: Lists all connected web pros for the site
+      security:
+        - JWT: []
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Webpro'
+        401:
+          $ref: '#/components/responses/maestro_401'
+        403:
+          $ref: '#/components/responses/maestro_403'
+        404:
+          $ref: '#/components/responses/404'
+    post:
+      summary: 'Create Web Pro'
+      requestBody:
+        $ref: '#/components/requestBodies/default'
+      security:
+        - JWT: []
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webpro'
+        401:
+          $ref: '#/components/responses/maestro_401'
+        403:
+          description: Forbidden - User does not have correct permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/403'
+              example:
+                code: rest_maestro_cannot_approve_connection
+                message: Sorry, you are not allowed to grant access to web pros.
+                data:
+                  status: 403
+        404:
+          $ref: '#/components/responses/404'
+  '/bluehost/maestro/v1/webpros/{id}':
+    summary: Operate on a specific Web Pro's connection
+    parameters:
+      - name: id
+        in: path
+        description: Unique identifier for the user.
+        required: true
+        schema:
+          type: integer
+          format: int64
+    get:
+      summary: Get information about a Web Pro
+      security:
+        - JWT: []
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webpro'
+        401:
+          $ref: '#/components/responses/maestro_401'
+        403:
+          $ref: '#/components/responses/maestro_403'
+        404:
+          $ref: '#/components/responses/maestro_404'
+    post:
+      summary: Update a Web Pro connection
+      description: Replace the previously used magic key with a new one. This will invalidate the previously issued access token.
+      requestBody:
+        $ref: '#/components/requestBodies/default'
+      security:
+        - JWT: []
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webpro'
+        401:
+          $ref: '#/components/responses/maestro_401'
+        403:
+          $ref: '#/components/responses/maestro_403'
+        404:
+          $ref: '#/components/responses/maestro_404'
+    put:
+      summary: Update a Web Pro connection
+      description: Replace the previously used magic key with a new one. This will invalidate the previously issued access token.
+      requestBody:
+        $ref: '#/components/requestBodies/default'
+      security:
+        - JWT: []
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webpro'
+        401:
+          $ref: '#/components/responses/maestro_401'
+        403:
+          $ref: '#/components/responses/maestro_403'
+        404:
+          $ref: '#/components/responses/maestro_404'
+    patch:
+      summary: Update a Web Pro connection
+      description: Replace the previously used magic key with a new one. This will invalidate the previously issued access token.
+      requestBody:
+        $ref: '#/components/requestBodies/default'
+      security:
+        - JWT: []
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webpro'
+        401:
+          $ref: '#/components/responses/maestro_401'
+        403:
+          $ref: '#/components/responses/maestro_403'
+        404:
+          $ref: '#/components/responses/maestro_404'
+    delete:
+      summary: Revoke a Web Pro connection
+      security:
+        - JWT: []
+      responses:
+        200:
+          $ref: '#/components/responses/deleted'
+        401:
+          $ref: '#/components/responses/maestro_401'
+        403:
+          $ref: '#/components/responses/maestro_403'
+        404:
+          $ref: '#/components/responses/maestro_404'
+  /bluehost/maestro/v1/webpros/me:
+    get:
+      summary: Get Web Pro inforamtion about the current user
+      security:
+        - JWT: []
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webpro'
+        401:
+          $ref: '#/components/responses/maestro_401'
+        403:
+          $ref: '#/components/responses/maestro_me_403'
+        404:
+          $ref: '#/components/responses/404'
+    post:
+      summary: Update Web Pro connection for current user
+      description: Replace the previously used magic key with a new one. This will invalidate the previously issued access token.
+      requestBody:
+        $ref: '#/components/requestBodies/default'
+      security:
+        - JWT: []
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webpro'
+        401:
+          $ref: '#/components/responses/maestro_401'
+        403:
+          $ref: '#/components/responses/maestro_me_403'
+        404:
+          $ref: '#/components/responses/404'
+    put:
+      summary: Update Web Pro connection for current user
+      description: Replace the previously used magic key with a new one. This will invalidate the previously issued access token.
+      requestBody:
+        $ref: '#/components/requestBodies/default'
+      security:
+        - JWT: []
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webpro'
+        401:
+          $ref: '#/components/responses/maestro_401'
+        403:
+          $ref: '#/components/responses/maestro_me_403'
+        404:
+          $ref: '#/components/responses/404'
+    patch:
+      summary: Update Web Pro connection for current user
+      description: Replace the previously used magic key with a new one. This will invalidate the previously issued access token.
+      requestBody:
+        $ref: '#/components/requestBodies/default'
+      security:
+        - JWT: []
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webpro'
+        401:
+          $ref: '#/components/responses/maestro_401'
+        403:
+          $ref: '#/components/responses/maestro_me_403'
+        404:
+          $ref: '#/components/responses/404'
+    delete:
+      summary: Revoke Web Pro connection for current user
+      security:
+        - JWT: []
+      responses:
+        200:
+          $ref: '#/components/responses/deleted'
+        401:
+          $ref: '#/components/responses/maestro_401'
+        403:
+          $ref: '#/components/responses/maestro_me_403'
+        404:
+          $ref: '#/components/responses/404'
+components:
+  schemas:
+    Webpro:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        username:
+          type: string
+          example: johndoe
+        first_name:
+          type: string
+          example: John
+        last_name:
+          type: string
+          example: Doe
+        email:
+          type: string
+          format: email
+          example: johndoe@example.com
+        location:
+          type: string
+          example: Salt Lake City, Utah, USA
+        added_by:
+          type: string
+          example: admin
+        added_time:
+          type: integer
+          example: 1584986480
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        data:
+          type: object
+          properties:
+            status:
+              type: integer
+              description: HTTP Status code
+
+  responses:
+    deleted:
+      description: Item deleted
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              revoked:
+                type: boolean
+              previous:
+                $ref: '#/components/schemas/Webpro'
+    401:
+      description: Not Authorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            default:
+              $ref: '#/components/examples/401'
+    maestro_401:
+      description: Not Authorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            default:
+              $ref: '#/components/examples/maestro_401'
+    403:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            default:
+              $ref: '#/components/examples/403'
+    maestro_403:
+      description: Forbidden - User does not have correct permissions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            default:
+              $ref: '#/components/examples/maestro_403'
+    maestro_me_403:
+      description: Forbidden - User not a Web Pro
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/responses/403'
+          examples:
+            default:
+              $ref: '#/components/examples/maestro_not_webpro'
+    404:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            Plugin Not Active:
+              $ref: '#/components/examples/404'
+    maestro_404:
+      description: Not Found - Plugin inactive or ID not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/responses/404'
+          examples:
+            Plugin Inactive:
+              $ref: '#/components/examples/404'
+            Invalid User ID:
+              $ref: '#/components/examples/invalid_id'
+  examples:
+    401:
+      value:
+        code: rest_forbidden
+        message: Sorry, you are not allowed to do that.
+        data:
+          status: 401
+    maestro_401:
+      value:
+        code: rest_maestro_not_authorized
+        message: Sorry, you are not allowed to access this endpoint.
+        data:
+          status: 401
+    403:
+      value:
+        code: rest_forbidden
+        message: Sorry, you are not allowed to do that.
+        data:
+          status: 403
+    maestro_403:
+      value:
+        code: rest_maestro_forbidden
+        message: Sorry, you are not allowed to access this endpoint.
+        data:
+          status: 403
+    maestro_not_webpro:
+      value:
+        code: maestro_rest_not_webpro
+        message: You are not an authorized web pro.
+        data:
+          status: 403
+    invalid_id:
+      value:
+        code: rest_user_invalid_id
+        message: Invalid user ID.
+        data:
+          status: 404
+    404:
+      value:
+        code: rest_no_route
+        message: No route was found matching the URL and request method
+        data:
+          status: 404
+  requestBodies:
+    default:
+      description: Magic key to be used to generate a connection.
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              magic_key:
+                type: string
+                example: M-353535-EFikeoj3434399fkemekmgr0302OM3MMOE03f4KEleleff
+  securitySchemes:
+    JWT:
+      description: Maestro JWT Authentication
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
