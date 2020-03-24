@@ -2,6 +2,10 @@
 
 namespace Bluehost\Maestro;
 
+use Exception;
+use WP_REST_Server;
+use WP_REST_Response;
+
 /**
  * Class REST_SSO_Controller
  */
@@ -17,6 +21,15 @@ class REST_SSO_Controller extends \WP_REST_Controller {
 	protected $namespace = 'bluehost/maestro/v1';
 
 	/**
+	 * The current Web Pro accessing the endpoint
+	 *
+	 * @since 1.0
+	 *
+	 * @var Web_Pro
+	 */
+	private $webpro;
+
+	/**
 	 * Registers the SSO route
 	 *
 	 * @since 1.0
@@ -28,7 +41,7 @@ class REST_SSO_Controller extends \WP_REST_Controller {
 			'/sso',
 			array(
 				array(
-					'methods'             => \WP_REST_Server::CREATABLE,
+					'methods'             => WP_REST_Server::CREATABLE,
 					'callback'            => array( $this, 'new_sso' ),
 					'permission_callback' => array( $this, 'check_permission' ),
 				),
@@ -50,13 +63,9 @@ class REST_SSO_Controller extends \WP_REST_Controller {
 
 		// We want to SSO into the same user making the current request
 		// User is also already verified as a Maestro using the permission callback
-		$user = wp_get_current_user();
-
-		$webpro = new Web_Pro( $user->ID );
-
 		// Create a temporary single-use JWT; expires in 30 seconds
 		$token = new Token();
-		$jwt   = $token->generate_token( $webpro, 30, true, array( 'type' => 'sso' ) );
+		$jwt   = $token->generate_token( $this->webpro, 30, true, array( 'type' => 'sso' ) );
 
 		if ( is_wp_error( $jwt ) ) {
 			return $jwt;
@@ -70,7 +79,7 @@ class REST_SSO_Controller extends \WP_REST_Controller {
 		$link     = add_query_arg( $params, admin_url( 'admin-ajax.php' ) );
 		$response = array( 'link' => $link );
 
-		return new \WP_Rest_Response( $response );
+		return new WP_Rest_Response( $response );
 	}
 
 	/**
@@ -86,10 +95,17 @@ class REST_SSO_Controller extends \WP_REST_Controller {
 	 */
 	public function check_permission() {
 
-		$user   = wp_get_current_user();
-		$webpro = new Web_Pro( $user->ID );
+		// We want to SSO into the same user making the current request
+		// User is also already verified as a Maestro using the permission callback
+		$user_id = get_current_user_id();
 
-		return $webpro->is_connected();
+		try {
+			$this->webpro = new Web_Pro( $user_id );
+		} catch ( Exception $e ) {
+			return false;
+		}
+
+		return $this->webpro->is_connected();
 
 	}
 
