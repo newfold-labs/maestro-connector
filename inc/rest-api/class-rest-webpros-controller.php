@@ -2,7 +2,10 @@
 
 namespace Bluehost\Maestro;
 
-use WP_REST_Server, WP_Error, WP_User_Query;
+use WP_REST_Server;
+use WP_Error;
+use WP_User_Query;
+use WP_REST_Response;
 
 /**
  * Class REST_SSO_Controller
