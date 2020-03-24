@@ -300,7 +300,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 			return new WP_Error(
 				'maestro_rest_not_webpro',
 				__( 'You are not an authorized web pro.' ),
-				array( 'status' => 401 ),
+				array( 'status' => 403 ),
 			);
 		}
 
@@ -328,7 +328,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 			return new WP_Error(
 				'maestro_rest_not_webpro',
 				__( 'You are not an authorized web pro.' ),
-				array( 'status' => 401 ),
+				array( 'status' => 403 ),
 			);
 		}
 
@@ -356,7 +356,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 			return new WP_Error(
 				'maestro_rest_not_webpro',
 				__( 'You are not an authorized web pro.' ),
-				array( 'status' => 401 ),
+				array( 'status' => 403 ),
 			);
 		}
 
