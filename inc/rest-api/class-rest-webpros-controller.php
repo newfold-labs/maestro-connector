@@ -120,11 +120,18 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 	 * @return bool Whether user as edit_users capability
 	 */
 	public function edit_users_permissions_check() {
+		if ( ! is_user_logged_in() ) {
+			return new WP_Error(
+				'rest_maestro_not_authorized',
+				__( 'Sorry, you are not allowed to access this endpoint.' ),
+				array( 'status' => rest_authorization_required_code() ),
+			);
+		}
 		if ( ! current_user_can( 'edit_users' ) ) {
 			return new WP_Error(
 				'rest_maestro_forbidden',
 				__( 'Sorry, you are not allowed to access this endpoint.' ),
-				array( 'status' => rest_authorization_required_code() ),
+				array( 'status' => 403),
 			);
 		}
 
@@ -141,11 +148,18 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 	 * @return bool Whether user as create_users capability
 	 */
 	public function create_users_permissions_check() {
+		if ( ! is_user_logged_in() ) {
+			return new WP_Error(
+				'rest_maestro_not_authorized',
+				__( 'Sorry, you are not allowed to access this endpoint.' ),
+				array( 'status' => rest_authorization_required_code() ),
+			);
+		}
 		if ( ! current_user_can( 'create_users' ) ) {
 			return new WP_Error(
 				'rest_maestro_cannot_approve_connection',
 				__( 'Sorry, you are not allowed to grant access to web pros.' ),
-				array( 'status' => rest_authorization_required_code() ),
+				array( 'status' => 403 ),
 			);
 		}
 
