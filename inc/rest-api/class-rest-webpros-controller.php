@@ -261,7 +261,8 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 			return $webpro;
 		}
 
-		$deleted = $webpro->disconnect();
+		$previous = $webpro;
+		$deleted  = $webpro->disconnect();
 
 		if ( ! $deleted ) {
 			return new WP_Error(
@@ -271,8 +272,15 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 			);
 		}
 
-		// @todo Need response for successful REST delete
+		$response = new WP_REST_Response();
+		$response->set_data(
+			array(
+				'revoked'  => true,
+				'previous' => $this->prepare_item_for_response( $previous, $request ),
+			)
+		);
 
+		return $response;
 	}
 
 	/**
