@@ -351,6 +351,9 @@ class Web_Pro {
 
 		// If successful, the platform will return a 200 status code
 		if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
+			// The request failed for some reason, so clean up saved information to try again later
+			$this->delete_key();
+			$this->clean_up();
 			return false;
 		}
 
@@ -552,14 +555,23 @@ class Web_Pro {
 	 */
 	public function disconnect() {
 		$this->delete_key();
-		delete_user_meta( $this->user->ID, 'bh_maestro_location' );
-		delete_user_meta( $this->user->ID, 'bh_maestro_added_by' );
-		delete_user_meta( $this->user->ID, 'bh_maestro_added_time' );
+		$this->clean_up();
 
 		$this->user->set_role( 'subscriber' );
 
 		// Let the platform know that the site is disconnected
 		$this->revoke();
+	}
+
+	/**
+	 * Deletes associated Web Pro user meta
+	 *
+	 * @since 1.0
+	 */
+	public function clean_up() {
+		delete_user_meta( $this->user->ID, 'bh_maestro_location' );
+		delete_user_meta( $this->user->ID, 'bh_maestro_added_by' );
+		delete_user_meta( $this->user->ID, 'bh_maestro_added_time' );
 	}
 
 	/**
