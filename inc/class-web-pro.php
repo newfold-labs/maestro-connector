@@ -366,7 +366,7 @@ class Web_Pro {
 		// If we didn't get a JWT back from the platform, then the connection is considered failed
 		$decoded_response = json_decode( $response['body'] );
 		// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-		if ( ! $decoded_response->accessToken ) {
+		if ( ! isset( $decoded_response->accessToken ) ) {
 			$connection_failed = true;
 		}
 
