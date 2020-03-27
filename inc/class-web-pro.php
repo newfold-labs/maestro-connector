@@ -256,7 +256,7 @@ class Web_Pro {
 		if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
 			return false;
 		}
-		return json_decode( $response['body'] );
+		return json_decode( wp_remote_retrieve_body( $response ) );
 	}
 
 	/**
@@ -364,7 +364,7 @@ class Web_Pro {
 		}
 
 		// If we didn't get a JWT back from the platform, then the connection is considered failed
-		$decoded_response = json_decode( $response['body'] );
+		$decoded_response = json_decode( wp_remote_retrieve_body( $response ) );
 		// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 		if ( ! isset( $decoded_response->accessToken ) ) {
 			$connection_failed = true;
