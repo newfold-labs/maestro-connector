@@ -507,8 +507,8 @@ class Web_Pro {
 		//     - A revoke token saved in usermeta returned from the platform
 		if ( $this->get_key() && $this->user ) {
 			// Allows bypassing the revoke token check when required
-			if ( $check_revoke && get_user_meta( $this->user->ID, $this->revoke_token_key, true ) ) {
-				return true;
+			if ( $check_revoke ) {
+				return (bool) get_user_meta( $this->user->ID, $this->revoke_token_key, true );
 			}
 			return true;
 		}
