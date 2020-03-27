@@ -203,7 +203,15 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 
 		$webpro = new Web_Pro( $request['magic_key'] );
 
-		$webpro->connect();
+		$success = $webpro->connect();
+
+		if ( ! $success ) {
+			return new WP_Error(
+				'maestro_connection_failed',
+				__( 'Failed to connect Web Pro' ),
+				array( 'status' => 500 )
+			);
+		}
 
 		$response = $this->prepare_item_for_response( $webpro, $request );
 		$response = rest_ensure_response( $response );
