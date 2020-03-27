@@ -53,7 +53,7 @@ class REST_API {
 			return $status;
 		}
 
-		list( $jwt ) = sscanf( $this->get_authorization_header(), 'Bearer %s' );
+		list( $jwt ) = sscanf( $this->get_access_token(), 'Bearer %s' );
 
 		// If no auth header included, bail to allow a different auth method
 		if ( is_null( $jwt ) ) {
@@ -74,30 +74,31 @@ class REST_API {
 	}
 
 	/**
-	 * Get the token from an authorization header
+	 * Get the token from the Maestro-Authorization header
 	 *
 	 * @since 1.0
 	 *
-	 * @return null|string The token from the authorization header or null
+	 * @return null|string The token from the header or null
 	 */
-	function get_authorization_header() {
-		if ( ! empty( $_SERVER['HTTP_AUTHORIZATION'] ) ) {
-			return wp_unslash( $_SERVER['HTTP_AUTHORIZATION'] );
+	function get_access_token() {
+		$token = null;
+		if ( ! empty( $_SERVER['HTTP_MAESTRO_AUTHORIZATION'] ) ) {
+			$token = wp_unslash( $_SERVER['HTTP_MAESTRO_AUTHORIZATION'] );
 		}
 
-		// Use getallheaders in case the HTTP_AUTHORIZATION header is stripped by a server configuration
+		// Use getallheaders in case the HTTP_MAESTRO_AUTHORIZATION header is stripped by a server configuration
 		if ( function_exists( 'getallheaders' ) ) {
 			$headers = getallheaders();
 
 			// Check for the authorization header case-insensitively
 			foreach ( $headers as $key => $value ) {
-				if ( strtolower( $key ) === 'authorization' ) {
-					return $value;
+				if ( strtolower( $key ) === 'maestro-authorization' ) {
+					$token = $value;
 				}
 			}
 		}
 
-		return null;
+		return $token;
 	}
 
 }
