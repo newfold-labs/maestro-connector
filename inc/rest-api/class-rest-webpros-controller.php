@@ -131,7 +131,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 			return new WP_Error(
 				'rest_maestro_forbidden',
 				__( 'Sorry, you are not allowed to access this endpoint.' ),
-				array( 'status' => 403)
+				array( 'status' => 403 )
 			);
 		}
 
