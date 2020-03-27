@@ -305,8 +305,13 @@ class Web_Pro {
 			return false;
 		};
 
-		// User does not exist. If they did, they would have been set during initalization
-		if ( ! $this->user ) {
+		// Create a user if one does not exist
+		if ( $this->user ) {
+			if ( in_array( 'administrator', $this->user->roles, true ) ) {
+				$already_admin = true;
+			}
+			$user_exists = true;
+		} else {
 			// A username is required, so create one from the email
 			$user_login = substr( $this->email, 0, strrpos( $this->email, '@' ) );
 
@@ -319,7 +324,7 @@ class Web_Pro {
 				'first_name'   => $this->first_name,
 				'last_name'    => $this->last_name,
 				'display_name' => $this->first_name . ' ' . $this->last_name,
-				'role'         => 'administrator',
+				'role'         => 'subscriber',
 			);
 
 			$id   = wp_insert_user( $userdata );
@@ -328,7 +333,10 @@ class Web_Pro {
 			$this->user = $user;
 		}
 
-		// Make sure they are an administrator
+		// Store whether they were already an administrator
+		$already_admin = ( in_array( 'administrator', $this->user->roles, true ) ) ? true : false;
+
+		// Make sure they are an administrator now
 		$this->user->set_role( 'administrator' );
 
 		// Save the supplied connection Key
@@ -351,15 +359,30 @@ class Web_Pro {
 
 		// If successful, the platform will return a 200 status code
 		if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
-			// The request failed for some reason, so clean up saved information to try again later
-			$this->delete_key();
-			$this->clean_up();
-			return false;
+			$connection_failed = true;
 		}
 
 		// If we didn't get a JWT back from the platform, then the connection is considered failed
 		$maestro_token = json_decode( $response['body'] )->accessToken;
 		if ( ! $maestro_token ) {
+			$connection_failed = true;
+		}
+
+		// The request failed for some reason, so clean up saved information to try again later
+		if ( $connection_failed ) {
+
+			// If they already existed, let's just clean up the changes
+			if ( $user_exists ) {
+				// If not previously an admin, remove admin role and make subscriber to be safe
+				if ( ! $already_admin ) {
+					$this->user->remove_role( 'administrator' );
+					$this->user->set_role( 'subscriber' );
+				}
+				$this->clean_up();
+			} else {
+				// Otherwise just remove them
+				wp_delete_user( $this->user->ID );
+			}
 			return false;
 		}
 
@@ -555,9 +578,9 @@ class Web_Pro {
 	 * @since 1.0
 	 */
 	public function disconnect() {
-		$this->delete_key();
 		$this->clean_up();
 
+		$this->user->remove_role( 'administrator' );
 		$this->user->set_role( 'subscriber' );
 
 		// Let the platform know that the site is disconnected
@@ -570,6 +593,7 @@ class Web_Pro {
 	 * @since 1.0
 	 */
 	public function clean_up() {
+		$this->delete_key();
 		delete_user_meta( $this->user->ID, 'bh_maestro_location' );
 		delete_user_meta( $this->user->ID, 'bh_maestro_added_by' );
 		delete_user_meta( $this->user->ID, 'bh_maestro_added_time' );
