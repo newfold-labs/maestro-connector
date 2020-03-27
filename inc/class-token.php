@@ -192,7 +192,7 @@ class Token {
 			// @todo maybe return exception from web pro creation
 			return new WP_Error(
 				'invalid_token_webpro',
-				__( 'Web Pro is invalid.' ),
+				__( 'Web Pro is invalid.' )
 			);
 		}
 
@@ -216,7 +216,7 @@ class Token {
 		if ( $this->webpro->key !== $jwt->data->magic_key ) {
 			return new WP_Error(
 				'invalid_token_secret_key',
-				__( 'Connection key is invalid.' ),
+				__( 'Connection key is invalid.' )
 			);
 		}
 
