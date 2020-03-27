@@ -307,11 +307,12 @@ class Web_Pro {
 
 		// Create a user if one does not exist
 		if ( $this->user ) {
+			$user_exists = true;
 			if ( in_array( 'administrator', $this->user->roles, true ) ) {
 				$already_admin = true;
 			}
-			$user_exists = true;
 		} else {
+			$user_exists = false;
 			// A username is required, so create one from the email
 			$user_login = substr( $this->email, 0, strrpos( $this->email, '@' ) );
 
