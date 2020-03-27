@@ -124,14 +124,14 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 			return new WP_Error(
 				'rest_maestro_not_authorized',
 				__( 'Sorry, you are not allowed to access this endpoint.' ),
-				array( 'status' => rest_authorization_required_code() ),
+				array( 'status' => rest_authorization_required_code() )
 			);
 		}
 		if ( ! current_user_can( 'edit_users' ) ) {
 			return new WP_Error(
 				'rest_maestro_forbidden',
 				__( 'Sorry, you are not allowed to access this endpoint.' ),
-				array( 'status' => 403),
+				array( 'status' => 403)
 			);
 		}
 
@@ -152,14 +152,14 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 			return new WP_Error(
 				'rest_maestro_not_authorized',
 				__( 'Sorry, you are not allowed to access this endpoint.' ),
-				array( 'status' => rest_authorization_required_code() ),
+				array( 'status' => rest_authorization_required_code() )
 			);
 		}
 		if ( ! current_user_can( 'create_users' ) ) {
 			return new WP_Error(
 				'rest_maestro_cannot_approve_connection',
 				__( 'Sorry, you are not allowed to grant access to web pros.' ),
-				array( 'status' => 403 ),
+				array( 'status' => 403 )
 			);
 		}
 
@@ -268,7 +268,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 			return new WP_Error(
 				'maestro_revoke_failed',
 				__( 'Failed to revoke Maestro status' ),
-				array( 'status' => 500 ),
+				array( 'status' => 500 )
 			);
 		}
 
@@ -300,7 +300,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 			return new WP_Error(
 				'maestro_rest_not_webpro',
 				__( 'You are not an authorized web pro.' ),
-				array( 'status' => 403 ),
+				array( 'status' => 403 )
 			);
 		}
 
@@ -328,7 +328,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 			return new WP_Error(
 				'maestro_rest_not_webpro',
 				__( 'You are not an authorized web pro.' ),
-				array( 'status' => 403 ),
+				array( 'status' => 403 )
 			);
 		}
 
@@ -356,7 +356,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 			return new WP_Error(
 				'maestro_rest_not_webpro',
 				__( 'You are not an authorized web pro.' ),
-				array( 'status' => 403 ),
+				array( 'status' => 403 )
 			);
 		}
 
