@@ -381,6 +381,7 @@ class Web_Pro {
 				$this->clean_up();
 			} else {
 				// Otherwise just remove them
+				require_once( ABSPATH . 'wp-admin/includes/user.php' );
 				wp_delete_user( $this->user->ID );
 			}
 			return false;
