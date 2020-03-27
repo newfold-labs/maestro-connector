@@ -364,8 +364,9 @@ class Web_Pro {
 		}
 
 		// If we didn't get a JWT back from the platform, then the connection is considered failed
-		$maestro_token = json_decode( $response['body'] )->accessToken;
-		if ( ! $maestro_token ) {
+		$decoded_response = json_decode( $response['body'] );
+		// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+		if ( ! $decoded_response->accessToken ) {
 			$connection_failed = true;
 		}
 
@@ -388,7 +389,7 @@ class Web_Pro {
 			return false;
 		}
 
-		return $this->save_revoke_token( $maestro_token );
+		return $this->save_revoke_token( $decoded_response->accessToken );
 
 	}
 
