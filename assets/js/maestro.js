@@ -57,6 +57,10 @@ maestro.confirmMaestro = function () {
 		maestro.setMessage( maestro.strings.accessGranted );
 		maestro.setDetails( '' );
 		maestro.setButtons();
+	} ).fail( function( response ) {
+		maestro.setMessage( maestro.strings.genericError );
+		maestro.setDetails( '' );
+		maestro.setButtons();
 	} );
 }
 
