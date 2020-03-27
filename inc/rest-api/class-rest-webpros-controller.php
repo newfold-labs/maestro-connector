@@ -53,7 +53,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 					'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::CREATABLE ),
 				),
 				'schema' => array( $this, 'get_public_item_schema' ),
-			),
+			)
 		);
 
 		register_rest_route(
