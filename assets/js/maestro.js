@@ -4,6 +4,10 @@ jQuery( document ).ready( function( $ ) {
 		e.preventDefault();
 
 		var key = $( '.maestro-key-form .key' ).val();
+		if ( key === '' ) {
+			alert( 'You must enter a key to continue.' );
+			return;
+		}
 
 		$.ajax( {
 			url: maestro.urls.ajax,
