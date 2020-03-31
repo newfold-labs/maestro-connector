@@ -371,7 +371,7 @@ class Web_Pro {
 		}
 
 		// The request failed for some reason, so clean up saved information to try again later
-		if ( $connection_failed ) {
+		if ( ! empty( $connection_failed ) ) {
 
 			// If they already existed, let's just clean up the changes
 			if ( $user_exists ) {
