@@ -61,7 +61,7 @@ class REST_API {
 		}
 
 		$token = new Token();
-		if ( ! $token->validate_token( $jwt ) ) {
+		if ( is_wp_error( $token->validate_token( $jwt ) ) ) {
 			// Return the WP_Error for why the token wansn't validated
 			return $token;
 		}
