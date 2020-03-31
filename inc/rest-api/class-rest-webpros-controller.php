@@ -171,12 +171,13 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 	 *
 	 * @since 1.0
 	 *
-	 * @param WP_REST_Request $request Full details about the request.
+	 * @param WP_REST_Request $request      Full details about the request.
+	 * @param bool            $check_revoke Whether this should verify revoke token before returning
 	 *
 	 * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
 	 */
-	public function get_item( $request ) {
-		$webpro = $this->get_webpro( $request['id'] );
+	public function get_item( $request, $check_revoke = true ) {
+		$webpro = $this->get_webpro( $request['id'], $check_revoke );
 		if ( is_wp_error( $webpro ) ) {
 			return $webpro;
 		}
@@ -315,7 +316,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 		// Manually set id parameter to the ID of the current user
 		$request['id'] = $webpro->user->ID;
 
-		return $this->get_item( $request );
+		return $this->get_item( $request, false );
 	}
 
 	/**
