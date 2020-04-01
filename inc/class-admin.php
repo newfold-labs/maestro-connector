@@ -431,6 +431,7 @@ class Admin {
 			'email'          => __( 'Email' ),
 			'location'       => __( 'Location' ),
 			'next'           => __( 'Next' ),
+			'keyError'       => __( "That secret key doesn't match—please try again." ),
 			'viewAllUsers'   => __( 'View all Users' ),
 			'addWebPro'      => __( 'Add a Web Pro' ),
 			'giveAccess'     => __( 'Give access' ),

@@ -5,6 +5,6 @@
 <div class="actions">
 	<form method="POST" action="" class="maestro-key-form">
 		<input type="text" name="key" class="key" placeholder="<?php _e( 'Enter secret key here' ); ?>" />
-		<button class="maestro-button primary submit"><span class="next"><?php _e( 'Next' ); ?></span></button>
+		<button class="maestro-button primary submit" disabled><span class="next"><?php _e( 'Next' ); ?></span></button>
 	</form>
 </div>

@@ -37,7 +37,7 @@
 	line-height: 48px;
 	display: inline-block;
 }
-.maestro-page input[type="text"] {
+.maestro-key-form .key {
 	background-position: 19px 14px;
 	background-repeat: no-repeat;
 	background-image: url( '../images/lock.svg' );
@@ -54,6 +54,13 @@
 	color: #2a5da8;
 	background: none;
 	text-decoration: none;
+	display: flex;
+    align-items: center;
+}
+.maestro-button.primary[disabled] {
+	cursor: not-allowed;
+	background-color: #72777c;
+	border-color: #72777c;
 }
 .maestro-button img.loading {
 	margin-top:
@@ -61,6 +68,14 @@
 .maestro-button.primary {
 	color: #fff;
 	background-color: #2a5da8;
+}
+.key.key-error {
+	border: 1px solid #d0031b;
+}
+.key-error-msg {
+	color:#d0031b;
+	font-size: 85%;
+	padding-left: 20px;
 }
 .boat-bg {
 	display: none;

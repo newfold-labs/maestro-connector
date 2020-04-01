@@ -1,13 +1,19 @@
 jQuery( document ).ready( function( $ ) {
 
+	$( '.maestro-key-form .key').keyup(function (e) {
+		if ( $(this).val() ) {
+			$( '.maestro-key-form .submit' ).removeAttr( 'disabled' );
+		} else {
+			$( '.maestro-key-form .submit' ).prop( 'disabled', true);
+			$( '.maestro-key-form .key' ).removeClass( 'key-error' );
+			$( '.key-error-msg' ).remove();
+		}
+	} );
+
 	$( '.maestro-key-form .submit' ).click( function( e ) {
 		e.preventDefault();
 
 		var key = $( '.maestro-key-form .key' ).val();
-		if ( key === '' ) {
-			alert( 'You must enter a key to continue.' );
-			return;
-		}
 
 		$.ajax( {
 			url: maestro.urls.ajax,
@@ -33,15 +39,18 @@ jQuery( document ).ready( function( $ ) {
 
 maestro.verifyWebPro = function ( response ) {
 	response = JSON.parse( response );
-	maestro.setMessage( response.message );
-	if ( 'invalid_key' !== response.status ) {
-		maestro.webpro = response;
-		maestro.setMessage( response.message );
-		var details = "<div class='name'><span>" + maestro.strings.name + ":</span> <span>" + response.name + "</span></div>\
-				<div class='email'><span>" + maestro.strings.email + ":</span> <span>" + response.email + "</span></div>\
-				<div class='location'><span>" + maestro.strings.location + ":</span> <span>" + response.location + "</span></div>";
-		maestro.setDetails( details );
+	if ( 'invalid_key' === response.status ) {
+		jQuery( '.maestro-key-form .key' ).addClass( 'key-error' );
+		jQuery( 'div.key-error-msg' ).remove();
+		jQuery( '.maestro-key-form' ).append( jQuery( '<div>' ).addClass( 'key-error-msg' ).text( maestro.strings.keyError ) );
+		return;
 	}
+	maestro.webpro = response;
+	maestro.setMessage( response.message );
+	var details = "<div class='name'><span>" + maestro.strings.name + ":</span> <span>" + response.name + "</span></div>\
+			<div class='email'><span>" + maestro.strings.email + ":</span> <span>" + response.email + "</span></div>\
+		<div class='location'><span>" + maestro.strings.location + ":</span> <span>" + response.location + "</span></div>";
+	maestro.setDetails( details );
 	var buttons = ( 'success' === response.status ) ? 'confirm' : '';
 	maestro.setButtons( buttons );
 }
