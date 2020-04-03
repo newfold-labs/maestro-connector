@@ -116,7 +116,7 @@ class Token {
 
 		// JWT Reserved claims.
 		$reserved = array(
-			'iss' => get_bloginfo( 'url' ), // Token issuer.
+			'iss' => preg_replace( '|https?://|', '', get_bloginfo( 'url' ) ), // Issuer with protocol stripped
 			'iat' => $time, // Token issued at.
 			'nbf' => $time, // Token accepted not before.
 			'exp' => $time + $expires, // Token expiry.
@@ -221,7 +221,7 @@ class Token {
 		}
 
 		// Determine if the token issuer matches this site.
-		if ( get_bloginfo( 'url' ) !== $jwt->iss ) {
+		if ( preg_replace( '|https?://|', '', get_bloginfo( 'url' ) ) !== $jwt->iss ) {
 			return new WP_Error(
 				'invalid_token_issuer',
 				__( 'Token issuer is invalid.' )
