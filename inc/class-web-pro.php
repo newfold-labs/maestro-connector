@@ -110,15 +110,6 @@ class Web_Pro {
 	private $platform = 'https://api-maestro.webpropanel.com/wp-plugin';
 
 	/**
-	 * Whether the plugin is in debug mode
-	 *
-	 * @since 1.0
-	 *
-	 * @var bool
-	 */
-	private $debug;
-
-	/**
 	 * Constructor
 	 *
 	 * @since 1.0
@@ -127,8 +118,6 @@ class Web_Pro {
 	 * @param string $key     A connection key assigned to a Web Pro by the platform
 	 */
 	public function __construct( $user_id = 0, $key = '' ) {
-
-		$this->debug = ( defined( 'MAESTRO_DEBUG_MODE' ) ) ? MAESTRO_DEBUG_MODE : false;
 
 		if ( ! $user_id && ! $key ) {
 			throw new Exception( 'Must provide a user ID or connection key.' );
@@ -231,7 +220,7 @@ class Web_Pro {
 		// md5 to make sure the key isn't too long for the option_name column
 		$response = get_transient( $trans_key );
 
-		if ( ! $response || $this->debug ) {
+		if ( ! $response ) {
 			$url = add_query_arg(
 				array(
 					'magicKey'   => $key,
@@ -242,14 +231,6 @@ class Web_Pro {
 
 			$response = wp_remote_get( $url );
 			set_transient( $trans_key, $response, 300 ); // Cache for 5 minutes
-		}
-
-		if ( $this->debug ) {
-			error_log(
-				"==============\nVERIFY REQUEST\n===========\n" . print_r( $response, true ),
-				3,
-				MAESTRO_PATH . '/debug.log'
-			);
 		}
 
 		// If it is valid, the platform will return a 200 status code
@@ -350,14 +331,6 @@ class Web_Pro {
 
 		$response = $this->send_access_token();
 
-		if ( $this->debug ) {
-			error_log(
-				"\n==============\nCONNECT REQUEST\n===========\n" . print_r( $response, true ),
-				3,
-				MAESTRO_PATH . '/debug.log'
-			);
-		}
-
 		// If successful, the platform will return a 200 status code
 		if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
 			$connection_failed = true;
@@ -425,14 +398,6 @@ class Web_Pro {
 		$this->parse_platform_response( $data );
 
 		$maestro_token = $this->send_access_token();
-
-		if ( $this->debug ) {
-			error_log(
-				"\n==============\nCONNECT REQUEST\n===========\n" . print_r( $maestro_token, true ),
-				3,
-				MAESTRO_PATH . '/debug.log'
-			);
-		}
 
 		if ( ! $maestro_token ) {
 			return false;
@@ -623,14 +588,6 @@ class Web_Pro {
 		);
 
 		$response = wp_remote_post( $this->platform . '/revoke-association', $args );
-
-		if ( $this->debug ) {
-			error_log(
-				"==============\nREVOKE REQUEST\n===========\n" . print_r( $response, true ),
-				3,
-				MAESTRO_PATH . '/debug.log'
-			);
-		}
 
 		delete_user_meta( $this->user->ID, $this->revoke_token_key );
 	}
