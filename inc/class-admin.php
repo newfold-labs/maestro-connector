@@ -118,9 +118,8 @@ class Admin {
 	 * @since 1.0
 	 */
 	public function admin_page() {
-		$nonce  = filter_input( INPUT_GET, '_wpnonce', FILTER_SANITIZE_STRING );
-		$action = filter_input( INPUT_GET, 'action', FILTER_SANITIZE_STRING );
-		$id     = intval( filter_input( INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT ) );
+		$nonce = filter_input( INPUT_GET, '_wpnonce', FILTER_SANITIZE_STRING );
+		$id    = intval( filter_input( INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT ) );
 		?>
 		<div class="wrap maestro-container">
 			<div class="maestro-page">
