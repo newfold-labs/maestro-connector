@@ -1,5 +1,5 @@
 {
-    "name": "bluehost/bluehost-maestro",
+    "name": "bluehost/maestro-connector",
     "description": "Give trusted web professionals admin access to your WordPress account. Revoke anytime.",
     "type": "wordpress-plugin",
     "license": "GPL-2.0-or-later",
