@@ -107,7 +107,7 @@ class Web_Pro {
 	 *
 	 * @var string
 	 */
-	private $platform = 'https://api-maestro.webpropanel.com/wp-plugin';
+	private $platform = 'https://api-maestro.bluehost.com/wp-plugin';
 
 	/**
 	 * Constructor
