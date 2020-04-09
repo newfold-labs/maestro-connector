@@ -1,14 +1,13 @@
 <?php
 /**
- * Plugin Name: Bluehost Maestro
+ * Plugin Name: Maestro Connector
  * Description: Give trusted web professionals admin access to your WordPress account. Revoke anytime.
  * Version: 1.0
  * Requires at least: 4.7
  * Requires PHP: 5.4
  * Author: Bluehost
  * Author URI: https://www.bluehost.com/
- * Text Domain: maestro
- * Domain Path: /languages
+ * Text Domain: maestro-connector
  * License: GPLv2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  *
@@ -103,8 +102,8 @@ function vendor_notice() {
 	</style>
 	<tr class="active maestro-warning">
 		<td colspan="3">
-			<strong style="color:#dc3232;"><span class="dashicons dashicons-warning"></span> <?php _e( 'Maestro is missing critical files' ); ?></strong>
-			// <span><a href="https://www.bluehost.com/contact"><?php _e( 'Contact Bluehost Support' ); ?> <span class="dashicons dashicons-external"></span> </a></span>
+			<strong style="color:#dc3232;"><span class="dashicons dashicons-warning"></span> <?php _e( 'Maestro is missing critical files', 'maestro-connector' ); ?></strong>
+			// <span><a href="https://www.bluehost.com/contact"><?php _e( 'Contact Bluehost Support', 'maestro-connector' ); ?> <span class="dashicons dashicons-external"></span> </a></span>
 		</td>
 	</tr>
 	<?php
