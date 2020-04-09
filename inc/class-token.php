@@ -158,7 +158,7 @@ class Token {
 			// Return caught exception as a WP_Error.
 			return new WP_Error(
 				'token_error',
-				__( 'Invalid token.' )
+				__( 'Invalid token.', 'maestro-connector' )
 			);
 		}
 	}
@@ -182,7 +182,7 @@ class Token {
 		if ( ! isset( $jwt->data->user->id ) ) {
 			return new WP_Error(
 				'missing_token_user_id',
-				__( 'Token user must have an ID.' )
+				__( 'Token user must have an ID.', 'maestro-connector' )
 			);
 		}
 
@@ -192,7 +192,7 @@ class Token {
 			// @todo maybe return exception from web pro creation
 			return new WP_Error(
 				'invalid_token_webpro',
-				__( 'Web Pro is invalid.' )
+				__( 'Web Pro is invalid.', 'maestro-connector' )
 			);
 		}
 
@@ -200,7 +200,7 @@ class Token {
 		if ( $jwt->data->user->user_login !== $this->webpro->user->user_login ) {
 			return new WP_Error(
 				'invalid_token_user_login',
-				__( 'Token user_login is invalid.' )
+				__( 'Token user_login is invalid.', 'maestro-connector' )
 			);
 		}
 
@@ -208,7 +208,7 @@ class Token {
 		if ( $jwt->data->user->user_email !== $this->webpro->user->user_email ) {
 			return new WP_Error(
 				'invalid_token_user_email',
-				__( 'Token user_email is invalid.' )
+				__( 'Token user_email is invalid.', 'maestro-connector' )
 			);
 		}
 
@@ -216,7 +216,7 @@ class Token {
 		if ( $this->webpro->key !== $jwt->data->magic_key ) {
 			return new WP_Error(
 				'invalid_token_secret_key',
-				__( 'Connection key is invalid.' )
+				__( 'Connection key is invalid.', 'maestro-connector' )
 			);
 		}
 
@@ -224,7 +224,7 @@ class Token {
 		if ( preg_replace( '|https?://|', '', get_bloginfo( 'url' ) ) !== $jwt->iss ) {
 			return new WP_Error(
 				'invalid_token_issuer',
-				__( 'Token issuer is invalid.' )
+				__( 'Token issuer is invalid.', 'maestro-connector' )
 			);
 		}
 
@@ -261,14 +261,14 @@ class Token {
 		if ( ! isset( $token->exp ) ) {
 			return new WP_Error(
 				'missing_token_expiration',
-				__( 'Token must have an expiration.' )
+				__( 'Token must have an expiration.', 'maestro-connector' )
 			);
 		}
 
 		if ( time() > $token->exp ) {
 			return new WP_Error(
 				'token_expired',
-				__( 'Token has expired.' )
+				__( 'Token has expired.', 'maestro-connector' )
 			);
 		}
 
@@ -292,7 +292,7 @@ class Token {
 		if ( ! isset( $token->jti ) ) {
 			return new WP_Error(
 				'missing_token_jti',
-				__( 'Token must have a unique identifier.' )
+				__( 'Token must have a unique identifier.', 'maestro-connector' )
 			);
 		}
 
@@ -300,7 +300,7 @@ class Token {
 		if ( get_user_meta( $token->data->user->id, $this->jti_meta_key, true ) !== $token->jti ) {
 			return new WP_Error(
 				'jti_not_valid',
-				__( 'Token identifier is not valid.' )
+				__( 'Token identifier is not valid.', 'maestro-connector' )
 			);
 		}
 

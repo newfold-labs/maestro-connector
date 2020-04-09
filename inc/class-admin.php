@@ -67,8 +67,8 @@ class Admin {
 	public function admin_menu() {
 		$this->page_hook = add_submenu_page(
 			'users.php',
-			__( 'Bluehost Maestro' ),
-			__( 'Bluehost Maestro' ),
+			__( 'Bluehost Maestro', 'maestro-connector' ),
+			__( 'Bluehost Maestro', 'maestro-connector' ),
 			'manage_options',
 			'bluehost-maestro',
 			array( $this, 'admin_page' ),
@@ -155,14 +155,14 @@ class Admin {
 	public function confirm_revoke( $nonce, $id ) {
 
 		if ( 1 !== wp_verify_nonce( $nonce, 'revoke-webpro' ) ) {
-			echo '<p class="thin">' . __( 'Unable to complete your request. Please try again.' ) . '</p>';
+			echo '<p class="thin">' . __( 'Unable to complete your request. Please try again.', 'maestro-connector' ) . '</p>';
 			return;
 		}
 
 		try {
 			$webpro = new Web_Pro( $id );
 		} catch ( Exception $e ) {
-			echo '<p class="thin">' . __( 'Invalid user ID.' ) . '</p>';
+			echo '<p class="thin">' . __( 'Invalid user ID.', 'maestro-connector' ) . '</p>';
 		}
 
 		if ( $webpro->is_connected() ) {
@@ -176,7 +176,7 @@ class Admin {
 			$cancel_url  = add_query_arg( 'page', 'bluehost-maestro', admin_url( 'users.php' ) );
 			include $this->partials . 'confirm-revoke.php';
 		} else {
-			echo '<p class="thin">' . __( 'This user is not a connected Web Pro.' ) . '</p>';
+			echo '<p class="thin">' . __( 'This user is not a connected Web Pro.', 'maestro-connector' ) . '</p>';
 		}
 	}
 
@@ -190,22 +190,22 @@ class Admin {
 	 */
 	public function revoke( $nonce, $id ) {
 		if ( 1 !== wp_verify_nonce( $nonce, 'confirm-revoke-webpro' ) ) {
-			echo '<p class="thin">' . __( 'Unable to complete your request. Please try again.' ) . '</p>';
+			echo '<p class="thin">' . __( 'Unable to complete your request. Please try again.', 'maestro-connector' ) . '</p>';
 			return;
 		}
 
 		try {
 			$webpro = new Web_Pro( $id );
 		} catch ( Exception $e ) {
-			echo '<p class="thin">' . __( 'Invalid user ID.' ) . '</p>';
+			echo '<p class="thin">' . __( 'Invalid user ID.', 'maestro-connector' ) . '</p>';
 		}
 
 		$webpro->disconnect();
 
 		if ( ! $webpro->is_connected() ) {
-			echo '<p class="thin">' . __( 'The Maestro connection for this Web Pro has been revoked and their user role has been demoted.' ) . '</p>';
+			echo '<p class="thin">' . __( 'The Maestro connection for this Web Pro has been revoked and their user role has been demoted.', 'maestro-connector' ) . '</p>';
 		} else {
-			echo '<p class="thin">' . __( 'Something went wrong. Please try again.' ) . '</p>';
+			echo '<p class="thin">' . __( 'Something went wrong. Please try again.', 'maestro-connector' ) . '</p>';
 		}
 	}
 
@@ -220,23 +220,23 @@ class Admin {
 
 		// Requires HTTPS
 		if ( ! is_ssl() ) {
-			return new WP_Error( 'https-not-detected', __( 'Maestro requires HTTPS.' ) );
+			return new WP_Error( 'https-not-detected', __( 'Maestro requires HTTPS.', 'maestro-connector' ) );
 		}
 
 		// Requires WordPress 4.7 or higher
 		global $wp_version;
 		if ( version_compare( $wp_version, '4.7', '<' ) ) {
-			return new WP_Error( 'wp-version-incompatibile', __( 'Maestro requires WordPress version 4.7 or higher.' ) );
+			return new WP_Error( 'wp-version-incompatibile', __( 'Maestro requires WordPress version 4.7 or higher.', 'maestro-connector' ) );
 		}
 
 		// Requires PHP version 5.3 or higher
 		if ( version_compare( phpversion(), '5.3', '<' ) ) {
-			return new WP_Error( 'php-version-incompatible', __( 'Maestro requires PHP version 5.3 or higher.' ) );
+			return new WP_Error( 'php-version-incompatible', __( 'Maestro requires PHP version 5.3 or higher.', 'maestro-connector' ) );
 		}
 
 		// Make sure the site has secure keys configured
 		if ( ! defined( 'SECURE_AUTH_KEY' ) || '' === SECURE_AUTH_KEY ) {
-			return new WP_Error( 'secure-auth-key-not-set', __( 'You must have a SECURE_AUTH_KEY configured in wp-config.php' ) );
+			return new WP_Error( 'secure-auth-key-not-set', __( 'You must have a SECURE_AUTH_KEY configured in wp-config.php', 'maestro-connector' ) );
 		}
 
 		return true;
@@ -267,17 +267,17 @@ class Admin {
 			$webpro = new Web_Pro( $key );
 		} catch ( Exception $e ) {
 			$response['status']  = 'invalid_key';
-			$response['message'] = __( 'This secret key is not valid.' );
+			$response['message'] = __( 'This secret key is not valid.', 'maestro-connector' );
 			echo wp_json_encode( $response );
 			wp_die();
 		}
 
 		if ( $webpro->is_connected() ) {
 			$response['status']  = 'user_exists';
-			$response['message'] = __( 'You have already added this web pro to your site.' );
+			$response['message'] = __( 'You have already added this web pro to your site.', 'maestro-connector' );
 		} else {
 			$response['status']  = 'success';
-			$response['message'] = __( "Let's double-check this: Make sure the name below matches the name of your web pro." );
+			$response['message'] = __( "Let's double-check this: Make sure the name below matches the name of your web pro.", 'maestro-connector' );
 		}
 
 		$response['name']     = $webpro->first_name . ' ' . $webpro->last_name;
@@ -334,7 +334,7 @@ class Admin {
 			$revoke_url = $this->get_revoke_url( $user_id );
 
 			$value  = '<img style="max-width: 80%;" src="' . esc_url( $logo_url ) . '" />';
-			$value .= '<div class="row-actions"><a href="' . esc_url( $revoke_url ) . '">' . __( 'Revoke Access' ) . '</a></div>';
+			$value .= '<div class="row-actions"><a href="' . esc_url( $revoke_url ) . '">' . __( 'Revoke Access', 'maestro-connector' ) . '</a></div>';
 		}
 
 		return $value;
@@ -426,19 +426,19 @@ class Admin {
 	 */
 	public function get_translated_strings() {
 		return array(
-			'name'           => __( 'Name' ),
-			'email'          => __( 'Email' ),
-			'location'       => __( 'Location' ),
-			'next'           => __( 'Next' ),
-			'keyError'       => __( "That secret key doesn't match—please try again." ),
-			'viewAllUsers'   => __( 'View all Users' ),
-			'addWebPro'      => __( 'Add a Web Pro' ),
-			'giveAccess'     => __( 'Give access' ),
-			'dontGiveAccess' => __( "Don't give access" ),
-			'confirmMessage' => __( "Let's double-check this: Make sure the name below matches the name of your web pro." ),
-			'accessGranted'  => __( "You've successfully given your web professional administrative access to your site." ),
-			'accessDeclined' => __( 'Got it. That web professional does not have access to your site.' ),
-			'genericError'   => __( 'An error occured.' ),
+			'name'           => __( 'Name', 'maestro-connector' ),
+			'email'          => __( 'Email', 'maestro-connector' ),
+			'location'       => __( 'Location', 'maestro-connector' ),
+			'next'           => __( 'Next', 'maestro-connector' ),
+			'keyError'       => __( "That secret key doesn't match—please try again.", 'maestro-connector' ),
+			'viewAllUsers'   => __( 'View all Users', 'maestro-connector' ),
+			'addWebPro'      => __( 'Add a Web Pro', 'maestro-connector' ),
+			'giveAccess'     => __( 'Give access', 'maestro-connector' ),
+			'dontGiveAccess' => __( "Don't give access", 'maestro-connector' ),
+			'confirmMessage' => __( "Let's double-check this: Make sure the name below matches the name of your web pro.", 'maestro-connector' ),
+			'accessGranted'  => __( "You've successfully given your web professional administrative access to your site.", 'maestro-connector' ),
+			'accessDeclined' => __( 'Got it. That web professional does not have access to your site.', 'maestro-connector' ),
+			'genericError'   => __( 'An error occured.', 'maestro-connector' ),
 		);
 	}
 }

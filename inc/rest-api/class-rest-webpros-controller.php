@@ -62,7 +62,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 			array(
 				'args'   => array(
 					'id' => array(
-						'description' => __( 'Unique identifier for the user.' ),
+						'description' => __( 'Unique identifier for the user.', 'maestro-connector' ),
 						'type'        => 'integer',
 					),
 				),
@@ -123,14 +123,14 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 		if ( ! is_user_logged_in() ) {
 			return new WP_Error(
 				'rest_maestro_not_authorized',
-				__( 'Sorry, you are not allowed to access this endpoint.' ),
+				__( 'Sorry, you are not allowed to access this endpoint.', 'maestro-connector' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}
 		if ( ! current_user_can( 'edit_users' ) ) {
 			return new WP_Error(
 				'rest_maestro_forbidden',
-				__( 'Sorry, you are not allowed to access this endpoint.' ),
+				__( 'Sorry, you are not allowed to access this endpoint.', 'maestro-connector' ),
 				array( 'status' => 403 )
 			);
 		}
@@ -151,14 +151,14 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 		if ( ! is_user_logged_in() ) {
 			return new WP_Error(
 				'rest_maestro_not_authorized',
-				__( 'Sorry, you are not allowed to access this endpoint.' ),
+				__( 'Sorry, you are not allowed to access this endpoint.', 'maestro-connector' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}
 		if ( ! current_user_can( 'create_users' ) ) {
 			return new WP_Error(
 				'rest_maestro_cannot_approve_connection',
-				__( 'Sorry, you are not allowed to grant access to web pros.' ),
+				__( 'Sorry, you are not allowed to grant access to web pros.', 'maestro-connector' ),
 				array( 'status' => 403 )
 			);
 		}
@@ -209,7 +209,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 		if ( ! $success ) {
 			return new WP_Error(
 				'maestro_connection_failed',
-				__( 'Failed to connect Web Pro' ),
+				__( 'Failed to connect Web Pro', 'maestro-connector' ),
 				array( 'status' => 500 )
 			);
 		}
@@ -276,7 +276,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 		if ( ! $deleted ) {
 			return new WP_Error(
 				'maestro_revoke_failed',
-				__( 'Failed to revoke Maestro status' ),
+				__( 'Failed to revoke Maestro status', 'maestro-connector' ),
 				array( 'status' => 500 )
 			);
 		}
@@ -308,7 +308,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 		if ( is_wp_error( $webpro ) ) {
 			return new WP_Error(
 				'maestro_rest_not_webpro',
-				__( 'You are not an authorized web pro.' ),
+				__( 'You are not an authorized web pro.', 'maestro-connector' ),
 				array( 'status' => 403 )
 			);
 		}
@@ -336,7 +336,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 		if ( is_wp_error( $webpro ) ) {
 			return new WP_Error(
 				'maestro_rest_not_webpro',
-				__( 'You are not an authorized web pro.' ),
+				__( 'You are not an authorized web pro.', 'maestro-connector' ),
 				array( 'status' => 403 )
 			);
 		}
@@ -364,7 +364,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 		if ( is_wp_error( $webpro ) ) {
 			return new WP_Error(
 				'maestro_rest_not_webpro',
-				__( 'You are not an authorized web pro.' ),
+				__( 'You are not an authorized web pro.', 'maestro-connector' ),
 				array( 'status' => 403 )
 			);
 		}
@@ -436,7 +436,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 	 * @return Web_Pro|WP_Error Web_Pro object if ID is valid, WP_Error otherwise.
 	 */
 	protected function get_webpro( $id, $check_revoke = true ) {
-		$error = new WP_Error( 'rest_user_invalid_id', __( 'Invalid user ID.' ), array( 'status' => 404 ) );
+		$error = new WP_Error( 'rest_user_invalid_id', __( 'Invalid user ID.', 'maestro-connector' ), array( 'status' => 404 ) );
 		if ( (int) $id <= 0 ) {
 			return $error;
 		}
@@ -476,14 +476,14 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 		$username = (string) $value;
 
 		if ( ! validate_username( $username ) ) {
-			return new WP_Error( 'rest_user_invalid_username', __( 'Username contains invalid characters.' ), array( 'status' => 400 ) );
+			return new WP_Error( 'rest_user_invalid_username', __( 'Username contains invalid characters.', 'maestro-connector' ), array( 'status' => 400 ) );
 		}
 
 		/** This filter is documented in wp-includes/user.php */
 		$illegal_logins = (array) apply_filters( 'illegal_user_logins', array() );
 
 		if ( in_array( strtolower( $username ), array_map( 'strtolower', $illegal_logins ), true ) ) {
-			return new WP_Error( 'rest_user_invalid_username', __( 'Sorry, that username is not allowed.' ), array( 'status' => 400 ) );
+			return new WP_Error( 'rest_user_invalid_username', __( 'Sorry, that username is not allowed.', 'maestro-connector' ), array( 'status' => 400 ) );
 		}
 
 		return $username;
@@ -508,12 +508,12 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 			'type'       => 'object',
 			'properties' => array(
 				'id'         => array(
-					'description' => __( 'Unique identifier for the user.' ),
+					'description' => __( 'Unique identifier for the user.', 'maestro-connector' ),
 					'type'        => 'integer',
 					'readonly'    => true,
 				),
 				'username'   => array(
-					'description' => __( 'Login name for the user.' ),
+					'description' => __( 'Login name for the user.', 'maestro-connector' ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 					'readonly'    => true, // Either exists, or auto-generated from email
@@ -522,7 +522,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 					),
 				),
 				'name'       => array(
-					'description' => __( 'Display name for the user.' ),
+					'description' => __( 'Display name for the user.', 'maestro-connector' ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 					'readonly'    => true, // Either exists, or is supplied from the platform based on key
@@ -531,27 +531,27 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 					),
 				),
 				'email'      => array(
-					'description' => __( 'The email address for the user.' ),
+					'description' => __( 'The email address for the user.', 'maestro-connector' ),
 					'type'        => 'string',
 					'format'      => 'email',
 					'readonly'    => true, // Either exists, or is supplied from the platform based on key
 					'context'     => array( 'view', 'edit' ),
 				),
 				'added_by'   => array(
-					'description' => __( 'The user who approved the Maestro connection.' ),
+					'description' => __( 'The user who approved the Maestro connection.', 'maestro-connector' ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 					'readonly'    => true, // This can only be set programmatically
 				),
 				'added_time' => array(
-					'description' => __( 'Time when the Maestro connection was approved.' ),
+					'description' => __( 'Time when the Maestro connection was approved.', 'maestro-connector' ),
 					'type'        => 'string',
 					'format'      => 'date-time',
 					'context'     => array( 'view', 'edit' ),
 					'readonly'    => true, // This can only be set programmatically
 				),
 				'magic_key'  => array(
-					'description' => __( 'The maestro identifier key for the webpro.' ),
+					'description' => __( 'The maestro identifier key for the webpro.', 'maestro-connector' ),
 					'type'        => 'string',
 					'context'     => array(), // connection key doesn't get displayed
 					'arg_options' => array(
