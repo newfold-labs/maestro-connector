@@ -49,7 +49,8 @@ maestro.verifyWebPro = function ( response ) {
 	maestro.setMessage( response.message );
 	var details = "<div class='name'><span>" + maestro.strings.name + ":</span> <span>" + response.name + "</span></div>\
 			<div class='email'><span>" + maestro.strings.email + ":</span> <span>" + response.email + "</span></div>\
-		<div class='location'><span>" + maestro.strings.location + ":</span> <span>" + response.location + "</span></div>";
+		<div class='location'><span>" + maestro.strings.location + ":</span> <span>" + response.location + "</span></div>\
+		<div class='access-description'><p>Access will give administrative control over your site. That includes managing content, plugins, themes and permissions.</p></div>";
 	maestro.setDetails( details );
 	var buttons = ( 'success' === response.status ) ? 'confirm' : '';
 	maestro.setButtons( buttons );
