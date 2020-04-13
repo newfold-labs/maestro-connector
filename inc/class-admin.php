@@ -438,6 +438,7 @@ class Admin {
 			'confirmMessage' => __( 'We found your Web Pro:', 'maestro-connector' ),
 			'accessGranted'  => __( "You've successfully given your web professional administrative access to your site.", 'maestro-connector' ),
 			'accessDeclined' => __( 'Got it. That web professional does not have access to your site.', 'maestro-connector' ),
+			'accessDescription' => __( 'Access will give administrative control over your site. That includes managing content, plugins, themes and permissions.', 'maestro-connector' ),
 			'genericError'   => __( 'An error occured.', 'maestro-connector' ),
 		);
 	}
