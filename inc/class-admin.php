@@ -426,20 +426,20 @@ class Admin {
 	 */
 	public function get_translated_strings() {
 		return array(
-			'name'           => __( 'Name', 'maestro-connector' ),
-			'email'          => __( 'Email', 'maestro-connector' ),
-			'location'       => __( 'Location', 'maestro-connector' ),
-			'next'           => __( 'Next', 'maestro-connector' ),
-			'keyError'       => __( "That secret key doesn't match—please try again.", 'maestro-connector' ),
-			'viewAllUsers'   => __( 'View all Users', 'maestro-connector' ),
-			'addWebPro'      => __( 'Add a Web Pro', 'maestro-connector' ),
-			'giveAccess'     => __( 'Give access', 'maestro-connector' ),
-			'dontGiveAccess' => __( "Don't give access", 'maestro-connector' ),
-			'confirmMessage' => __( 'We found your Web Pro:', 'maestro-connector' ),
-			'accessGranted'  => __( "You've successfully given your web professional administrative access to your site.", 'maestro-connector' ),
-			'accessDeclined' => __( 'Got it. That web professional does not have access to your site.', 'maestro-connector' ),
+			'name'              => __( 'Name', 'maestro-connector' ),
+			'email'             => __( 'Email', 'maestro-connector' ),
+			'location'          => __( 'Location', 'maestro-connector' ),
+			'next'              => __( 'Next', 'maestro-connector' ),
+			'keyError'          => __( "That secret key doesn't match—please try again.", 'maestro-connector' ),
+			'viewAllUsers'      => __( 'View all Users', 'maestro-connector' ),
+			'addWebPro'         => __( 'Add a Web Pro', 'maestro-connector' ),
+			'giveAccess'        => __( 'Give access', 'maestro-connector' ),
+			'dontGiveAccess'    => __( "Don't give access", 'maestro-connector' ),
+			'confirmMessage'    => __( 'We found your Web Pro:', 'maestro-connector' ),
+			'accessGranted'     => __( "You've successfully given your web professional administrative access to your site.", 'maestro-connector' ),
+			'accessDeclined'    => __( 'Got it. That web professional does not have access to your site.', 'maestro-connector' ),
 			'accessDescription' => __( 'Access will give administrative control over your site. That includes managing content, plugins, themes and permissions.', 'maestro-connector' ),
-			'genericError'   => __( 'An error occured.', 'maestro-connector' ),
+			'genericError'      => __( 'An error occured.', 'maestro-connector' ),
 		);
 	}
 }
