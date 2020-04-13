@@ -8,6 +8,7 @@
  * Author: Bluehost
  * Author URI: https://www.bluehost.com/
  * Text Domain: maestro-connector
+ * Domain Path: languages
  * License: GPLv2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  *
@@ -24,9 +25,15 @@ define( 'MAESTRO_URL', plugin_dir_url( __FILE__ ) );
 // Composer autoloader
 if ( ! is_readable( __DIR__ . '/vendor/autoload.php' ) ) {
 	add_action( 'after_plugin_row_' . plugin_basename( __FILE__ ), __NAMESPACE__ . '\\vendor_notice' );
+
 	return;
 }
 require __DIR__ . '/vendor/autoload.php';
+
+// Load translations
+add_action( 'plugins_loaded', function () {
+	load_plugin_textdomain( basename( __DIR__ ), false, basename( __DIR__ ) . '/languages/' );
+} );
 
 // Other required files
 require __DIR__ . '/inc/sso.php';
