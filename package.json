@@ -1,0 +1,23 @@
+{
+  "name": "maestro-connector",
+  "version": "1.0.0",
+  "description": "Give trusted web professionals admin access to your WordPress account. Revoke anytime.",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "translate": "wpi18n addtextdomain && wpi18n makepot"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bluehost/wp-maestro.git"
+  },
+  "author": "William Earnhardt <wearnhardt@gmail.com>",
+  "license": "GPL-2.0-or-later",
+  "bugs": {
+    "url": "https://github.com/bluehost/wp-maestro/issues"
+  },
+  "homepage": "https://github.com/bluehost/wp-maestro#readme",
+  "devDependencies": {
+    "node-wp-i18n": "^1.2.3"
+  }
+}
