@@ -27,7 +27,7 @@
 .maestro-page p {
 	color: #5C5C5C;
 	font-size: 28px;
-	margin-bottom: 50px;
+	margin-bottom: 25px;
 }
 .maestro-page input,
 .maestro-page button,
@@ -54,8 +54,6 @@
 	color: #2a5da8;
 	background: none;
 	text-decoration: none;
-	display: flex;
-    align-items: center;
 }
 .maestro-button.primary[disabled] {
 	cursor: not-allowed;
@@ -63,7 +61,7 @@
 	border-color: #72777c;
 }
 .maestro-button img.loading {
-	margin-top:
+	margin-bottom: -5px;
 }
 .maestro-button.primary {
 	color: #fff;
@@ -94,6 +92,14 @@
 }
 .details div span:last-of-type {
 	color: #5B5B5B;
+}
+.access-description {
+    max-width: 500px;
+    padding-top: 10px;
+}
+.maestro-page .access-description p {
+    font-size: .9em;
+    font-weight: 400;
 }
 .thin {
 	font-weight: 300;

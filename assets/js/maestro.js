@@ -24,7 +24,7 @@ jQuery( document ).ready( function( $ ) {
 				nonce: maestro.nonces.ajax
 			},
 			beforeSend: function() {
-				$( '.maestro-key-form .submit' ).html( '<img src="' + maestro.urls.assets + '/images/loading.svg" />' );
+				$( '.maestro-key-form .submit' ).html( '<span><img class="loading" src="' + maestro.urls.assets + '/images/loading.svg" /></span>' );
 			},
 			complete: function() {
 				$( '.maestro-key-form .submit' ).html( maestro.strings.next );
