@@ -45,6 +45,7 @@
 	width: 400px;
 	padding-left: 53px;
 	font-size: 18px;
+	max-width: 100%;
 }
 .maestro-button {
 	height: 48px;
@@ -54,6 +55,19 @@
 	color: #2a5da8;
 	background: none;
 	text-decoration: none;
+	text-align: center;
+	box-sizing: border-box;
+}
+@media (max-width: 960px) {
+	.maestro-page p {
+		font-size: 24px;
+	}
+	.maestro-page input,
+	.maestro-page button,
+	.maestro-button {
+		width: 100%;
+		margin-bottom: 15px;
+	}
 }
 .maestro-button.primary[disabled] {
 	cursor: not-allowed;
