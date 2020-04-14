@@ -46,7 +46,7 @@ maestro.verifyWebPro = function ( response ) {
 		return;
 	}
 	maestro.webpro = response;
-	maestro.nonces.ajax = response.nonce;
+	maestro.nonces = response.nonces;
 	maestro.setMessage( response.message );
 	var details = "<div class='name'><span>" + maestro.strings.name + ":</span> <span>" + response.name + "</span></div>\
 			<div class='email'><span>" + maestro.strings.email + ":</span> <span>" + response.email + "</span></div>\
@@ -63,13 +63,11 @@ maestro.confirmMaestro = function () {
 		method: 'POST',
 		beforeSend: function ( xhr ) {
 			xhr.setRequestHeader( 'X-WP-Nonce', maestro.nonces.rest );
+			jQuery( '.maestro-button.primary' ).html( '<span><img class="loading" src="' + maestro.urls.assets + '/images/loading.svg" /></span>' );
 		},
 		data: {
 			magic_key: maestro.webpro.key,
 			email: maestro.webpro.email,
-		},
-		beforeSend: function() {
-			jQuery( '.maestro-button.primary' ).html( '<span><img class="loading" src="' + maestro.urls.assets + '/images/loading.svg" /></span>' );
 		}
 	} ).done( function ( response ) {
 		maestro.setMessage( maestro.strings.accessGranted );

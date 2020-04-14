@@ -105,15 +105,14 @@ class Admin {
 		$data = array(
 			'urls'    => array(
 				'site'        => get_option( 'siteurl' ),
-				'assets'      => MAESTRO_URL . '/assets',
+				'assets'      => MAESTRO_URL . 'assets',
 				'ajax'        => admin_url( 'admin-ajax.php' ),
 				'restAPI'     => rest_url( '/bluehost/maestro/v1' ),
 				'usersList'   => admin_url( 'users.php' ),
 				'maestroPage' => add_query_arg( 'page', 'bluehost-maestro', admin_url( 'users.php' ) ),
 			),
 			'nonces'  => array(
-				'ajax' => wp_create_nonce( 'maestro_check_key' ),
-				'rest' => wp_create_nonce( 'wp_rest' ),
+				'ajax' => wp_create_nonce( 'maestro_check_key' )
 			),
 			'strings' => $this->get_translated_strings(),
 		);
@@ -300,7 +299,10 @@ class Admin {
 		$response['email']    = $webpro->email;
 		$response['location'] = $webpro->location;
 		$response['key']      = $key;
-		$response['nonce']    = wp_create_nonce( 'maestro_deny' );
+		$response['nonces']   = array(
+			'ajax' => wp_create_nonce( 'maestro_deny' ),
+			'rest' => wp_create_nonce( 'wp_rest' ),
+		);
 
 		echo wp_json_encode( $response );
 		wp_die();
