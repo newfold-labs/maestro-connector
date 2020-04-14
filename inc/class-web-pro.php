@@ -565,16 +565,20 @@ class Web_Pro {
 	 *
 	 * Deletes all usermeta set during Maestro connection, which also renders access token invalid
 	 *
+	 * @param boolean $notify Whether to notify the platform of a disconnect
+	 *
 	 * @since 1.0
 	 */
-	public function disconnect() {
+	public function disconnect( $notify = true ) {
 		$this->clean_up();
 
 		$this->user->remove_role( 'administrator' );
 		$this->user->set_role( 'subscriber' );
 
 		// Let the platform know that the site is disconnected
-		$this->revoke();
+		if ( $notify ) {
+			$this->revoke();
+		}
 	}
 
 	/**

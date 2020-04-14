@@ -271,7 +271,10 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 		}
 
 		$previous = $webpro;
-		$deleted  = $webpro->disconnect();
+
+		// Don't send a platform revoke notification if we're accessing using the token auth
+		$notify  = ( empty( $_SERVER['HTTP_MAESTRO_AUTHORIZATION'] ) ) ? true : false;
+		$deleted = $webpro->disconnect( $notify );
 
 		if ( ! $deleted ) {
 			return new WP_Error(
