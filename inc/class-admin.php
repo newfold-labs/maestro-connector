@@ -292,7 +292,7 @@ class Admin {
 			$response['message'] = __( 'You have already added this web pro to your site.', 'maestro-connector' );
 		} else {
 			$response['status']  = 'success';
-			$response['message'] = __( "Let's double-check this: Make sure the name below matches the name of your web pro.", 'maestro-connector' );
+			$response['message'] = __( 'We found your Web Pro:', 'maestro-connector' );
 		}
 
 		$response['name']     = $webpro->first_name . ' ' . $webpro->last_name;
@@ -450,7 +450,6 @@ class Admin {
 			'addWebPro'      => __( 'Add a Web Pro', 'maestro-connector' ),
 			'giveAccess'     => __( 'Give access', 'maestro-connector' ),
 			'dontGiveAccess' => __( "Don't give access", 'maestro-connector' ),
-			'confirmMessage' => __( 'We found your Web Pro:', 'maestro-connector' ),
 			'accessGranted'  => __( "You've successfully given your web professional administrative access to your site.", 'maestro-connector' ),
 			'accessDeclined' => __( 'Got it. That web professional does not have access to your site.', 'maestro-connector' ),
 			'genericError'   => __( 'An error occured.', 'maestro-connector' ),
