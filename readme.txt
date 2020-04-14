@@ -32,6 +32,14 @@ Your Maestro account is free, and is separate from any existing account you migh
 
 No! In fact, that is what this plugin is for. It allows you to connect your sites hosted anywhere to the Bluehost Maestro platform.
 
+= What access am I giving to the Web Pro through this plugin? =
+
+You will be giving your Web Pro Administrator privileges to your website. This means the Web Pro will have complete control over your WordPress Admin area including but not limited to themes, plugins, content, user list and user roles.
+
+= How do I revoke access for a Web Pro after giving them access? =
+
+You can always do this by going to the ‘Users’ section from the left hand navigation menu. Click on ‘All Users’. You will see a list of users who have access to your WordPress Admin. The Web Pros to whom you have granted Administrator access via the Maestro Connector plugin will appear with the Bluehost Maestro tag under the Maestro column. Hover over the tag to see the “Revoke Access” button. Clicking on this will demote the Web Pro to a Subscriber to your WordPress Admin and disconnect from the Maestro platform. The Web Pro will no longer be able to access your WordPress admin dashboard.
+
 == Screenshots ==
 
 
