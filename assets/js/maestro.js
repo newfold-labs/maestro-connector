@@ -46,6 +46,7 @@ maestro.verifyWebPro = function ( response ) {
 		return;
 	}
 	maestro.webpro = response;
+	maestro.nonces.ajax = response.nonce;
 	maestro.setMessage( response.message );
 	var details = "<div class='name'><span>" + maestro.strings.name + ":</span> <span>" + response.name + "</span></div>\
 			<div class='email'><span>" + maestro.strings.email + ":</span> <span>" + response.email + "</span></div>\
@@ -82,6 +83,15 @@ maestro.confirmMaestro = function () {
 }
 
 maestro.denyMaestro = function () {
+	jQuery.ajax( {
+		url: maestro.urls.ajax,
+		method: 'POST',
+		data: {
+			action: 'bh-maestro-deny',
+			key: maestro.webpro.key,
+			nonce: maestro.nonces.ajax
+		}
+	} );
 	maestro.setMessage( maestro.strings.accessDeclined );
 	maestro.setDetails( '' );
 	maestro.setButtons();

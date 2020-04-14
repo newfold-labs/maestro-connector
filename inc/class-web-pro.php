@@ -538,6 +538,29 @@ class Web_Pro {
 	}
 
 	/**
+	 * Notifies the platform an association request has been denied
+	 *
+	 * @since 1.0
+	 *
+	 * @return array The response returned by the platform
+	 */
+	public function deny() {
+		$body = array(
+			'magicKey'   => $this->key,
+			'websiteUrl' => get_option( 'siteurl' ),
+		);
+
+		$args = array(
+			'body'        => wp_json_encode( $body ),
+			'headers'     => array( 'Content-Type' => 'application/json' ),
+			'timeout'     => 10,
+			'data_format' => 'body',
+		);
+
+		return wp_remote_post( $this->platform . '/decline-association', $args );
+	}
+
+	/**
 	 * Severs the connection to the platform for the Web Pro
 	 *
 	 * Deletes all usermeta set during Maestro connection, which also renders access token invalid

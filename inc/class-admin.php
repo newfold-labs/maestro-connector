@@ -48,6 +48,7 @@ class Admin {
 
 		// Ajax hooks for adding maestros
 		add_action( 'wp_ajax_bh-maestro-key-check', array( $this, 'check_key' ) );
+		add_action( 'wp_ajax_bh-maestro-deny', array( $this, 'deny_request' ) );
 
 		// Hooks for the user list table
 		add_filter( 'manage_users_columns', array( $this, 'add_user_column' ) );
@@ -271,7 +272,7 @@ class Admin {
 		$nonce = filter_input( INPUT_POST, 'nonce', FILTER_SANITIZE_STRING );
 		$key   = filter_input( INPUT_POST, 'key', FILTER_SANITIZE_STRING );
 
-		// Make sure we have a valid nonce and a key
+		// Make sure we have a valid nonce
 		if ( 1 !== wp_verify_nonce( $nonce, 'maestro_check_key' ) || ! $key ) {
 			return;
 		}
@@ -299,8 +300,35 @@ class Admin {
 		$response['email']    = $webpro->email;
 		$response['location'] = $webpro->location;
 		$response['key']      = $key;
+		$response['nonce']    = wp_create_nonce( 'maestro_deny' );
 
 		echo wp_json_encode( $response );
+		wp_die();
+	}
+
+	/**
+	 * Ajax callback to handle notifying the platform when a user denies connection
+	 *
+	 * @since 1.0
+	 */
+	public function deny_request() {
+
+		$nonce = filter_input( INPUT_POST, 'nonce', FILTER_SANITIZE_STRING );
+		$key   = filter_input( INPUT_POST, 'key', FILTER_SANITIZE_STRING );
+
+		// Make sure we have a valid nonce
+		if ( 1 !== wp_verify_nonce( $nonce, 'maestro_deny' ) || ! $key ) {
+			return;
+		}
+
+		try {
+			$webpro = new Web_Pro( $key );
+		} catch ( Exception $e ) {
+			wp_die();
+		}
+
+		$webpro->deny();
+
 		wp_die();
 	}
 
