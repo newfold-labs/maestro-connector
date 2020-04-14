@@ -67,6 +67,9 @@ maestro.confirmMaestro = function () {
 			magic_key: maestro.webpro.key,
 			email: maestro.webpro.email,
 		},
+		beforeSend: function() {
+			jQuery( '.maestro-button.primary' ).html( '<span><img class="loading" src="' + maestro.urls.assets + '/images/loading.svg" /></span>' );
+		}
 	} ).done( function ( response ) {
 		maestro.setMessage( maestro.strings.accessGranted );
 		maestro.setDetails( '' );
