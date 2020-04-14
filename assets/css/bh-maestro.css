@@ -42,7 +42,7 @@
 	background-repeat: no-repeat;
 	background-image: url( '../images/lock.svg' );
 	border: none;
-	width: 400px;
+	min-width: 400px;
 	padding-left: 53px;
 	font-size: 18px;
 	max-width: 100%;
@@ -125,7 +125,7 @@
 	font-weight: 600;
 }
 
-@media (min-width: 960px) {
+@media (min-width: 961px) {
 	.maestro-page .boat-bg {
 		display: block;
 		position: absolute;
