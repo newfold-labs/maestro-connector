@@ -40,6 +40,9 @@ class Admin {
 		// Register the primary admin page
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 
+		// Remove admin notices from the custom page
+		add_action( 'in_admin_header', array( $this, 'unset_admin_notices' ), 1000 );
+
 		// Set up required JS/CSS
 		add_action( 'admin_enqueue_scripts', array( $this, 'add_scripts' ) );
 
@@ -74,6 +77,18 @@ class Admin {
 			array( $this, 'admin_page' ),
 			4
 		);
+	}
+
+	/**
+	 * Removes all registered admin notices from the main plugin page
+	 *
+	 * @since 1.0
+	 */
+	public function unset_admin_notices() {
+		if ( get_current_screen()->base === $this->page_hook ) {
+			remove_all_actions( 'admin_notices' );
+			remove_all_actions( 'all_admin_notices' );
+		}
 	}
 
 	/**
