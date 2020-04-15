@@ -4,6 +4,6 @@
 .distignore
 .gitignore
 package.json
-package.lock
+package-lock.json
 composer.json
 composer.lock
