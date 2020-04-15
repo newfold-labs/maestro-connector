@@ -273,10 +273,11 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 		$previous = $webpro;
 
 		// Don't send a platform revoke notification if we're accessing using the token auth
-		$notify  = ( empty( $_SERVER['HTTP_MAESTRO_AUTHORIZATION'] ) ) ? true : false;
-		$deleted = $webpro->disconnect( $notify );
+		$notify = ( empty( $_SERVER['HTTP_MAESTRO_AUTHORIZATION'] ) ) ? true : false;
+		$webpro->disconnect( $notify );
 
-		if ( ! $deleted ) {
+		// Revoke token is already gone, so don't check for that
+		if ( $webpro->is_connected() ) {
 			return new WP_Error(
 				'maestro_revoke_failed',
 				__( 'Failed to revoke Maestro status', 'maestro-connector' ),
