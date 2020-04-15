@@ -9,4 +9,4 @@ find . -name '*.json' -type f -maxdepth 1 -delete
 find . -name '*.lock' -type f -maxdepth 1 -delete
 find . -name '*.xml' -type f -maxdepth 1 -delete
 find . -name '*.yml' -type f -maxdepth 1 -delete
-rm webpack.config.js
+rm -f webpack.config.js
