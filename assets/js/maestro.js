@@ -51,7 +51,7 @@ maestro.verifyWebPro = function ( response ) {
 	var details = "<div class='name'><span>" + maestro.strings.name + ":</span> <span>" + response.name + "</span></div>\
 			<div class='email'><span>" + maestro.strings.email + ":</span> <span>" + response.email + "</span></div>\
 		<div class='location'><span>" + maestro.strings.location + ":</span> <span>" + response.location + "</span></div>\
-		<div class='access-description'><p>" + maestro.string.accessDescription + "</p></div>";
+		<div class='access-description'><p>" + maestro.strings.accessDescription + "</p></div>";
 	maestro.setDetails( details );
 	var buttons = ( 'success' === response.status ) ? 'confirm' : '';
 	maestro.setButtons( buttons );
