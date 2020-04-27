@@ -45,6 +45,9 @@ You can always do this by going to the ‘Users’ section from the left hand na
 
 == Changelog ==
 
+= 1.0.2 =
+* Fix bug preventing approval of Web Pro connections
+
 = 1.0.1 =
 * Fix bug in response for DELETE REST API endpoint
 
