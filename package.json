@@ -4,8 +4,9 @@
   "description": "Give trusted web professionals admin access to your WordPress account. Revoke anytime.",
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "translate": "wpi18n addtextdomain && wpi18n makepot"
+    "i18n": "wpi18n addtextdomain && wpi18n makepot",
+    "lint": "yamllint --ignore=node_modules/** **/*.yml",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,22 @@
   },
   "homepage": "https://github.com/bluehost/wp-maestro#readme",
   "devDependencies": {
-    "node-wp-i18n": "^1.2.3"
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.0",
+    "node-wp-i18n": "^1.2.3",
+    "yaml-lint": "^1.2.4"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "**/*.yml": [
+      "yamllint --ignore=node_modues/**"
+    ],
+    "**/*.php": [
+      "vendor/bin/phpcs --standard=Bluehost -s"
+    ]
   }
 }
