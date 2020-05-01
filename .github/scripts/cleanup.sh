@@ -2,6 +2,7 @@
 
 rm -rf .git
 rm -rf .github
+rm -rf .wordpress-org
 rm -rf node_modules
 find . -name '.*' -type f -maxdepth 1 -delete
 find . -name '*.md' -type f -maxdepth 1 -delete
