@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c45f2f3b589dbfa60de58fc1f193e8cb",
+    "content-hash": "7dece35afc3d435bbabec47cb58511c7",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -55,6 +55,45 @@
                 "php"
             ],
             "time": "2020-03-25T18:49:23+00:00"
+        },
+        {
+            "name": "wpscholar/github-archive-installer",
+            "version": "1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wpscholar/github-archive-installer.git",
+                "reference": "c3e325f345e2ca3e3a110294e8914a747b16150d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wpscholar/github-archive-installer/zipball/c3e325f345e2ca3e3a110294e8914a747b16150d",
+                "reference": "c3e325f345e2ca3e3a110294e8914a747b16150d",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.1 || ^2.0"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "wpscholar\\Composer\\GithubArchiveInstaller"
+            },
+            "autoload": {
+                "psr-4": {
+                    "wpscholar\\Composer\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Micah Wood",
+                    "email": "micah@wpscholar.com"
+                }
+            ],
+            "description": "A custom Composer installer that will install a dependency from a GitHub release archive .zip file when installing from distribution.",
+            "time": "2020-04-24T14:36:31+00:00"
         }
     ],
     "packages-dev": [
