@@ -4,6 +4,7 @@
 
 # Bluehost Maestro Connector
 ![Deploy to WordPress.org](https://github.com/bluehost/maestro-connector/workflows/Deploy%20to%20WordPress.org/badge.svg)
+![Release Version](https://img.shields.io/github/v/release/bluehost/maestro-connector?labelColor=CF8070&color=FFBFAB)
 ![Required PHP Version](https://img.shields.io/wordpress/plugin/required-php/maestro-connector?labelColor=AF92DF&color=B8B0E5)
 ![Required WordPress Version](https://img.shields.io/wordpress/plugin/wp-version/maestro-connector?labelColor=21A0ED&color=7DC2FF)
 ![Tested WordPress Version](https://img.shields.io/wordpress/plugin/tested/maestro-connector?labelColor=00C2BA&color=ABF2E3)
