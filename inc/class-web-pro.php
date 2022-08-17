@@ -579,6 +579,7 @@ class Web_Pro {
 		if ( $notify ) {
 			$this->revoke();
 		}
+		delete_user_meta( $this->user->ID, $this->revoke_token_key );
 	}
 
 	/**
@@ -615,8 +616,6 @@ class Web_Pro {
 		);
 
 		$response = wp_remote_post( $this->platform . '/revoke-association', $args );
-
-		delete_user_meta( $this->user->ID, $this->revoke_token_key );
 	}
 
 }
