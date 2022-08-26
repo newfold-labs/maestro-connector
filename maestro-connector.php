@@ -115,3 +115,5 @@ function vendor_notice() {
 	</tr>
 	<?php
 }
+
+// Temporary change to test PHP linting workflow
