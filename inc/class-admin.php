@@ -101,7 +101,7 @@ class Admin {
 	 */
 	public function add_scripts( $hook ) {
 
-		wp_register_script( 'maestro', MAESTRO_URL . 'assets/js/maestro.js', array( 'jquery' ), MAESTRO_VERSION );
+		wp_register_script( 'maestro', MAESTRO_URL . 'assets/js/maestro.js', array( 'jquery' ), MAESTRO_VERSION, false );
 		$data = array(
 			'urls'    => array(
 				'site'        => get_option( 'siteurl' ),
@@ -112,7 +112,7 @@ class Admin {
 				'maestroPage' => add_query_arg( 'page', 'bluehost-maestro', admin_url( 'users.php' ) ),
 			),
 			'nonces'  => array(
-				'ajax' => wp_create_nonce( 'maestro_check_key' )
+				'ajax' => wp_create_nonce( 'maestro_check_key' ),
 			),
 			'strings' => $this->get_translated_strings(),
 		);
@@ -120,7 +120,7 @@ class Admin {
 
 		// Only add specific assets to the add-maestro page
 		if ( $this->page_hook === $hook ) {
-			wp_enqueue_style( 'google-open-sans', 'https://fonts.googleapis.com/css?family=Open+Sans:300,400,600&display=swap', array() );
+			wp_enqueue_style( 'google-open-sans', 'https://fonts.googleapis.com/css?family=Open+Sans:300,400,600&display=swap', array(), MAESTRO_VERSION );
 			wp_enqueue_style( 'maestro', MAESTRO_URL . 'assets/css/bh-maestro.css', array( 'google-open-sans' ), MAESTRO_VERSION );
 			wp_enqueue_script( 'maestro' );
 		}
@@ -138,14 +138,16 @@ class Admin {
 		?>
 		<div class="wrap maestro-container">
 			<div class="maestro-page">
-				<img class="logo" src="<?php echo MAESTRO_URL . 'assets/images/bh-maestro-logo.svg'; ?>" />
+				<img class="logo" src="<?php echo esc_url( MAESTRO_URL . 'assets/images/bh-maestro-logo.svg' ); ?>" />
 				<div class="maestro-content">
 					<?php
 					$compatible = $this->check_requirements();
 					if ( true !== $compatible ) {
 						include $this->partials . 'requirements.php';
+					// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 					} elseif ( isset( $_GET['action'] ) && 'revoke' === $_GET['action'] ) {
 						$this->confirm_revoke( $nonce, $id );
+					// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 					} elseif ( isset( $_GET['action'] ) && 'dorevoke' === $_GET['action'] ) {
 						$this->revoke( $nonce, $id );
 					} else {
@@ -170,14 +172,14 @@ class Admin {
 	public function confirm_revoke( $nonce, $id ) {
 
 		if ( 1 !== wp_verify_nonce( $nonce, 'revoke-webpro' ) ) {
-			echo '<p class="thin">' . __( 'Unable to complete your request. Please try again.', 'maestro-connector' ) . '</p>';
+			echo '<p class="thin">' . esc_html__( 'Unable to complete your request. Please try again.', 'maestro-connector' ) . '</p>';
 			return;
 		}
 
 		try {
 			$webpro = new Web_Pro( $id );
 		} catch ( Exception $e ) {
-			echo '<p class="thin">' . __( 'Invalid user ID.', 'maestro-connector' ) . '</p>';
+			echo '<p class="thin">' . esc_html__( 'Invalid user ID.', 'maestro-connector' ) . '</p>';
 		}
 
 		if ( $webpro->is_connected() ) {
@@ -191,7 +193,7 @@ class Admin {
 			$cancel_url  = add_query_arg( 'page', 'bluehost-maestro', admin_url( 'users.php' ) );
 			include $this->partials . 'confirm-revoke.php';
 		} else {
-			echo '<p class="thin">' . __( 'This user is not a connected Web Pro.', 'maestro-connector' ) . '</p>';
+			echo '<p class="thin">' . esc_html__( 'This user is not a connected Web Pro.', 'maestro-connector' ) . '</p>';
 		}
 	}
 
@@ -205,22 +207,22 @@ class Admin {
 	 */
 	public function revoke( $nonce, $id ) {
 		if ( 1 !== wp_verify_nonce( $nonce, 'confirm-revoke-webpro' ) ) {
-			echo '<p class="thin">' . __( 'Unable to complete your request. Please try again.', 'maestro-connector' ) . '</p>';
+			echo '<p class="thin">' . esc_html__( 'Unable to complete your request. Please try again.', 'maestro-connector' ) . '</p>';
 			return;
 		}
 
 		try {
 			$webpro = new Web_Pro( $id );
 		} catch ( Exception $e ) {
-			echo '<p class="thin">' . __( 'Invalid user ID.', 'maestro-connector' ) . '</p>';
+			echo '<p class="thin">' . esc_html__( 'Invalid user ID.', 'maestro-connector' ) . '</p>';
 		}
 
 		$webpro->disconnect();
 
 		if ( ! $webpro->is_connected() ) {
-			echo '<p class="thin">' . __( 'The Maestro connection for this Web Pro has been revoked and their user role has been demoted.', 'maestro-connector' ) . '</p>';
+			echo '<p class="thin">' . esc_html__( 'The Maestro connection for this Web Pro has been revoked and their user role has been demoted.', 'maestro-connector' ) . '</p>';
 		} else {
-			echo '<p class="thin">' . __( 'Something went wrong. Please try again.', 'maestro-connector' ) . '</p>';
+			echo '<p class="thin">' . esc_html__( 'Something went wrong. Please try again.', 'maestro-connector' ) . '</p>';
 		}
 	}
 

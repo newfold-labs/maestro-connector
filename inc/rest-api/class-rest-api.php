@@ -2,8 +2,14 @@
 
 namespace Bluehost\Maestro;
 
+/**
+ * Primary class for loading REST API endpoints and handling authentication
+ */
 class REST_API {
 
+	/**
+	 * Constructor
+	 */
 	public function __construct() {
 
 		$this->register_routes();
@@ -37,7 +43,7 @@ class REST_API {
 	 *
 	 * @since 1.0
 	 *
-	 * @param mixed $result Result of any other authentication attempts
+	 * @param mixed $status Result of any other authentication attempts
 	 *
 	 * @return WP_Error|null|bool
 	 */
@@ -80,7 +86,7 @@ class REST_API {
 	 *
 	 * @return null|string The token from the header or null
 	 */
-	function get_access_token() {
+	public function get_access_token() {
 		$token = null;
 		if ( ! empty( $_SERVER['HTTP_MAESTRO_AUTHORIZATION'] ) ) {
 			$token = wp_unslash( $_SERVER['HTTP_MAESTRO_AUTHORIZATION'] );

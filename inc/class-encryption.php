@@ -2,6 +2,9 @@
 
 namespace Bluehost\Maestro;
 
+/**
+ * Simple encryption/decription class for storing tokens
+ */
 class Encryption {
 
 	/**
@@ -109,6 +112,7 @@ class Encryption {
 			return false;
 		}
 
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
 		return base64_encode( $iv . $cipher );
 	}
 
@@ -128,6 +132,7 @@ class Encryption {
 			return $cipher;
 		}
 
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
 		$cipher = base64_decode( $cipher, true );
 
 		// Grab the IV from the front of the passed encrypted string

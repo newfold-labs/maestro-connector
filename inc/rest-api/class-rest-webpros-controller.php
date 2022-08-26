@@ -435,7 +435,8 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 	 *
 	 * @since 1.0
 	 *
-	 * @param int $id Supplied ID.
+	 * @param int     $id Supplied ID.
+	 * @param boolean $check_revoke Whether to check for the Maestro revoke token
 	 *
 	 * @return Web_Pro|WP_Error Web_Pro object if ID is valid, WP_Error otherwise.
 	 */

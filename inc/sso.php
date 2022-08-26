@@ -2,7 +2,6 @@
 
 namespace Bluehost\Maestro;
 
-
 // Ajax hooks for SSO
 add_action( 'wp_ajax_nopriv_bh-maestro-sso', __NAMESPACE__ . '\\authenticate_sso' );
 add_action( 'wp_ajax_bh-maestro-sso', __NAMESPACE__ . '\\authenticate_sso' );
@@ -40,7 +39,7 @@ function authenticate_sso() {
 		failed_sso_attempts( 1 );
 		do_action( 'bh_maestro_sso_fail' );
 		wp_die(
-			__( 'Invalid token.', 'maestro-connector' ),
+			esc_html__( 'Invalid token.', 'maestro-connector' ),
 			403
 		);
 	}
