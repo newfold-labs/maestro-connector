@@ -61,11 +61,10 @@ class Token {
 	 *
 	 * @since 1.0
 	 *
-	 * @param Web_Pro $webpro      The web pro object for whom the token is issued
-	 * @param int     $user_id     The ID of the user the token is issued for
-	 * @param int     $expires     Unix timestamp representing time the token expires (optional)
-	 * @param bool    $jti         Generate a unique identifier which makes this a single-use token (optional)
-	 * @param array   $data        Array of additional data to encode into the token (optional)
+	 * @param Web_Pro $webpro  The web pro object for whom the token is issued
+	 * @param int     $expires Unix timestamp representing time the token expires (optional)
+	 * @param bool    $jti     Generate a unique identifier which makes this a single-use token (optional)
+	 * @param array   $data    Array of additional data to encode into the token (optional)
 	 *
 	 * @return string|WP_Error
 	 */
@@ -104,9 +103,9 @@ class Token {
 	/**
 	 * Compile information for the the JWT token.
 	 *
-	 * @param int             $expires    The number of seconds until the token expires.
-	 * @param string          $jti        Optional unique identifier string. Forces token to be single-use.
-	 * @param array           $extra_data Optional array of additional data to encode into the data portion of the token
+	 * @param int    $expires    The number of seconds until the token expires.
+	 * @param string $jti        Optional unique identifier string. Forces token to be single-use.
+	 * @param array  $extra_data Optional array of additional data to encode into the data portion of the token
 	 *
 	 * @return array|WP_Error
 	 */
@@ -282,7 +281,7 @@ class Token {
 	 *
 	 * @since 1.0
 	 *
-	 * @param object  $token The decoded token.
+	 * @param object $token The decoded token.
 	 *
 	 * @return bool|WP_Error
 	 */

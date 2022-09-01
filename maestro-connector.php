@@ -31,9 +31,12 @@ if ( ! is_readable( __DIR__ . '/vendor/autoload.php' ) ) {
 require __DIR__ . '/vendor/autoload.php';
 
 // Load translations
-add_action( 'plugins_loaded', function () {
-	load_plugin_textdomain( basename( __DIR__ ), false, basename( __DIR__ ) . '/languages/' );
-} );
+add_action(
+	'plugins_loaded',
+	function () {
+		load_plugin_textdomain( basename( __DIR__ ), false, basename( __DIR__ ) . '/languages/' );
+	}
+);
 
 // Other required files
 require __DIR__ . '/inc/sso.php';
@@ -56,7 +59,9 @@ add_action( 'rest_api_init', __NAMESPACE__ . '\\rest_init' );
 function activate() {
 	// Don't do redirects when multiple plugins are bulk activated
 	if (
+		// phpcs:ignore WordPress.Security.NonceVerification
 		( isset( $_REQUEST['action'] ) && 'activate-selected' === $_REQUEST['action'] ) &&
+		// phpcs:ignore WordPress.Security.NonceVerification
 		( isset( $_POST['checked'] ) && count( $_POST['checked'] ) > 1 ) ) {
 		return;
 	}
@@ -99,6 +104,11 @@ function rest_init() {
 	$rest_api = new REST_API();
 }
 
+/**
+ * Displays warning message if dependencies have not been installed
+ *
+ * @return void
+ */
 function vendor_notice() {
 	?>
 	<style type="text/css">
@@ -109,8 +119,8 @@ function vendor_notice() {
 	</style>
 	<tr class="active maestro-warning">
 		<td colspan="3">
-			<strong style="color:#dc3232;"><span class="dashicons dashicons-warning"></span> <?php _e( 'Maestro is missing critical files', 'maestro-connector' ); ?></strong>
-			// <span><a href="https://www.bluehost.com/contact"><?php _e( 'Contact Bluehost Support', 'maestro-connector' ); ?> <span class="dashicons dashicons-external"></span> </a></span>
+			<strong style="color:#dc3232;"><span class="dashicons dashicons-warning"></span> <?php esc_html_e( 'Maestro is missing critical files', 'maestro-connector' ); ?></strong>
+			// <span><a href="https://www.bluehost.com/contact"><?php esc_html_e( 'Contact Bluehost Support', 'maestro-connector' ); ?> <span class="dashicons dashicons-external"></span> </a></span>
 		</td>
 	</tr>
 	<?php

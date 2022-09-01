@@ -116,6 +116,8 @@ class Web_Pro {
 	 *
 	 * @param int    $user_id The ID of a WordPress user
 	 * @param string $key     A connection key assigned to a Web Pro by the platform
+	 *
+	 * @throws Exception Unable to retrieve WebPro.
 	 */
 	public function __construct( $user_id = 0, $key = '' ) {
 
@@ -197,6 +199,8 @@ class Web_Pro {
 	 * Fetches details about the web pro from the Maestro platform using the provided key
 	 *
 	 * @since 1.0
+	 *
+	 * @param string $key The magic key to send to Maestro platform
 	 */
 	private function fetch_details( $key ) {
 		$data = $this->verify_key( $key );
@@ -211,7 +215,9 @@ class Web_Pro {
 	 *
 	 * @since 1.0
 	 *
-	 * @return array|false Array of data if valid, false if key is invalid
+	 * @param string $key The magic key to send to Maestro platform
+	 *
+	 * @return object|false Plan object containing data if valid, false if key is invalid
 	 */
 	private function verify_key( $key ) {
 
@@ -245,8 +251,7 @@ class Web_Pro {
 	 *
 	 * @since 1.0
 	 *
-	 * @param array $data The array of data returned from verifying the key on the platform
-	 *
+	 * @param object $data The data returned from verifying the key on the platform
 	 */
 	private function parse_platform_response( $data ) {
 		// We might have an existing user that matches the email
@@ -274,6 +279,8 @@ class Web_Pro {
 	 * @since 1.0
 	 *
 	 * @return int|false The user ID of the user who is connected, or false if the connection failed
+	 *
+	 * @throws Exception Cannot connect WebPro.
 	 */
 	public function connect() {
 
@@ -356,7 +363,7 @@ class Web_Pro {
 				$this->clean_up();
 			} else {
 				// Otherwise just remove them
-				require_once( ABSPATH . 'wp-admin/includes/user.php' );
+				require_once ABSPATH . 'wp-admin/includes/user.php';
 				wp_delete_user( $this->user->ID );
 			}
 			return false;
@@ -488,14 +495,14 @@ class Web_Pro {
 	 *
 	 * @since 1.0
 	 *
-	 * @param bool Whether to check for the platform revoke token or not
+	 * @param bool $check_revoke Whether to check for the platform revoke token or not
 	 *
 	 * @return bool Connected or not
 	 */
 	public function is_connected( $check_revoke = true ) {
 		// To generally be considered connected, we need:
-		//     - A key submitted by a site administrator
-		//     - A revoke token saved in usermeta returned from the platform
+		// - A key submitted by a site administrator
+		// - A revoke token saved in usermeta returned from the platform
 		if ( $this->get_key() && $this->user ) {
 			// Allows bypassing the revoke token check when required
 			if ( $check_revoke ) {
