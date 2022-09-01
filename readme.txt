@@ -2,8 +2,8 @@
 Contributors: bluehost, earnjam, dryanpress, wpscholar
 Tags: security, authentication, sso, site-management
 Requires at least: 4.7
-Tested up to: 5.9
-Stable tag: 1.0.2
+Tested up to: 6.0
+Stable tag: 1.1.0
 Requires PHP: 5.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -44,6 +44,10 @@ You can always do this by going to the ‘Users’ section from the left hand na
 
 
 == Changelog ==
+
+= 1.1.0 =
+* Add support for a bounce parameter on SSO logins
+* Fix bug preventing reconnecting after revoking
 
 = 1.0.2 =
 * Fix bug preventing approval of Web Pro connections

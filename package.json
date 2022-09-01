@@ -1,6 +1,6 @@
 {
   "name": "maestro-connector",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Give trusted web professionals admin access to your WordPress account. Revoke anytime.",
   "private": true,
   "scripts": {
