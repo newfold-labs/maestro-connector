@@ -43,6 +43,12 @@ class REST_SSO_Controller extends \WP_REST_Controller {
 				array(
 					'methods'             => WP_REST_Server::CREATABLE,
 					'callback'            => array( $this, 'new_sso' ),
+					'args'                => array(
+						'bounce' => array(
+							'required' => false,
+							'type'     => 'string',
+						),
+					),
 					'permission_callback' => array( $this, 'check_permission' ),
 				),
 			)
@@ -57,15 +63,18 @@ class REST_SSO_Controller extends \WP_REST_Controller {
 	 *
 	 * @since 1.0
 	 *
+	 * @param WP_REST_Request $request Full details about the request.
+	 *
 	 * @return WP_Rest_Response Returns a standard rest response with the SSO link included
 	 */
-	public function new_sso() {
+	public function new_sso( $request ) {
 
 		// We want to SSO into the same user making the current request
 		// User is also already verified as a Maestro using the permission callback
 		// Create a temporary single-use JWT; expires in 30 seconds
-		$token = new Token();
-		$jwt   = $token->generate_token( $this->webpro, 30, true, array( 'type' => 'sso' ) );
+		$token  = new Token();
+		$jwt    = $token->generate_token( $this->webpro, 30, true, array( 'type' => 'sso' ) );
+		$bounce = $request( $request['bounce'] );
 
 		if ( is_wp_error( $jwt ) ) {
 			return $jwt;
@@ -75,6 +84,7 @@ class REST_SSO_Controller extends \WP_REST_Controller {
 		$params   = array(
 			'action' => 'bh-maestro-sso',
 			'token'  => $jwt,
+			'bounce' => $bounce,
 		);
 		$link     = add_query_arg( $params, admin_url( 'admin-ajax.php' ) );
 		$response = array( 'link' => $link );

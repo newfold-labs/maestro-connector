@@ -13,7 +13,8 @@ add_action( 'wp_ajax_bh-maestro-sso', __NAMESPACE__ . '\\authenticate_sso' );
  */
 function authenticate_sso() {
 
-	$jwt = filter_input( INPUT_GET, 'token', FILTER_SANITIZE_STRING );
+	$jwt    = filter_input( INPUT_GET, 'token', FILTER_SANITIZE_STRING );
+	$bounce = filter_input( INPUT_GET, 'bounce', FILTER_SANITIZE_STRING );
 
 	// Can't continue without a token
 	if ( ! $jwt ) {
@@ -54,7 +55,14 @@ function authenticate_sso() {
 	// Add to a short log of SSO logins
 	log_sso( $user );
 
-	wp_safe_redirect( admin_url() );
+	$url = '';
+	if ( $bounce ) {
+		$url = admin_url( esc_url_raw( $bounce ) );
+	} else {
+		$url = admin_url();
+	}
+
+	wp_safe_redirect( $url );
 	wp_die();
 
 }
