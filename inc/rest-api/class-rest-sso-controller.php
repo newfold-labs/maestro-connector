@@ -41,13 +41,13 @@ class REST_SSO_Controller extends \WP_REST_Controller {
 			'/sso',
 			array(
 				array(
-					'methods'  => WP_REST_Server::CREATABLE,
-					'callback' => array( $this, 'new_sso' ),
-					'args'     => array(
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => array( $this, 'new_sso' ),
+					'args'                => array(
 						'bounce' => array(
 							'required' => false,
 							'type'     => 'string',
-						)
+						),
 					),
 					'permission_callback' => array( $this, 'check_permission' ),
 				),
@@ -64,7 +64,7 @@ class REST_SSO_Controller extends \WP_REST_Controller {
 	 * @since 1.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
-	 * 
+	 *
 	 * @return WP_Rest_Response Returns a standard rest response with the SSO link included
 	 */
 	public function new_sso( $request ) {
