@@ -63,7 +63,7 @@ class REST_SSO_Controller extends \WP_REST_Controller {
 	 *
 	 * @since 1.0
 	 *
-	 * @param WP_REST_Request $request      Full details about the request.
+	 * @param WP_REST_Request $request Full details about the request.
 	 * 
 	 * @return WP_Rest_Response Returns a standard rest response with the SSO link included
 	 */
