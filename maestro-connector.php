@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Maestro Connector
  * Description: Give trusted web professionals admin access to your WordPress account. Revoke anytime.
- * Version: 1.0.2
+ * Version: 1.1.0
  * Requires at least: 4.7
  * Requires PHP: 5.4
  * Author: Bluehost
@@ -17,7 +17,7 @@
 
 namespace Bluehost\Maestro;
 
-define( 'MAESTRO_VERSION', '1.0.2' );
+define( 'MAESTRO_VERSION', '1.1.0' );
 define( 'MAESTRO_FILE', __FILE__ );
 define( 'MAESTRO_PATH', plugin_dir_path( __FILE__ ) );
 define( 'MAESTRO_URL', plugin_dir_url( __FILE__ ) );
