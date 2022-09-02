@@ -26,13 +26,18 @@ class REST_API {
 	public function register_routes() {
 
 		$controllers = array(
-			'REST_SSO_Controller',
-			'REST_Webpros_Controller',
+			'Bluehost\\Maestro\\RestApi\\WebProsController',
+			'Bluehost\\Maestro\\RestApi\\SSOController',
+			'Bluehost\\Maestro\\RestApi\\ThemesController',
 		);
-
+	
 		foreach ( $controllers as $controller ) {
-			$class    = __NAMESPACE__ . '\\' . $controller;
-			$instance = new $class();
+			/**
+			 * Get an instance of the WP_REST_Controller.
+			 *
+			 * @var $instance WP_REST_Controller
+			 */
+			$instance = new $controller();
 			$instance->register_routes();
 		}
 

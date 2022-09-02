@@ -1,15 +1,18 @@
 <?php
 
-namespace Bluehost\Maestro;
+namespace Bluehost\Maestro\RestApi;
 
 use Exception;
 use WP_REST_Server;
 use WP_REST_Response;
 
+use Bluehost\Maestro\WebPro;
+use Bluehost\Maestro\Token;
+
 /**
- * Class REST_SSO_Controller
+ * Class SSOController
  */
-class REST_SSO_Controller extends \WP_REST_Controller {
+class SSOController extends \WP_REST_Controller {
 
 	/**
 	 * The namespace of this controller's route.
@@ -25,7 +28,7 @@ class REST_SSO_Controller extends \WP_REST_Controller {
 	 *
 	 * @since 1.0
 	 *
-	 * @var Web_Pro
+	 * @var WebPro
 	 */
 	private $webpro;
 
@@ -74,7 +77,7 @@ class REST_SSO_Controller extends \WP_REST_Controller {
 		// Create a temporary single-use JWT; expires in 30 seconds
 		$token  = new Token();
 		$jwt    = $token->generate_token( $this->webpro, 30, true, array( 'type' => 'sso' ) );
-		$bounce = $request( $request['bounce'] );
+		$bounce = $request['bounce'];
 
 		if ( is_wp_error( $jwt ) ) {
 			return $jwt;
@@ -110,7 +113,7 @@ class REST_SSO_Controller extends \WP_REST_Controller {
 		$user_id = get_current_user_id();
 
 		try {
-			$this->webpro = new Web_Pro( $user_id );
+			$this->webpro = new WebPro( $user_id );
 		} catch ( Exception $e ) {
 			return false;
 		}
