@@ -62,9 +62,9 @@ class Token {
 	 * @since 1.0
 	 *
 	 * @param WebPro $webpro  The web pro object for whom the token is issued
-	 * @param int     $expires Unix timestamp representing time the token expires (optional)
-	 * @param bool    $jti     Generate a unique identifier which makes this a single-use token (optional)
-	 * @param array   $data    Array of additional data to encode into the token (optional)
+	 * @param int    $expires Unix timestamp representing time the token expires (optional)
+	 * @param bool   $jti     Generate a unique identifier which makes this a single-use token (optional)
+	 * @param array  $data    Array of additional data to encode into the token (optional)
 	 *
 	 * @return string|WP_Error
 	 */
