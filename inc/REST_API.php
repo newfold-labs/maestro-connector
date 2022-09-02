@@ -29,7 +29,7 @@ class REST_API {
 			'Bluehost\\Maestro\\RestApi\\WebProsController',
 			'Bluehost\\Maestro\\RestApi\\SSOController',
 		);
-	
+
 		foreach ( $controllers as $controller ) {
 			/**
 			 * Get an instance of the WP_REST_Controller.

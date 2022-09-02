@@ -410,7 +410,7 @@ class WebProsController extends \WP_REST_Controller {
 	 *
 	 * @since 1.0
 	 *
-	 * @param WebPro         $webpro  Web Pro user object.
+	 * @param WebPro          $webpro  Web Pro user object.
 	 * @param WP_REST_Request $request Request object.
 	 *
 	 * @return WP_REST_Response Response object.
