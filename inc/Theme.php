@@ -102,18 +102,19 @@ class Theme {
         // Include theme functions
         require_once( ABSPATH . 'wp-admin/includes/theme.php' );
 
-        $theme_updates = get_site_transient( 'update_themes' );
-        $stylesheet = $theme->get_stylesheet();
-        $update = 'none';
+        $theme_updates  = get_site_transient( 'update_themes' );
+        $stylesheet     = $theme->get_stylesheet();
+        $update         = 'none';
         $update_version = '(undef)';
         if ( array_key_exists( $stylesheet, $theme_updates->response ) ) {
-            $update = 'available';
+            $update         = 'available';
             $update_version = $themes_updates->response[ $stylesheet ]['new_version'];
         }
 
-        $screenshot_url = $theme->get_screenshot() ? $theme->get_screenshot() : 'none';
+        $screenshot_url       = $theme->get_screenshot() ? $theme->get_screenshot() : 'none';
         $screenshot_url_array = $screenshot_url != 'none' ? explode( '/', $screenshot_url ) : array( 'none' );
-        $filename = end( $screenshot_url_array );
+        $filename             = end( $screenshot_url_array );
+
         $screenshot = array(
             'url'  => $screenshot_url,
             'file' => $filename
