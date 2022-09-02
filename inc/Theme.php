@@ -35,7 +35,7 @@ class Theme {
      * 
      * @var string
      */
-    public $theme;
+    public $title;
 
     /**
      * Theme's status, will either be active or inactive
