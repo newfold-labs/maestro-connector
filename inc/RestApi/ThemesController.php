@@ -6,7 +6,8 @@ use Exception;
 use WP_REST_Server;
 use WP_REST_Response;
 
-use Bluehost\Maestro\WebPro;
+use Bluehost\Maestro\Theme;
+use Bluehost\Maestro\Webpro;
 
 /**
  * Class REST_Themes_Controller
@@ -64,48 +65,11 @@ class ThemesController extends \WP_REST_Controller {
      */
     public function get_themes() {
         $themes_list = array();
-
-        // Make sure we populate the themes updates transient
-        wp_update_themes();
-
-        // Get the installed themes and the current one
         $themes_installed = wp_get_themes();
-        $current_theme = wp_get_theme();
 
-        // Include theme functions
-        require_once( ABSPATH . 'wp-admin/includes/theme.php' );
-
-        $theme_updates = get_site_trasient( 'update_themes' );
-
-        foreach ( $themes_wp as $theme_id => $theme ) {
-            $stylesheet = $theme->get_stylesheet();
-            $update = 'none';
-            $update_version = '(undef)';
-            if ( array_key_exists( $stylesheet, $theme_updates->response ) ) {
-                $update = 'available';
-                $update_version = $themes_updates->response[ $stylesheet ]['new_version'];
-            }
-
-            $screenshot_url = $theme->get_screenshot() ? $theme->get_screenshot() : 'none';
-            $screenshot_url_array = $screenshot_url != 'none' ? explode( '/', $screenshot_url ) : array( 'none' );
-            $filename = end( $screenshot_url_array );
-            $screenshot = array(
-                'url'  => $screenshot_url,
-                'file' => $filename
-            );
-
-            // Get theme values
-            $theme_values = array(
-                'id'            => $theme_id,
-                'name'          => $theme_id,
-                'title'         => $theme->display( 'Name' ),
-                'status'        => $theme->display( 'Name' ) == $current_theme->display( 'Name' ) ? 'active' : 'inactive',
-                'version'       => $theme->get( 'Version' ),
-                'update'        => $update,
-                'update_vesion' => $update_version,
-                'screenshot'    => $screenshot
-            );
-            array_push( $themes_list, $theme_values );
+        foreach ( $themes_installed as $theme_id => $theme_wp ) {
+            $theme = new Theme( $theme_id, $theme_wp );
+            array_push( $themes_list, $theme );
         }
 
         $response = array( $themes_list );
