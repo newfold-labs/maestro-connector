@@ -177,7 +177,7 @@ class Admin {
 		}
 
 		try {
-			$webpro = new Web_Pro( $id );
+			$webpro = new WebPro( $id );
 		} catch ( Exception $e ) {
 			echo '<p class="thin">' . esc_html__( 'Invalid user ID.', 'maestro-connector' ) . '</p>';
 		}
@@ -212,7 +212,7 @@ class Admin {
 		}
 
 		try {
-			$webpro = new Web_Pro( $id );
+			$webpro = new WebPro( $id );
 		} catch ( Exception $e ) {
 			echo '<p class="thin">' . esc_html__( 'Invalid user ID.', 'maestro-connector' ) . '</p>';
 		}
@@ -281,7 +281,7 @@ class Admin {
 		$response = array();
 
 		try {
-			$webpro = new Web_Pro( $key );
+			$webpro = new WebPro( $key );
 		} catch ( Exception $e ) {
 			$response['status']  = 'invalid_key';
 			$response['message'] = __( 'This secret key is not valid.', 'maestro-connector' );
@@ -326,7 +326,7 @@ class Admin {
 		}
 
 		try {
-			$webpro = new Web_Pro( $key );
+			$webpro = new WebPro( $key );
 		} catch ( Exception $e ) {
 			wp_die();
 		}
@@ -374,7 +374,7 @@ class Admin {
 	 */
 	public function user_column_details( $value, $column_name, $user_id ) {
 
-		$webpro = new Web_Pro( $user_id );
+		$webpro = new WebPro( $user_id );
 
 		if ( 'maestro' === $column_name && $webpro->is_connected() ) {
 			$logo_url   = MAESTRO_URL . '/assets/images/bh-maestro-logo.svg';
@@ -417,7 +417,7 @@ class Admin {
 	 */
 	public function user_profile_section( $user ) {
 
-		$webpro = new Web_Pro( $user->ID );
+		$webpro = new WebPro( $user->ID );
 
 		if ( $webpro->is_connected() ) {
 			$revoke_url = $this->get_revoke_url( $user->ID );
@@ -435,7 +435,7 @@ class Admin {
 	 */
 	public function role_change( $user_id, $new_role ) {
 		try {
-			$webpro = new Web_Pro( $user_id );
+			$webpro = new WebPro( $user_id );
 		} catch ( Exception $e ) {
 			return;
 		}
@@ -454,7 +454,7 @@ class Admin {
 	 */
 	public function on_delete_user( $user_id ) {
 		try {
-			$webpro = new Web_Pro( $user_id );
+			$webpro = new WebPro( $user_id );
 		} catch ( Exception $e ) {
 			return;
 		}

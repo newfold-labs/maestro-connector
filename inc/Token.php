@@ -25,7 +25,7 @@ class Token {
 	 *
 	 * @since 1.0
 	 *
-	 * @var Web_Pro
+	 * @var WebPro
 	 */
 	protected $webpro;
 
@@ -61,10 +61,10 @@ class Token {
 	 *
 	 * @since 1.0
 	 *
-	 * @param Web_Pro $webpro  The web pro object for whom the token is issued
-	 * @param int     $expires Unix timestamp representing time the token expires (optional)
-	 * @param bool    $jti     Generate a unique identifier which makes this a single-use token (optional)
-	 * @param array   $data    Array of additional data to encode into the token (optional)
+	 * @param WebPro $webpro  The web pro object for whom the token is issued
+	 * @param int    $expires Unix timestamp representing time the token expires (optional)
+	 * @param bool   $jti     Generate a unique identifier which makes this a single-use token (optional)
+	 * @param array  $data    Array of additional data to encode into the token (optional)
 	 *
 	 * @return string|WP_Error
 	 */
@@ -186,7 +186,7 @@ class Token {
 		}
 
 		try {
-			$this->webpro = new Web_Pro( $jwt->data->user->id );
+			$this->webpro = new WebPro( $jwt->data->user->id );
 		} catch ( Exception $e ) {
 			// @todo maybe return exception from web pro creation
 			return new WP_Error(

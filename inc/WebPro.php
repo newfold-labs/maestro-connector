@@ -8,7 +8,7 @@ use WP_User_Query;
 /**
  * Class for managing Web Pro connections
  */
-class Web_Pro {
+class WebPro {
 
 	/**
 	 * WP_User object for the web pro

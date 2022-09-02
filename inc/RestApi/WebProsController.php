@@ -1,16 +1,18 @@
 <?php
 
-namespace Bluehost\Maestro;
+namespace Bluehost\Maestro\RestApi;
 
 use WP_REST_Server;
 use WP_Error;
 use WP_User_Query;
 use WP_REST_Response;
 
+use Bluehost\Maestro\WebPro;
+
 /**
- * Class REST_SSO_Controller
+ * Class WebprosController
  */
-class REST_Webpros_Controller extends \WP_REST_Controller {
+class WebProsController extends \WP_REST_Controller {
 
 	/**
 	 * The namespace of this controller's route.
@@ -202,7 +204,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 	 */
 	public function create_item( $request ) {
 
-		$webpro = new Web_Pro( $request['magic_key'] );
+		$webpro = new WebPro( $request['magic_key'] );
 
 		$success = $webpro->connect();
 
@@ -392,7 +394,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 		$query = new WP_User_Query( array( 'meta_key' => 'bh_maestro_magic_key' ) );
 
 		foreach ( $query->results as $user ) {
-			$webpro = new Web_Pro( $user->ID );
+			$webpro = new WebPro( $user->ID );
 			// Skip and do not return user if it isn't a valid connection
 			if ( ! $webpro->is_connected() ) {
 				continue;
@@ -408,7 +410,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 	 *
 	 * @since 1.0
 	 *
-	 * @param Web_Pro         $webpro  Web Pro user object.
+	 * @param WebPro          $webpro  Web Pro user object.
 	 * @param WP_REST_Request $request Request object.
 	 *
 	 * @return WP_REST_Response Response object.
@@ -431,14 +433,14 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 	}
 
 	/**
-	 * Get the Web_Pro object for the webpro, if the ID is valid.
+	 * Get the WebPro object for the webpro, if the ID is valid.
 	 *
 	 * @since 1.0
 	 *
 	 * @param int     $id Supplied ID.
 	 * @param boolean $check_revoke Whether to check for the Maestro revoke token
 	 *
-	 * @return Web_Pro|WP_Error Web_Pro object if ID is valid, WP_Error otherwise.
+	 * @return WebPro|WP_Error WebPro object if ID is valid, WP_Error otherwise.
 	 */
 	protected function get_webpro( $id, $check_revoke = true ) {
 		$error = new WP_Error( 'rest_user_invalid_id', __( 'Invalid user ID.', 'maestro-connector' ), array( 'status' => 404 ) );
@@ -455,7 +457,7 @@ class REST_Webpros_Controller extends \WP_REST_Controller {
 			return $error;
 		}
 
-		$webpro = new Web_Pro( $id );
+		$webpro = new WebPro( $id );
 
 		if ( ! $webpro->is_connected( $check_revoke ) ) {
 			return $error;
