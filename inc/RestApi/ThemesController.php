@@ -71,8 +71,7 @@ class ThemesController extends \WP_REST_Controller {
 			$theme = new Theme( $theme_id, $theme_wp );
 			array_push( $themes_list, $theme );
 		}
-		$response = array( $themes_list );
-		return new WP_Rest_Response( $response );
+		return new WP_Rest_Response( $themes_list );
 	}
 
 	/**
