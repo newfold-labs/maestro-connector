@@ -6,13 +6,13 @@ use Exception;
 use WP_REST_Server;
 use WP_REST_Response;
 
-use Bluehost\Maestro\Plugins;
+use Bluehost\Maestro\WebsiteOptions;
 use Bluehost\Maestro\Webpro;
 
 /**
- * Class PluginsController
+ * Class WebsiteOptionsController
  */
-class PluginsController extends \WP_REST_Controller {
+class WebsiteOptionsController extends \WP_REST_Controller {
 
 	/**
 	 * The namespace of this controller's route.
@@ -41,11 +41,11 @@ class PluginsController extends \WP_REST_Controller {
 
 		register_rest_route(
 			$this->namespace,
-			'/plugins',
+			'/website-options',
 			array(
 				array(
 					'methods'             => WP_REST_Server::READABLE,
-					'callback'            => array( $this, 'get_plugins' ),
+					'callback'            => array( $this, 'get_website_options' ),
 					'permission_callback' => array( $this, 'check_permission' ),
 				),
 			)
@@ -62,9 +62,9 @@ class PluginsController extends \WP_REST_Controller {
 	 *
 	 * @return WP_Rest_Response Returns a standard rest response with a list of plugins
 	 */
-	public function get_plugins() {
-		$plugins_data = new Plugins();
-		return new WP_Rest_Response( $plugins_data );
+	public function get_website_options() {
+		$website_options = new WebsiteOptions();
+		return new WP_Rest_Response( $website_options );
 	}
 
 	/**

@@ -30,7 +30,7 @@ class Plugins {
 	 *
 	 * @since 1.1.1
 	 *
-	 * @var timestamp
+	 * @var date
 	 */
 	public $last_checked;
 

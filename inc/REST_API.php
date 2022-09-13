@@ -29,6 +29,7 @@ class REST_API {
 			'Bluehost\\Maestro\\RestApi\\WebProsController',
 			'Bluehost\\Maestro\\RestApi\\SSOController',
 			'Bluehost\\Maestro\\RestApi\\PluginsController',
+			'Bluehost\\Maestro\\RestApi\\WebsiteOptionsController',
 		);
 
 		foreach ( $controllers as $controller ) {
