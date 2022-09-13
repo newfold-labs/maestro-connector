@@ -28,6 +28,7 @@ class REST_API {
 		$controllers = array(
 			'Bluehost\\Maestro\\RestApi\\WebProsController',
 			'Bluehost\\Maestro\\RestApi\\SSOController',
+			'Bluehost\\Maestro\\RestApi\\PluginsController',
 		);
 
 		foreach ( $controllers as $controller ) {
