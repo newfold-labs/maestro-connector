@@ -85,9 +85,9 @@ class Theme {
 
 	/**
 	 * If Auto updates have been enabled for this theme
-	 * 
+	 *
 	 * @since 1.1.1
-	 * 
+	 *
 	 * @var bool
 	 */
 	public $auto_updates_enabled;

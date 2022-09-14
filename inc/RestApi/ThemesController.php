@@ -76,7 +76,6 @@ class ThemesController extends \WP_REST_Controller {
 		$auto_updates     = get_option( 'auto_update_themes' );
 		$current_theme    = wp_get_theme();
 
-
 		foreach ( $themes_installed as $theme_id => $theme_wp ) {
 			$theme = new Theme( $theme_id, $theme_wp, $auto_updates, $theme_updates, $current_theme );
 			array_push( $themes_list, $theme );
