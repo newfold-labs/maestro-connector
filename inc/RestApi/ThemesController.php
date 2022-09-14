@@ -64,14 +64,30 @@ class ThemesController extends \WP_REST_Controller {
 	 * @return WP_Rest_Response Returns a standard rest response with a list of themes
 	 */
 	public function get_themes() {
+		require_once ABSPATH . 'wp-admin/includes/theme.php';
+		require_once ABSPATH . 'wp-admin/includes/option.php';
+
+		// Make sure we populate the themes updates transient
+		wp_update_themes();
+
 		$themes_list      = array();
 		$themes_installed = wp_get_themes();
+		$theme_updates    = get_site_transient( 'update_themes' );
+		$auto_updates     = get_option( 'auto_update_themes' );
+		$current_theme    = wp_get_theme();
+
 
 		foreach ( $themes_installed as $theme_id => $theme_wp ) {
-			$theme = new Theme( $theme_id, $theme_wp );
+			$theme = new Theme( $theme_id, $theme_wp, $auto_updates, $theme_updates, $current_theme );
 			array_push( $themes_list, $theme );
 		}
-		return new WP_Rest_Response( $themes_list );
+		return new WP_Rest_Response(
+			array(
+				'themes'             => $themes_list,
+				'auto_update_global' => get_option( 'auto_update_theme' ),
+				'last_checked'       => $auto_updates->last_checked,
+			)
+		);
 	}
 
 	/**

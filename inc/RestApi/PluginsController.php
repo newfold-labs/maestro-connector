@@ -88,7 +88,7 @@ class PluginsController extends \WP_REST_Controller {
 			array(
 				'plugins'            => $plugins,
 				'auto_update_global' => get_option( 'auto_update_plugin' ),
-				'last_checked'       => $updated->last_checked,
+				'last_checked'       => $updates->last_checked,
 			)
 		);
 	}
