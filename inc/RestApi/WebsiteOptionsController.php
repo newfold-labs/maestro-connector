@@ -70,7 +70,7 @@ class WebsiteOptionsController extends \WP_REST_Controller {
 	/**
 	 * Verify permission to access this endpoint
 	 *
-	 * Autheinticating a Webpro user via token
+	 * Authenticating a WebPro user via token
 	 *
 	 * @since 1.1.1
 	 *

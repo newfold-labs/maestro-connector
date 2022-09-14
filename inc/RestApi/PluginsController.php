@@ -63,8 +63,34 @@ class PluginsController extends \WP_REST_Controller {
 	 * @return WP_Rest_Response Returns a standard rest response with a list of plugins
 	 */
 	public function get_plugins() {
-		$plugins_data = new Plugins();
-		return new WP_Rest_Response( $plugins_data );
+		if ( ! function_exists( 'get_plugin_data' ) ) {
+			include_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		if ( ! function_exists( 'get_option' ) ) {
+			include_once ABSPATH . 'wp-includes/option.php';
+		}
+
+		// Make sure we populate the plugins updates transient
+		wp_update_plugins();
+
+		$installed_plugins = get_plugins();
+		$updates           = get_site_transient( 'update_plugins' );
+		$auto_updates      = get_option( 'auto_update_plugins' );
+		$plugins           = array();
+
+		foreach ( $installed_plugins as $plugin_slug => $plugin_details ) {
+			$plugin = new Plugin( $plugin_slug, $updates, $plugin_details, $auto_updates );
+			array_push( $plugins, $plugin );
+		}
+
+		return new WP_Rest_Response(
+			array(
+				'plugins'            => $plugins,
+				'auto_update_global' => get_option( 'auto_update_plugin' ),
+				'last_checked'       => $updated->last_checked,
+			)
+		);
 	}
 
 	/**
