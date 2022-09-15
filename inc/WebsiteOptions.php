@@ -53,11 +53,6 @@ class WebsiteOptions {
 		wp_update_plugins();
 		wp_update_themes();
 
-		// Import necessary files
-		if ( ! function_exists( 'get_option' ) ) {
-			include_once ABSPATH . 'wp-includes/option.php';
-		}
-
 		$core_update              = get_site_transient( 'update_core' );
 		$last_updated             = $core_update->last_checked;
 		$wordpress_version        = $core_update->version_checked;
@@ -66,7 +61,6 @@ class WebsiteOptions {
 		$plugins_update_count     = count( get_site_transient( 'update_plugins' )->response );
 		$core_update_count        = count( $core_update->updates ) - 1;
 
-		$updates_available              = new UpdatesAvailable( $core_update_count, $themes_update_count, $plugins_update_count );
 		$updates_available              = array(
 			'core'    => $core_update_count,
 			'themes'  => $themes_update_count,

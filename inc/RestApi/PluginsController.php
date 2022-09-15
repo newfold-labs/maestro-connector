@@ -6,7 +6,7 @@ use Exception;
 use WP_REST_Server;
 use WP_REST_Response;
 
-use Bluehost\Maestro\Plugins;
+use Bluehost\Maestro\Plugin;
 use Bluehost\Maestro\WebPro;
 
 /**
