@@ -7,7 +7,7 @@ use WP_REST_Server;
 use WP_REST_Response;
 
 use Bluehost\Maestro\Theme;
-use Bluehost\Maestro\Webpro;
+use Bluehost\Maestro\WebPro;
 
 /**
  * Class REST_Themes_Controller
