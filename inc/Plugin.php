@@ -117,13 +117,11 @@ class Plugin {
 	 * @param array  $auto_updates   The auto updates option
 	 */
 	public function __construct( $slug, $plugin_updates, $plugin_details, $auto_updates ) {
-		$update_info     = null;
-		echo implode( $plugin_updates->response );
+		$update_info = null;
 
 		if ( ! function_exists( 'get_plugin_data' ) ) {
 			include_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
-
 
 		if ( array_key_exists( $slug, $plugin_updates->response ) ) {
 			$update_response = $plugin_updates->response[ $slug ];
