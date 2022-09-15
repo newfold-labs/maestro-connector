@@ -68,7 +68,7 @@ class PluginsController extends \WP_REST_Controller {
 		}
 
 		if ( ! function_exists( 'get_option' ) ) {
-			include_once ABSPATH . 'wp-includes/option.php';
+			include_once ABSPATH . 'wp-includes/options.php';
 		}
 
 		// Make sure we populate the plugins updates transient

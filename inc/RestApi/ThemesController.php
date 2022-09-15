@@ -65,7 +65,7 @@ class ThemesController extends \WP_REST_Controller {
 	 */
 	public function get_themes() {
 		require_once ABSPATH . 'wp-admin/includes/theme.php';
-		require_once ABSPATH . 'wp-admin/includes/option.php';
+		require_once ABSPATH . 'wp-admin/includes/options.php';
 
 		// Make sure we populate the themes updates transient
 		wp_update_themes();
@@ -84,7 +84,7 @@ class ThemesController extends \WP_REST_Controller {
 			array(
 				'themes'             => $themes_list,
 				'auto_update_global' => get_option( 'auto_update_theme' ),
-				'last_checked'       => $auto_updates->last_checked,
+				'last_checked'       => $theme_updates->last_checked,
 			)
 		);
 	}
