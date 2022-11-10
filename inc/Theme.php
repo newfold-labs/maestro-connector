@@ -109,10 +109,10 @@ class Theme {
 		require_once ABSPATH . 'wp-admin/includes/theme.php';
 
 		$stylesheet     = $theme->get_stylesheet();
-		$update         = 'none';
-		$update_version = '(undef)';
+		$update         = false;
+		$update_version = null;
 		if ( array_key_exists( $stylesheet, $theme_updates->response ) ) {
-			$update         = 'available';
+			$update         = true;
 			$update_version = $themes_updates->response[ $stylesheet ]['new_version'];
 		}
 

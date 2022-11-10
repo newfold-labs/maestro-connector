@@ -5,9 +5,11 @@ namespace Bluehost\Maestro\RestApi;
 use Exception;
 use WP_REST_Server;
 use WP_REST_Response;
+use Plugin_Upgrader;
 
 use Bluehost\Maestro\Plugin;
 use Bluehost\Maestro\WebPro;
+use Bluehost\Maestro\PluginUpgraderSkin;
 
 /**
  * Class PluginsController
@@ -51,6 +53,63 @@ class PluginsController extends \WP_REST_Controller {
 			)
 		);
 
+		register_rest_route(
+			$this->namespace,
+			'/plugins/upgrade',
+			array(
+				array(
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => array( $this, 'upgrade_plugin' ),
+					'args'                => array(
+						'slug' => array(
+							'required' => true,
+							'type'     => 'string',
+						),
+					),
+					'permission_callback' => array( $this, 'check_permission' ),
+				),
+			)
+		);
+
+	}
+
+	/**
+	 * Function to include the required classes and files
+	 *
+	 * @since 1.1.1
+	 */
+	private function load_wp_classes_and_functions() {
+		if ( ! function_exists( 'get_plugin_data' ) ) {
+			include_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		if ( ! function_exists( 'get_option' ) ) {
+			include_once ABSPATH . 'wp-includes/options.php';
+		}
+
+		if ( ! function_exists( 'plugin_dir_path' ) ) {
+			include_once ABSPATH . 'wp-includes/plugin.php';
+		}
+
+		if ( ! function_exists( 'request_filesystem_credentials' ) ) {
+			include_once ABSPATH . 'wp-admin/includes/file.php';
+		}
+
+		if ( ! class_exists( 'WP_Upgrader' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+		}
+
+		if ( ! class_exists( 'Plugin_Upgrader' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/class-plugin-upgrader.php';
+		}
+
+		if ( ! class_exists( 'WP_Upgrader_Skin' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader-skin.php';
+		}
+
+		if ( ! class_exists( 'Plugin_Upgrader_Skin' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/class-plugin-upgrader-skin.php';
+		}
 	}
 
 	/**
@@ -63,13 +122,7 @@ class PluginsController extends \WP_REST_Controller {
 	 * @return WP_Rest_Response Returns a standard rest response with a list of plugins
 	 */
 	public function get_plugins() {
-		if ( ! function_exists( 'get_plugin_data' ) ) {
-			include_once ABSPATH . 'wp-admin/includes/plugin.php';
-		}
-
-		if ( ! function_exists( 'get_option' ) ) {
-			include_once ABSPATH . 'wp-includes/options.php';
-		}
+		$this->load_wp_classes_and_functions();
 
 		// Make sure we populate the plugins updates transient
 		wp_update_plugins();
@@ -94,9 +147,58 @@ class PluginsController extends \WP_REST_Controller {
 	}
 
 	/**
+	 * Callback to upgrade a plugin with it's slug
+	 *
+	 * Returns the plugin's version, status, slug
+	 *
+	 * @since 1.1.1
+	 *
+	 * @param WP_REST_Request $request details about the plugin slug
+	 *
+	 * @return WP_Rest_Response Returns a standard rest response with the plugin's information
+	 */
+	public function upgrade_plugin( $request ) {
+		$this->load_wp_classes_and_functions();
+
+		wp_update_plugins();
+
+		$plugin_slug    = $request['slug'];
+		$updates        = get_site_transient( 'update_plugins' );
+		$plugin_file    = "$plugin_slug/$plugin_slug.php";
+		$plugin_details = get_plugin_data( WP_PLUGIN_DIR . "/$plugin_file" );
+
+		if ( array_key_exists( $plugin_file, $updates->response ) ) {
+			$update_response = $updates->response[ $plugin_file ];
+		}
+
+		if ( ! isset( $update_response ) ) {
+			return new WP_Rest_Response(
+				array(
+					'error' => 'Plugin already up to date',
+					'code'  => 'alreadyUpdated',
+				),
+				400
+			);
+		} else {
+			$plugin_upgrader = new Plugin_Upgrader( new PluginUpgraderSkin( array( '', '', '', '' ) ) );
+			$upgraded        = $plugin_upgrader->upgrade( $update_response->plugin );
+			// Get the upgraded version
+			$plugin_details = get_plugin_data( WP_PLUGIN_DIR . "/$plugin_file" );
+		}
+
+		return new WP_Rest_Response(
+			array(
+				'slug'    => $plugin_slug,
+				'version' => $plugin_details['Version'],
+				'success' => $upgraded,
+			)
+		);
+	}
+
+	/**
 	 * Verify permission to access this endpoint
 	 *
-	 * Autheinticating a Webpro user via token
+	 * Authenticating a Webpro user via token
 	 *
 	 * @since 1.1.1
 	 *

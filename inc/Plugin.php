@@ -125,7 +125,7 @@ class Plugin {
 
 		if ( array_key_exists( $slug, $plugin_updates->response ) ) {
 			$update_response = $plugin_updates->response[ $slug ];
-			$update_info = array(
+			$update_info     = array(
 				'update_version'      => $update_response->new_version,
 				'requires_wp_version' => $update_response->requires,
 				'requires_php'        => $update_response->requires_php,

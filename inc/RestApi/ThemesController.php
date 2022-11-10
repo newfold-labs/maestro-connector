@@ -5,9 +5,11 @@ namespace Bluehost\Maestro\RestApi;
 use Exception;
 use WP_REST_Server;
 use WP_REST_Response;
+use Theme_Upgrader;
 
 use Bluehost\Maestro\Theme;
 use Bluehost\Maestro\WebPro;
+use Bluehost\Maestro\ThemeUpgraderSkin;
 
 /**
  * Class REST_Themes_Controller
@@ -51,6 +53,127 @@ class ThemesController extends \WP_REST_Controller {
 			)
 		);
 
+		register_rest_route(
+			$this->namespace,
+			'/themes/upgrade',
+			array(
+				array(
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => array( $this, 'upgrade_theme' ),
+					'args'                => array(
+						'slug' => array(
+							'required' => true,
+							'type'     => 'string',
+						),
+					),
+					'permission_callback' => array( $this, 'check_permission' ),
+				),
+			)
+		);
+
+	}
+
+	/**
+	 * Function to include the required classes and files
+	 *
+	 * @since 1.1.1
+	 */
+	private function load_wp_classes_and_functions() {
+
+		if ( ! function_exists( 'request_filesystem_credentials' ) ) {
+			include_once ABSPATH . 'wp-admin/includes/file.php';
+		}
+
+		if ( ! function_exists( 'wp_get_themes' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/theme.php';
+		}
+
+		if ( ! function_exists( 'get_option' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/options.php';
+		}
+
+		if ( ! class_exists( 'WP_Upgrader' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+		}
+
+		if ( ! class_exists( 'Theme_Upgrader' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/class-theme-upgrader.php';
+		}
+
+		if ( ! class_exists( 'WP_Upgrader_Skin' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader-skin.php';
+		}
+
+		if ( ! class_exists( 'Theme_Upgrader_Skin' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/class-theme-upgrader-skin.php';
+		}
+
+		if ( ! class_exists( 'WP_Theme' ) ) {
+			require_once ABSPATH . 'wp-includes/class-wp-theme.php';
+		}
+	}
+
+	/**
+	 * A function to get the theme object with slug
+	 *
+	 * @since 1.1.1
+	 *
+	 * @param String $slug the theme's slug
+	 */
+	private function get_theme_from_slug( $slug ) {
+		$themes = wp_get_themes();
+		foreach ( $themes as $theme_slug => $theme_wp ) {
+			if ( $theme_slug === $slug ) {
+				return $theme_wp;
+			}
+		}
+	}
+
+	/**
+	 * Callback to upgrade a theme with it's slug
+	 *
+	 * Returns the theme's version, status, slug
+	 *
+	 * @since 1.1.1
+	 *
+	 * @param WP_REST_Request $request details about the theme slug
+	 *
+	 * @return WP_Rest_Response Returns a standard rest response with the plugin's information
+	 */
+	public function upgrade_theme( $request ) {
+		$this->load_wp_classes_and_functions();
+
+		wp_update_themes();
+
+		$theme_slug = $request['slug'];
+		$updates    = get_site_transient( 'update_themes' );
+		$theme_obj  = $this->get_theme_from_slug( $theme_slug );
+		$stylesheet = $theme_obj->get_stylesheet();
+
+		if ( array_key_exists( $stylesheet, $updates->response ) ) {
+			$update_response = $updates->response[ $stylesheet ];
+		}
+
+		if ( ! isset( $update_response ) ) {
+			return new WP_Rest_Response(
+				array(
+					'error' => 'Theme already up to date',
+					'code'  => 'alreadyUpdated',
+				),
+				400
+			);
+		} else {
+			$theme_upgrader = new Theme_Upgrader( new ThemeUpgraderSkin( array( '', '', '', '' ) ) );
+			$upgraded       = $theme_upgrader->upgrade( $theme_slug );
+		}
+
+		return new WP_Rest_Response(
+			array(
+				'slug'    => $theme_slug,
+				'version' => $update_response['new_version'],
+				'success' => $upgraded,
+			)
+		);
 	}
 
 	/**
