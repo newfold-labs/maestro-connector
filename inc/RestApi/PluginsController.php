@@ -72,6 +72,46 @@ class PluginsController extends \WP_REST_Controller {
 			)
 		);
 
+		register_rest_route(
+			$this->namespace,
+			'/plugins/toggle-auto-update',
+			array(
+				array(
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => array( $this, 'toggle_auto_update' ),
+					'args'                => array(
+						'slug'        => array(
+							'required' => true,
+							'type'     => 'string',
+						),
+						'auto_update' => array(
+							'required' => true,
+							'type'     => 'boolean',
+						),
+					),
+					'permission_callback' => array( $this, 'check_permission' ),
+				),
+			)
+		);
+
+		register_rest_route(
+			$this->namespace,
+			'/plugins/toggle-auto-update-global',
+			array(
+				array(
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => array( $this, 'toggle_auto_update_global' ),
+					'args'                => array(
+						'auto_updates_enabled' => array(
+							'required' => true,
+							'type'     => 'boolean',
+						),
+					),
+					'permission_callback' => array( $this, 'check_permission' ),
+				),
+			)
+		);
+
 	}
 
 	/**
@@ -197,6 +237,81 @@ class PluginsController extends \WP_REST_Controller {
 				'slug'    => $plugin_slug,
 				'version' => $plugin_details['Version'],
 				'success' => $upgraded,
+			)
+		);
+	}
+
+	/**
+	 * Callback to toggle auto updates for a plugin with it's slug
+	 *
+	 * @since 1.1.1
+	 *
+	 * @param WP_REST_Request $request details about the plugin slug
+	 *
+	 * @return WP_Rest_Response Returns a standard rest response
+	 */
+	public function toggle_auto_update( $request ) {
+		$this->load_wp_classes_and_functions();
+
+		$plugin_slug       = $request['slug'];
+		$installed_plugins = get_plugins();
+		$auto_update       = $request['auto_update'];
+		$util              = new Util();
+		$plugin_file       = $util->get_plugin_file_from_slug( $installed_plugins, $plugin_slug );
+		$auto_updates      = (array) get_site_option( 'auto_update_plugins', array() );
+		$plugin_file       = wp_unslash( $plugin_file );
+
+		if ( $auto_update ) {
+			$new_auto_updates = array_merge( $auto_updates, array( $plugin_file ) );
+		} else {
+			if ( $util->is_bluehost() ) {
+				update_site_option( 'auto_update_theme', 'false' );
+			}
+			$new_auto_updates = array_diff( $auto_updates, array( $plugin_file ) );
+		}
+		$new_auto_updates = array_unique( $new_auto_updates );
+
+		if ( $auto_updates !== $new_auto_updates ) {
+			update_site_option( 'auto_update_plugins', $new_auto_updates );
+		}
+
+		return new WP_REST_Response(
+			array(
+				'slug'                 => $plugin_slug,
+				'auto_updates_enabled' => $auto_update,
+			)
+		);
+	}
+
+	/**
+	 * Callback to toggle auto updates for all plugins, only for BH sites
+	 *
+	 * @since 1.1.1
+	 *
+	 * @param WP_REST_Request $request containing a boolean indicating on or off
+	 *
+	 * @return WP_Rest_Response Returns a standard rest response
+	 */
+	public function toggle_auto_update_global( $request ) {
+		$this->load_wp_classes_and_functions();
+
+		$util = new Util();
+		if ( ! $util->is_bluehost() ) {
+			return new WP_Rest_Response(
+				array(
+					'error' => 'Site needs to be on BH for this to work',
+					'code'  => 'notABHSite',
+				),
+				400
+			);
+		}
+
+		$auto_updates_enabled = $request['auto_updates_enabled'];
+		update_site_option( 'auto_update_plugin', $auto_updates_enabled ? 'true' : 'false' );
+
+		return new WP_REST_Response(
+			array(
+				'auto_updates_enabled' => $auto_updates_enabled,
 			)
 		);
 	}

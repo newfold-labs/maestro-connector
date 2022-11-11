@@ -4,6 +4,8 @@ namespace Bluehost\Maestro;
 
 /**
  * A utility class for generic functions to use across the codebase
+ *
+ * @since 1.1.1
  */
 class Util {
 	/**
@@ -18,8 +20,8 @@ class Util {
 			include_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 		$installed_plugins = get_plugins();
-		if ( ! empty( $installed_plugins['bluehost/bluehost'] ) ) {
-			if ( is_plugin_active( $installed_plugin['bluehost/bluehost'] ) ) {
+		if ( ! empty( $installed_plugins['bluehost-wordpress-plugin/bluehost-wordpress-plugin.php'] ) ) {
+			if ( is_plugin_active( 'bluehost-wordpress-plugin/bluehost-wordpress-plugin.php' ) ) {
 				return true;
 			}
 			return false;

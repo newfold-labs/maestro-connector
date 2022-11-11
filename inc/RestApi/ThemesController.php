@@ -10,6 +10,7 @@ use Theme_Upgrader;
 use Bluehost\Maestro\Theme;
 use Bluehost\Maestro\WebPro;
 use Bluehost\Maestro\ThemeUpgraderSkin;
+use Bluehost\Maestro\Util;
 
 /**
  * Class REST_Themes_Controller
@@ -64,6 +65,46 @@ class ThemesController extends \WP_REST_Controller {
 						'slug' => array(
 							'required' => true,
 							'type'     => 'string',
+						),
+					),
+					'permission_callback' => array( $this, 'check_permission' ),
+				),
+			)
+		);
+
+		register_rest_route(
+			$this->namespace,
+			'/themes/toggle-auto-update',
+			array(
+				array(
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => array( $this, 'toggle_auto_update' ),
+					'args'                => array(
+						'slug'        => array(
+							'required' => true,
+							'type'     => 'string',
+						),
+						'auto_update' => array(
+							'required' => true,
+							'type'     => 'boolean',
+						),
+					),
+					'permission_callback' => array( $this, 'check_permission' ),
+				),
+			)
+		);
+
+		register_rest_route(
+			$this->namespace,
+			'/themes/toggle-auto-update-global',
+			array(
+				array(
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => array( $this, 'toggle_auto_update_global' ),
+					'args'                => array(
+						'auto_updates_enabled' => array(
+							'required' => true,
+							'type'     => 'boolean',
 						),
 					),
 					'permission_callback' => array( $this, 'check_permission' ),
@@ -203,11 +244,87 @@ class ThemesController extends \WP_REST_Controller {
 			$theme = new Theme( $theme_id, $theme_wp, $auto_updates, $theme_updates, $current_theme );
 			array_push( $themes_list, $theme );
 		}
+
+		$util        = new Util();
+		$is_bluehost = $util->is_bluehost();
+
 		return new WP_Rest_Response(
 			array(
 				'themes'             => $themes_list,
-				'auto_update_global' => get_option( 'auto_update_theme' ),
+				'auto_update_global' => $is_bluehost ? get_option( 'auto_update_theme' ) : null,
 				'last_checked'       => $theme_updates->last_checked,
+			)
+		);
+	}
+
+	/**
+	 * Callback to toggle auto updates for a theme with it's slug
+	 *
+	 * @since 1.1.1
+	 *
+	 * @param WP_REST_Request $request details about the theme slug
+	 *
+	 * @return WP_Rest_Response Returns a standard rest response
+	 */
+	public function toggle_auto_update( $request ) {
+		$this->load_wp_classes_and_functions();
+
+		$theme_slug   = $request['slug'];
+		$auto_update  = $request['auto_update'];
+		$util         = new Util();
+		$auto_updates = (array) get_site_option( 'auto_update_themes', array() );
+
+		if ( $auto_update ) {
+			$new_auto_updates = array_merge( $auto_updates, array( $theme_slug ) );
+		} else {
+			if ( $util->is_bluehost() ) {
+				update_site_option( 'auto_update_theme', 'false' );
+			}
+			$new_auto_updates = array_diff( $auto_updates, array( $theme_slug ) );
+		}
+		$new_auto_updates = array_unique( $new_auto_updates );
+
+		if ( $auto_updates !== $new_auto_updates ) {
+			update_site_option( 'auto_update_themes', $new_auto_updates );
+		}
+
+		return new WP_REST_Response(
+			array(
+				'slug'                 => $theme_slug,
+				'auto_updates_enabled' => $auto_update,
+			)
+		);
+	}
+
+	/**
+	 * Callback to toggle auto updates for all themes, only for BH sites
+	 *
+	 * @since 1.1.1
+	 *
+	 * @param WP_REST_Request $request containing a boolean indicating on or off
+	 *
+	 * @return WP_Rest_Response Returns a standard rest response
+	 */
+	public function toggle_auto_update_global( $request ) {
+		$this->load_wp_classes_and_functions();
+
+		$util = new Util();
+		if ( ! $util->is_bluehost() ) {
+			return new WP_Rest_Response(
+				array(
+					'error' => 'Site needs to be on BH for this to work',
+					'code'  => 'notABHSite',
+				),
+				400
+			);
+		}
+
+		$auto_updates_enabled = $request['auto_updates_enabled'];
+		update_site_option( 'auto_update_theme', $auto_updates_enabled ? 'true' : 'false' );
+
+		return new WP_REST_Response(
+			array(
+				'auto_updates_enabled' => $auto_updates_enabled,
 			)
 		);
 	}
