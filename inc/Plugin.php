@@ -117,20 +117,19 @@ class Plugin {
 	 * @param array  $auto_updates   The auto updates option
 	 */
 	public function __construct( $slug, $plugin_updates, $plugin_details, $auto_updates ) {
-		$update_info = null;
+		$update_info = array();
 
 		if ( ! function_exists( 'get_plugin_data' ) ) {
 			include_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 
-		if ( array_key_exists( $slug, $plugin_updates->response ) ) {
-			$update_response = $plugin_updates->response[ $slug ];
-			$update_info     = array(
-				'update_version'      => $update_response->new_version,
-				'requires_wp_version' => $update_response->requires,
-				'requires_php'        => $update_response->requires_php,
-				'tested_wp_version'   => $update_response->tested,
-				'last_updated'        => $update_response->last_updated,
+		if ( ! empty( $plugin_updates->response[ $slug ] ) ) {
+			$update_info = array(
+				'update_version'      => $plugin_updates->response[ $slug ]->new_version,
+				'requires_wp_version' => $plugin_updates->response[ $slug ]->requires,
+				'requires_php'        => $plugin_updates->response[ $slug ]->requires_php,
+				'tested_wp_version'   => $plugin_updates->response[ $slug ]->tested,
+				'last_updated'        => $plugin_updates->response[ $slug ]->last_updated,
 			);
 		}
 

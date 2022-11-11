@@ -10,6 +10,7 @@ use Plugin_Upgrader;
 use Bluehost\Maestro\Plugin;
 use Bluehost\Maestro\WebPro;
 use Bluehost\Maestro\PluginUpgraderSkin;
+use Bluehost\Maestro\Util;
 
 /**
  * Class PluginsController
@@ -137,10 +138,13 @@ class PluginsController extends \WP_REST_Controller {
 			array_push( $plugins, $plugin );
 		}
 
+		$util        = new Util();
+		$is_bluehost = $util->is_bluehost();
+
 		return new WP_Rest_Response(
 			array(
 				'plugins'            => $plugins,
-				'auto_update_global' => get_option( 'auto_update_plugin' ),
+				'auto_update_global' => $is_bluehost ? get_option( 'auto_update_plugin' ) : null,
 				'last_checked'       => $updates->last_checked,
 			)
 		);
@@ -162,10 +166,12 @@ class PluginsController extends \WP_REST_Controller {
 
 		wp_update_plugins();
 
-		$plugin_slug    = $request['slug'];
-		$updates        = get_site_transient( 'update_plugins' );
-		$plugin_file    = "$plugin_slug/$plugin_slug.php";
-		$plugin_details = get_plugin_data( WP_PLUGIN_DIR . "/$plugin_file" );
+		$util              = new Util();
+		$plugin_slug       = $request['slug'];
+		$installed_plugins = get_plugins();
+		$updates           = get_site_transient( 'update_plugins' );
+		$plugin_file       = $util->get_plugin_file_from_slug( $installed_plugins, $plugin_slug );
+		$plugin_details    = get_plugin_data( WP_PLUGIN_DIR . "/$plugin_file" );
 
 		if ( array_key_exists( $plugin_file, $updates->response ) ) {
 			$update_response = $updates->response[ $plugin_file ];
