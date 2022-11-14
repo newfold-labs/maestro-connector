@@ -13,7 +13,7 @@ class Theme {
 	/**
 	 * The id for the theme
 	 *
-	 * @since 1.1.2
+	 * @since 1.2
 	 *
 	 * @var string
 	 */
@@ -22,7 +22,7 @@ class Theme {
 	/**
 	 * The theme name, usually same as the id
 	 *
-	 * @since 1.1.2
+	 * @since 1.2
 	 *
 	 * @var string
 	 */
@@ -31,7 +31,7 @@ class Theme {
 	/**
 	 * The theme's title (or Name in pure WP sense)
 	 *
-	 * @since 1.1.2
+	 * @since 1.2
 	 *
 	 * @var string
 	 */
@@ -40,7 +40,7 @@ class Theme {
 	/**
 	 * Theme's status, will either be active or inactive
 	 *
-	 * @since 1.1.2
+	 * @since 1.2
 	 *
 	 * @var string
 	 */
@@ -49,7 +49,7 @@ class Theme {
 	/**
 	 * Theme's version
 	 *
-	 * @since 1.1.2
+	 * @since 1.2
 	 *
 	 * @var string
 	 */
@@ -59,7 +59,7 @@ class Theme {
 	 * Whether there is an update available for the theme or not
 	 * will be either none or available
 	 *
-	 * @since 1.1.2
+	 * @since 1.2
 	 *
 	 * @var string
 	 */
@@ -68,7 +68,7 @@ class Theme {
 	/**
 	 * Theme's update version, will be either (undef) or the version
 	 *
-	 * @since 1.1.2
+	 * @since 1.2
 	 *
 	 * @var string
 	 */
@@ -77,7 +77,7 @@ class Theme {
 	/**
 	 * Theme's screenshot, an associative array of file and url
 	 *
-	 * @since 1.1.2
+	 * @since 1.2
 	 *
 	 * @var array
 	 */
@@ -86,7 +86,7 @@ class Theme {
 	/**
 	 * If Auto updates have been enabled for this theme
 	 *
-	 * @since 1.1.2
+	 * @since 1.2
 	 *
 	 * @var bool
 	 */
@@ -95,7 +95,7 @@ class Theme {
 	/**
 	 * Constructor
 	 *
-	 * @since 1.1.2
+	 * @since 1.2
 	 *
 	 * @param string   $stylesheet          The theme id
 	 * @param WP_Theme $theme               object to initialize our theme

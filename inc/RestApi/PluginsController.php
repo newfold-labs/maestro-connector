@@ -20,7 +20,7 @@ class PluginsController extends \WP_REST_Controller {
 	/**
 	 * The namespace of this controller's route.
 	 *
-	 * @since 1.1.2
+	 * @since 1.2
 	 *
 	 * @var string
 	 */
@@ -29,7 +29,7 @@ class PluginsController extends \WP_REST_Controller {
 	/**
 	 * The current Web Pro accessing the endpoint
 	 *
-	 * @since 1.1.2
+	 * @since 1.2
 	 *
 	 * @var WebPro
 	 */
@@ -38,7 +38,7 @@ class PluginsController extends \WP_REST_Controller {
 	/**
 	 * Registers the Plugins routes
 	 *
-	 * @since 1.1.2
+	 * @since 1.2
 	 */
 	public function register_routes() {
 
@@ -117,7 +117,7 @@ class PluginsController extends \WP_REST_Controller {
 	/**
 	 * Function to include the required classes and files
 	 *
-	 * @since 1.1.2
+	 * @since 1.2
 	 */
 	private function load_wp_classes_and_functions() {
 		if ( ! function_exists( 'get_plugin_data' ) ) {
@@ -158,7 +158,7 @@ class PluginsController extends \WP_REST_Controller {
 	 *
 	 * Returns a list of installed plugins with details and updates
 	 *
-	 * @since 1.1.2
+	 * @since 1.2
 	 *
 	 * @return WP_Rest_Response Returns a standard rest response with a list of plugins
 	 */
@@ -205,7 +205,7 @@ class PluginsController extends \WP_REST_Controller {
 	 *
 	 * Returns the plugin's version, status, slug
 	 *
-	 * @since 1.1.2
+	 * @since 1.2
 	 *
 	 * @param WP_REST_Request $request details about the plugin slug
 	 *
@@ -254,7 +254,7 @@ class PluginsController extends \WP_REST_Controller {
 	/**
 	 * Callback to toggle auto updates for a plugin with it's slug
 	 *
-	 * @since 1.1.2
+	 * @since 1.2
 	 *
 	 * @param WP_REST_Request $request details about the plugin slug
 	 *
@@ -296,7 +296,7 @@ class PluginsController extends \WP_REST_Controller {
 	/**
 	 * Callback to toggle auto updates for all plugins, only for BH sites
 	 *
-	 * @since 1.1.2
+	 * @since 1.2
 	 *
 	 * @param WP_REST_Request $request containing a boolean indicating on or off
 	 *
@@ -331,7 +331,7 @@ class PluginsController extends \WP_REST_Controller {
 	 *
 	 * Authenticating a Webpro user via token
 	 *
-	 * @since 1.1.2
+	 * @since 1.2
 	 *
 	 * @return boolean Whether to allow access to endpoint.
 	 */

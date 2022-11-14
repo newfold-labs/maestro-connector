@@ -20,7 +20,7 @@ class ThemesController extends \WP_REST_Controller {
 	/**
 	 * The namespace of this controller's route.
 	 *
-	 * @since 1.1.2
+	 * @since 1.2
 	 *
 	 * @var string
 	 */
@@ -29,7 +29,7 @@ class ThemesController extends \WP_REST_Controller {
 	/**
 	 * The current Web Pro accessing the endpoint
 	 *
-	 * @since 1.1.2
+	 * @since 1.2
 	 *
 	 * @var WebPro
 	 */
@@ -38,7 +38,7 @@ class ThemesController extends \WP_REST_Controller {
 	/**
 	 * Registers the Themes routes
 	 *
-	 * @since 1.1.2
+	 * @since 1.2
 	 */
 	public function register_routes() {
 
@@ -117,7 +117,7 @@ class ThemesController extends \WP_REST_Controller {
 	/**
 	 * Function to include the required classes and files
 	 *
-	 * @since 1.1.2
+	 * @since 1.2
 	 */
 	private function load_wp_classes_and_functions() {
 
@@ -157,7 +157,7 @@ class ThemesController extends \WP_REST_Controller {
 	/**
 	 * A function to get the theme object with slug
 	 *
-	 * @since 1.1.2
+	 * @since 1.2
 	 *
 	 * @param String $slug the theme's slug
 	 */
@@ -175,7 +175,7 @@ class ThemesController extends \WP_REST_Controller {
 	 *
 	 * Returns the theme's version, status, slug
 	 *
-	 * @since 1.1.2
+	 * @since 1.2
 	 *
 	 * @param WP_REST_Request $request details about the theme slug
 	 *
@@ -223,7 +223,7 @@ class ThemesController extends \WP_REST_Controller {
 	 * Returns a list of installed themes with id, name, title
 	 * status, version, update, update_version and screenshot
 	 *
-	 * @since 1.1.2
+	 * @since 1.2
 	 *
 	 * @return WP_Rest_Response Returns a standard rest response with a list of themes
 	 */
@@ -263,7 +263,7 @@ class ThemesController extends \WP_REST_Controller {
 	/**
 	 * Callback to toggle auto updates for a theme with it's slug
 	 *
-	 * @since 1.1.2
+	 * @since 1.2
 	 *
 	 * @param WP_REST_Request $request details about the theme slug
 	 *
@@ -302,7 +302,7 @@ class ThemesController extends \WP_REST_Controller {
 	/**
 	 * Callback to toggle auto updates for all themes, only for BH sites
 	 *
-	 * @since 1.1.2
+	 * @since 1.2
 	 *
 	 * @param WP_REST_Request $request containing a boolean indicating on or off
 	 *
@@ -337,7 +337,7 @@ class ThemesController extends \WP_REST_Controller {
 	 *
 	 * Authenticating a WebPro user via token
 	 *
-	 * @since 1.1.2
+	 * @since 1.2
 	 *
 	 * @return boolean Whether to allow access to endpoint.
 	 */
