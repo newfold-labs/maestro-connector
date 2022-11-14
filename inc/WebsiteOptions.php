@@ -10,7 +10,7 @@ class WebsiteOptions {
 	/**
 	 * Last updated timestamp
 	 *
-	 * @since 1.1.1
+	 * @since 1.2
 	 *
 	 * @var date
 	 */
@@ -19,7 +19,7 @@ class WebsiteOptions {
 	/**
 	 * Version of WordPress installed
 	 *
-	 * @since 1.1.1
+	 * @since 1.2
 	 *
 	 * @var string
 	 */
@@ -28,7 +28,7 @@ class WebsiteOptions {
 	/**
 	 * Latest available version of WordPress
 	 *
-	 * @since 1.1.1
+	 * @since 1.2
 	 *
 	 * @var string
 	 */
@@ -37,7 +37,7 @@ class WebsiteOptions {
 	/**
 	 * Latest available version of WordPress
 	 *
-	 * @since 1.1.1
+	 * @since 1.2
 	 *
 	 * @var UpdatesAvailable
 	 */
@@ -46,7 +46,7 @@ class WebsiteOptions {
 	/**
 	 * Constructor
 	 *
-	 * @since 1.1.1
+	 * @since 1.2
 	 */
 	public function __construct() {
 		// Trigger Update check

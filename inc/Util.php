@@ -5,7 +5,7 @@ namespace Bluehost\Maestro;
 /**
  * A utility class for generic functions to use across the codebase
  *
- * @since 1.1.1
+ * @since 1.2
  */
 class Util {
 	/**
@@ -32,7 +32,7 @@ class Util {
 	/**
 	 * A utility function to get the plugin file from plugin list
 	 *
-	 * @since 1.1.1
+	 * @since 1.2
 	 *
 	 * @param array  $installed_plugins the list of installed plugins
 	 * @param String $plugin_slug The slug for plugin

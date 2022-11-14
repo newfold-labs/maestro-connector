@@ -9,7 +9,7 @@ class Plugin {
 	/**
 	 * Plugin's slug
 	 *
-	 * @since 1.1.1
+	 * @since 1.2
 	 *
 	 * @var string
 	 */
@@ -18,7 +18,7 @@ class Plugin {
 	/**
 	 * Plugin's name
 	 *
-	 * @since 1.1.1
+	 * @since 1.2
 	 *
 	 * @var string
 	 */
@@ -28,7 +28,7 @@ class Plugin {
 	/**
 	 * Plugin's version
 	 *
-	 * @since 1.1.1
+	 * @since 1.2
 	 *
 	 * @var string
 	 */
@@ -37,7 +37,7 @@ class Plugin {
 	/**
 	 * Plugin's author
 	 *
-	 * @since 1.1.1
+	 * @since 1.2
 	 *
 	 * @var string
 	 */
@@ -46,7 +46,7 @@ class Plugin {
 	/**
 	 * Plugin's Author's URI
 	 *
-	 * @since 1.1.1
+	 * @since 1.2
 	 *
 	 * @var string
 	 */
@@ -55,7 +55,7 @@ class Plugin {
 	/**
 	 * Plugin's description
 	 *
-	 * @since 1.1.1
+	 * @since 1.2
 	 *
 	 * @var string
 	 */
@@ -64,7 +64,7 @@ class Plugin {
 	/**
 	 * Plugin's title
 	 *
-	 * @since 1.1.1
+	 * @since 1.2
 	 *
 	 * @var string
 	 */
@@ -73,7 +73,7 @@ class Plugin {
 	/**
 	 * Plugin's status, will either be active or inactive
 	 *
-	 * @since 1.1.1
+	 * @since 1.2
 	 *
 	 * @var bool
 	 */
@@ -82,7 +82,7 @@ class Plugin {
 	/**
 	 * If the Plugin is uninstallable
 	 *
-	 * @since 1.1.1
+	 * @since 1.2
 	 *
 	 * @var bool
 	 */
@@ -91,7 +91,7 @@ class Plugin {
 	/**
 	 * Plugin's auto-update toggle
 	 *
-	 * @since 1.1.1
+	 * @since 1.2
 	 *
 	 * @var bool
 	 */
@@ -100,7 +100,7 @@ class Plugin {
 	/**
 	 * Plugin Updates, if any
 	 *
-	 * @since 1.1.1
+	 * @since 1.2
 	 *
 	 * @var array
 	 */
@@ -109,7 +109,7 @@ class Plugin {
 	/**
 	 * Constructor
 	 *
-	 * @since 1.1.1
+	 * @since 1.2
 	 *
 	 * @param string $plugin_file         The plugin's file location
 	 * @param array  $plugin_update       The update for the plugin or null
