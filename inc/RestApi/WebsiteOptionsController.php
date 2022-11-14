@@ -8,6 +8,7 @@ use WP_REST_Response;
 
 use Bluehost\Maestro\WebsiteOptions;
 use Bluehost\Maestro\WebPro;
+use Bluehost\Maestro\Util;
 
 /**
  * Class WebsiteOptionsController
@@ -33,7 +34,7 @@ class WebsiteOptionsController extends \WP_REST_Controller {
 	private $webpro;
 
 	/**
-	 * Registers the Plugins routes
+	 * Registers the Website options routes
 	 *
 	 * @since 1.1.2
 	 */
@@ -66,6 +67,45 @@ class WebsiteOptionsController extends \WP_REST_Controller {
 	public function get_website_options() {
 		$website_options = new WebsiteOptions();
 		return new WP_Rest_Response( $website_options );
+	}
+
+	/**
+	 * Callback for setting the auto-update options for WordPress major and minor
+	 *
+	 * @since 1.1.2
+	 *
+	 * @param WP_REST_Request $request details about the theme slug
+	 *
+	 * @return WP_Rest_Response with the options after the update call
+	 */
+	public function toggle_wp_update_options( $request ) {
+
+		$util = new Util();
+		if ( ! $util->is_bluehost() ) {
+			return new WP_Rest_Response(
+				array(
+					'error' => 'Site needs to be on BH for this to work',
+					'code'  => 'notABHSite',
+				),
+				400
+			);
+		}
+
+		if ( ! function_exists( 'update_site_option' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/options.php';
+		}
+
+		$allow_major_auto_core_updates = $request['allow_major_auto_core_updates'];
+		$allow_minor_auto_core_updates = $request['allow_minor_auto_core_updates'];
+		update_site_option( 'allow_major_auto_core_updates', $allow_major_auto_core_updates );
+		update_site_option( 'allow_minor_auto_core_updates', $allow_minor_auto_core_updates );
+
+		return new WP_REST_Response(
+			array(
+				'allow_major_auto_core_updates' => get_option( 'allow_major_auto_core_updates' ),
+				'allow_minor_auto_core_updates' => get_option( 'allow_minor_auto_core_updates' ),
+			)
+		);
 	}
 
 	/**
