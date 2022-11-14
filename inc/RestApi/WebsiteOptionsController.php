@@ -17,7 +17,7 @@ class WebsiteOptionsController extends \WP_REST_Controller {
 	/**
 	 * The namespace of this controller's route.
 	 *
-	 * @since 1.1.1
+	 * @since 1.1.2
 	 *
 	 * @var string
 	 */
@@ -26,7 +26,7 @@ class WebsiteOptionsController extends \WP_REST_Controller {
 	/**
 	 * The current Web Pro accessing the endpoint
 	 *
-	 * @since 1.1.1
+	 * @since 1.1.2
 	 *
 	 * @var WebPro
 	 */
@@ -35,7 +35,7 @@ class WebsiteOptionsController extends \WP_REST_Controller {
 	/**
 	 * Registers the Plugins routes
 	 *
-	 * @since 1.1.1
+	 * @since 1.1.2
 	 */
 	public function register_routes() {
 
@@ -56,9 +56,10 @@ class WebsiteOptionsController extends \WP_REST_Controller {
 	/**
 	 * Callback for the plugins get endpoint
 	 *
-	 * Returns a list of installed plugins with details and updates
+	 * Returns general info about the current WordPress status like
+	 * last_updated, version, updates_available etc.
 	 *
-	 * @since 1.1.1
+	 * @since 1.1.2
 	 *
 	 * @return WP_Rest_Response Returns a standard rest response with a list of plugins
 	 */
@@ -72,7 +73,7 @@ class WebsiteOptionsController extends \WP_REST_Controller {
 	 *
 	 * Authenticating a WebPro user via token
 	 *
-	 * @since 1.1.1
+	 * @since 1.1.2
 	 *
 	 * @return boolean Whether to allow access to endpoint.
 	 */

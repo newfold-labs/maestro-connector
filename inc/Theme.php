@@ -13,7 +13,7 @@ class Theme {
 	/**
 	 * The id for the theme
 	 *
-	 * @since 1.1.1
+	 * @since 1.1.2
 	 *
 	 * @var string
 	 */
@@ -22,7 +22,7 @@ class Theme {
 	/**
 	 * The theme name, usually same as the id
 	 *
-	 * @since 1.1.1
+	 * @since 1.1.2
 	 *
 	 * @var string
 	 */
@@ -31,7 +31,7 @@ class Theme {
 	/**
 	 * The theme's title (or Name in pure WP sense)
 	 *
-	 * @since 1.1.1
+	 * @since 1.1.2
 	 *
 	 * @var string
 	 */
@@ -40,7 +40,7 @@ class Theme {
 	/**
 	 * Theme's status, will either be active or inactive
 	 *
-	 * @since 1.1.1
+	 * @since 1.1.2
 	 *
 	 * @var string
 	 */
@@ -49,7 +49,7 @@ class Theme {
 	/**
 	 * Theme's version
 	 *
-	 * @since 1.1.1
+	 * @since 1.1.2
 	 *
 	 * @var string
 	 */
@@ -59,7 +59,7 @@ class Theme {
 	 * Whether there is an update available for the theme or not
 	 * will be either none or available
 	 *
-	 * @since 1.1.1
+	 * @since 1.1.2
 	 *
 	 * @var string
 	 */
@@ -68,7 +68,7 @@ class Theme {
 	/**
 	 * Theme's update version, will be either (undef) or the version
 	 *
-	 * @since 1.1.1
+	 * @since 1.1.2
 	 *
 	 * @var string
 	 */
@@ -77,7 +77,7 @@ class Theme {
 	/**
 	 * Theme's screenshot, an associative array of file and url
 	 *
-	 * @since 1.1.1
+	 * @since 1.1.2
 	 *
 	 * @var array
 	 */
@@ -86,7 +86,7 @@ class Theme {
 	/**
 	 * If Auto updates have been enabled for this theme
 	 *
-	 * @since 1.1.1
+	 * @since 1.1.2
 	 *
 	 * @var bool
 	 */
@@ -95,25 +95,35 @@ class Theme {
 	/**
 	 * Constructor
 	 *
-	 * @since 1.1.1
+	 * @since 1.1.2
 	 *
-	 * @param string   $theme_id      The theme id
-	 * @param WP_Theme $theme         object to initialize our theme
-	 * @param array    $auto_updates  array of auto update options
-	 * @param array    $theme_updates array with info about theme updates
-	 * @param WP_Theme $current_theme current theme's object
+	 * @param string   $stylesheet          The theme id
+	 * @param WP_Theme $theme               object to initialize our theme
+	 * @param array    $theme_update        The updates for the theme
+	 * @param WP_Theme $current_theme       current theme's object
+	 * @param array    $auto_update_enabled array of auto update options
 	 */
-	public function __construct( $theme_id, $theme, $auto_updates, $theme_updates, $current_theme ) {
+	public function __construct( $stylesheet, $theme = null, $theme_update = null, $current_theme = null, $auto_update_enabled = null ) {
 
 		// Include theme functions
-		require_once ABSPATH . 'wp-admin/includes/theme.php';
+		if ( ! function_exists( 'wp_get_themes' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/theme.php';
+		}
 
-		$stylesheet     = $theme->get_stylesheet();
-		$update         = false;
-		$update_version = null;
-		if ( array_key_exists( $stylesheet, $theme_updates->response ) ) {
-			$update         = true;
-			$update_version = $themes_updates->response[ $stylesheet ]['new_version'];
+		if ( empty( $theme ) ) {
+			$theme = wp_get_theme( $stylesheet );
+		}
+
+		if ( is_null( $theme_update ) ) {
+			$theme_updates = get_site_transient( 'update_themes' );
+			if ( ! empty( $theme_updates->response[ $stylesheet ] ) ) {
+				$theme_update = $theme_updates->response[ $stylesheet ];
+			}
+		}
+
+		if ( empty( $auto_update_enabled ) ) {
+			$auto_update_themes  = (array) get_site_option( 'auto_update_themes', array() );
+			$auto_update_enabled = in_array( $stylesheet, $auto_update_themes, true );
 		}
 
 		$screenshot_url       = $theme->get_screenshot() ? $theme->get_screenshot() : 'none';
@@ -126,14 +136,14 @@ class Theme {
 		);
 
 		// Assign all the required values
-		$this->id                   = $theme_id;
-		$this->name                 = $theme_id;
+		$this->id                   = $stylesheet;
+		$this->name                 = $stylesheet;
 		$this->title                = $theme->display( 'Name' );
-		$this->status               = $theme->display( 'Name' ) === $current_theme->display( 'Name' ) ? 'active' : 'inactive';
+		$this->status               = $stylesheet === $current_theme->get_stylesheet() ? 'active' : 'inactive';
 		$this->version              = $theme->get( 'Version' );
-		$this->update               = $update;
-		$this->update_version       = $update_version;
+		$this->update               = ! empty( $theme_update );
+		$this->update_version       = ! empty( $theme_update ) ? $themes_update['new_version'] : null;
 		$this->screenshot           = $screenshot;
-		$this->auto_updates_enabled = in_array( $theme_id, $auto_updates, true );
+		$this->auto_updates_enabled = $auto_update_enabled;
 	}
 }

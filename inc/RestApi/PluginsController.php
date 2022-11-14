@@ -20,7 +20,7 @@ class PluginsController extends \WP_REST_Controller {
 	/**
 	 * The namespace of this controller's route.
 	 *
-	 * @since 1.1.1
+	 * @since 1.1.2
 	 *
 	 * @var string
 	 */
@@ -29,7 +29,7 @@ class PluginsController extends \WP_REST_Controller {
 	/**
 	 * The current Web Pro accessing the endpoint
 	 *
-	 * @since 1.1.1
+	 * @since 1.1.2
 	 *
 	 * @var WebPro
 	 */
@@ -38,7 +38,7 @@ class PluginsController extends \WP_REST_Controller {
 	/**
 	 * Registers the Plugins routes
 	 *
-	 * @since 1.1.1
+	 * @since 1.1.2
 	 */
 	public function register_routes() {
 
@@ -117,7 +117,7 @@ class PluginsController extends \WP_REST_Controller {
 	/**
 	 * Function to include the required classes and files
 	 *
-	 * @since 1.1.1
+	 * @since 1.1.2
 	 */
 	private function load_wp_classes_and_functions() {
 		if ( ! function_exists( 'get_plugin_data' ) ) {
@@ -158,7 +158,7 @@ class PluginsController extends \WP_REST_Controller {
 	 *
 	 * Returns a list of installed plugins with details and updates
 	 *
-	 * @since 1.1.1
+	 * @since 1.1.2
 	 *
 	 * @return WP_Rest_Response Returns a standard rest response with a list of plugins
 	 */
@@ -169,12 +169,22 @@ class PluginsController extends \WP_REST_Controller {
 		wp_update_plugins();
 
 		$installed_plugins = get_plugins();
-		$updates           = get_site_transient( 'update_plugins' );
-		$auto_updates      = get_option( 'auto_update_plugins' );
 		$plugins           = array();
+		$plugin_updates    = get_site_transient( 'update_plugins' );
+		$auto_updates      = (array) get_site_option( 'auto_update_plugins', array() );
 
-		foreach ( $installed_plugins as $plugin_slug => $plugin_details ) {
-			$plugin = new Plugin( $plugin_slug, $updates, $plugin_details, $auto_updates );
+		foreach ( $installed_plugins as $plugin_file => $plugin_details ) {
+			$plugin_update = array();
+			if ( ! empty( $plugin_updates->response[ $plugin_file ] ) ) {
+				$plugin_update = array(
+					'update_version'      => $plugin_updates->response[ $plugin_file ]->new_version,
+					'requires_wp_version' => $plugin_updates->response[ $plugin_file ]->requires,
+					'requires_php'        => $plugin_updates->response[ $plugin_file ]->requires_php,
+					'tested_wp_version'   => $plugin_updates->response[ $plugin_file ]->tested,
+					'last_updated'        => $plugin_updates->response[ $plugin_file ]->last_updated,
+				);
+			}
+			$plugin = new Plugin( $plugin_file, $plugin_update, $plugin_details, in_array( $plugin_file, $auto_updates, true ) );
 			array_push( $plugins, $plugin );
 		}
 
@@ -185,7 +195,7 @@ class PluginsController extends \WP_REST_Controller {
 			array(
 				'plugins'            => $plugins,
 				'auto_update_global' => $is_bluehost ? get_option( 'auto_update_plugin' ) : null,
-				'last_checked'       => $updates->last_checked,
+				'last_checked'       => $plugin_updates->last_checked,
 			)
 		);
 	}
@@ -195,7 +205,7 @@ class PluginsController extends \WP_REST_Controller {
 	 *
 	 * Returns the plugin's version, status, slug
 	 *
-	 * @since 1.1.1
+	 * @since 1.1.2
 	 *
 	 * @param WP_REST_Request $request details about the plugin slug
 	 *
@@ -244,7 +254,7 @@ class PluginsController extends \WP_REST_Controller {
 	/**
 	 * Callback to toggle auto updates for a plugin with it's slug
 	 *
-	 * @since 1.1.1
+	 * @since 1.1.2
 	 *
 	 * @param WP_REST_Request $request details about the plugin slug
 	 *
@@ -286,7 +296,7 @@ class PluginsController extends \WP_REST_Controller {
 	/**
 	 * Callback to toggle auto updates for all plugins, only for BH sites
 	 *
-	 * @since 1.1.1
+	 * @since 1.1.2
 	 *
 	 * @param WP_REST_Request $request containing a boolean indicating on or off
 	 *
@@ -321,7 +331,7 @@ class PluginsController extends \WP_REST_Controller {
 	 *
 	 * Authenticating a Webpro user via token
 	 *
-	 * @since 1.1.1
+	 * @since 1.1.2
 	 *
 	 * @return boolean Whether to allow access to endpoint.
 	 */

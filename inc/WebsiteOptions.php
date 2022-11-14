@@ -3,7 +3,7 @@
 namespace Bluehost\Maestro;
 
 /**
- * Class for managing Plugins
+ * Class for getting general info about the website and corresponding WordPress installation
  */
 class WebsiteOptions {
 

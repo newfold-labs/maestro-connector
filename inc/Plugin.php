@@ -111,29 +111,41 @@ class Plugin {
 	 *
 	 * @since 1.1.1
 	 *
-	 * @param string $slug           The plugin's slug
-	 * @param array  $plugin_updates The plugin updates site transient
-	 * @param array  $plugin_details The details for the plugin
-	 * @param array  $auto_updates   The auto updates option
+	 * @param string $plugin_file         The plugin's file location
+	 * @param array  $plugin_update       The update for the plugin or null
+	 * @param array  $plugin_details      The details for the plugin
+	 * @param array  $auto_update_enabled The auto updates option for this plugin
 	 */
-	public function __construct( $slug, $plugin_updates, $plugin_details, $auto_updates ) {
+	public function __construct( $plugin_file, $plugin_update = null, $plugin_details = null, $auto_update_enabled = null ) {
 		$update_info = array();
 
 		if ( ! function_exists( 'get_plugin_data' ) ) {
 			include_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 
-		if ( ! empty( $plugin_updates->response[ $slug ] ) ) {
-			$update_info = array(
-				'update_version'      => $plugin_updates->response[ $slug ]->new_version,
-				'requires_wp_version' => $plugin_updates->response[ $slug ]->requires,
-				'requires_php'        => $plugin_updates->response[ $slug ]->requires_php,
-				'tested_wp_version'   => $plugin_updates->response[ $slug ]->tested,
-				'last_updated'        => $plugin_updates->response[ $slug ]->last_updated,
-			);
+		if ( empty( $plugin_details ) ) {
+			$plugin_details = get_plugin_data( WP_PLUGIN_DIR . "/$plugin_file" );
 		}
 
-		$slug_split_array = explode( '/', $slug );
+		if ( is_null( $plugin_update ) ) {
+			$plugin_updates = get_site_transient( 'update_plugins' );
+			if ( ! empty( $plugin_updates->response[ $plugin_file ] ) ) {
+				$plugin_update = array(
+					'update_version'      => $plugin_updates->response[ $plugin_file ]->new_version,
+					'requires_wp_version' => $plugin_updates->response[ $plugin_file ]->requires,
+					'requires_php'        => $plugin_updates->response[ $plugin_file ]->requires_php,
+					'tested_wp_version'   => $plugin_updates->response[ $plugin_file ]->tested,
+					'last_updated'        => $plugin_updates->response[ $plugin_file ]->last_updated,
+				);
+			}
+		}
+
+		if ( empty( $auto_update_enabled ) ) {
+			$auto_update_plugins = (array) get_site_option( 'auto_update_plugins', array() );
+			$auto_update_enabled = in_array( $plugin_file, $auto_update_plugins, true );
+		}
+
+		$slug_split_array = explode( '/', $plugin_file );
 		$plugin_slug      = reset( $slug_split_array );
 
 		$this->slug                 = $plugin_slug;
@@ -143,9 +155,9 @@ class Plugin {
 		$this->author_uri           = $plugin_details['AuthorURI'];
 		$this->description          = $plugin_details['Description'];
 		$this->title                = $plugin_details['Title'];
-		$this->active               = is_plugin_active( $slug );
-		$this->uninstallable        = is_uninstallable_plugin( $slug );
-		$this->auto_updates_enabled = in_array( $slug, $auto_updates, true );
-		$this->update               = $update_info;
+		$this->active               = is_plugin_active( $plugin_file );
+		$this->uninstallable        = is_uninstallable_plugin( $plugin_file );
+		$this->auto_updates_enabled = $auto_update_enabled;
+		$this->update               = empty( $plugin_update ) ? null : $plugin_update;
 	}
 }
