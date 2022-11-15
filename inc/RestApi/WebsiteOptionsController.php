@@ -52,6 +52,28 @@ class WebsiteOptionsController extends \WP_REST_Controller {
 			)
 		);
 
+		register_rest_route(
+			$this->namespace,
+			'/website-options/toggle',
+			array(
+				array(
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => array( $this, 'toggle_wp_update_options' ),
+					'args'                => array(
+						'allow_major_auto_core_updates' => array(
+							'required' => true,
+							'type'     => 'boolean',
+						),
+						'allow_minor_auto_core_updates' => array(
+							'required' => true,
+							'type'     => 'boolean',
+						),
+					),
+					'permission_callback' => array( $this, 'check_permission' ),
+				),
+			)
+		);
+
 	}
 
 	/**
@@ -97,13 +119,13 @@ class WebsiteOptionsController extends \WP_REST_Controller {
 
 		$allow_major_auto_core_updates = $request['allow_major_auto_core_updates'];
 		$allow_minor_auto_core_updates = $request['allow_minor_auto_core_updates'];
-		update_site_option( 'allow_major_auto_core_updates', $allow_major_auto_core_updates );
-		update_site_option( 'allow_minor_auto_core_updates', $allow_minor_auto_core_updates );
+		update_site_option( 'allow_major_auto_core_updates', $allow_major_auto_core_updates ? 'true' : 'false' );
+		update_site_option( 'allow_minor_auto_core_updates', $allow_minor_auto_core_updates ? 'true' : 'false' );
 
 		return new WP_REST_Response(
 			array(
-				'allow_major_auto_core_updates' => get_option( 'allow_major_auto_core_updates' ),
-				'allow_minor_auto_core_updates' => get_option( 'allow_minor_auto_core_updates' ),
+				'allow_major_auto_core_updates' => get_site_option( 'allow_major_auto_core_updates' ) === 'true' ? true : false,
+				'allow_minor_auto_core_updates' => get_site_option( 'allow_minor_auto_core_updates' ) === 'true' ? true : false,
 			)
 		);
 	}
