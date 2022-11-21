@@ -275,7 +275,7 @@ class PluginsController extends \WP_REST_Controller {
 			$new_auto_updates = array_merge( $auto_updates, array( $plugin_file ) );
 		} else {
 			if ( $util->is_bluehost() ) {
-				update_site_option( 'auto_update_theme', 'false' );
+				update_site_option( 'auto_update_plugin', 'false' );
 			}
 			$new_auto_updates = array_diff( $auto_updates, array( $plugin_file ) );
 		}
