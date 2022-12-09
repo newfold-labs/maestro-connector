@@ -38,8 +38,6 @@ add_action(
 	}
 );
 
-// Other required files
-require __DIR__ . '/inc/sso.php';
 
 // Set up the activation redirect
 register_activation_hook( __FILE__, __NAMESPACE__ . '\\activate' );
@@ -47,7 +45,6 @@ add_action( 'admin_init', __NAMESPACE__ . '\\activation_redirect' );
 
 // Initialization hooks
 add_action( 'init', __NAMESPACE__ . '\\admin_init' );
-add_action( 'rest_api_init', __NAMESPACE__ . '\\rest_init' );
 
 /**
  * Plugin activation callback. Registers option to redirect on next admin load.

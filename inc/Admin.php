@@ -5,6 +5,8 @@ namespace Bluehost\Maestro;
 use Exception;
 use WP_Error;
 
+use NewfoldLabs\WP\Module\Maestro\Auth\WebPro;
+
 /**
  * Class for handling admin pages and functionality for the plugin
  *

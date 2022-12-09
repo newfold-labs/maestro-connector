@@ -9,19 +9,31 @@
       "email": "wearnhardt@gmail.com"
     }
   ],
-  "repositories": [
-    {
+  "repositories": {
+    "newfold": {
       "type": "composer",
-      "url": "https://bluehost.github.io/satis/"
+      "url": "https://newfold-labs.github.io/satis/",
+      "only": [
+        "newfold-labs/*"
+      ]
+    },
+    "bluehost": {    
+      "type": "composer",
+      "url": "https://bluehost.github.io/satis/",
+      "only": [
+        "bluehost/*",
+        "mojoness/*",
+        "endurance/*"
+      ]
     }
-  ],
+  },
   "autoload": {
     "psr-4": {
       "Bluehost\\Maestro\\": "inc/"
     }
   },
   "require": {
-    "firebase/php-jwt": "^5.0"
+    "newfold-labs/wp-module-maestro": "@stable"
   },
   "require-dev": {
     "bluehost/wp-php-standards": "^1.1"
