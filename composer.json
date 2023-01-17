@@ -10,13 +10,6 @@
     }
   ],
   "repositories": {
-    "maestro-module": {
-      "type": "path",
-      "url": "../wp-module-maestro/",
-      "options": {
-        "symlink": true
-      }
-    },
     "newfold": {
       "type": "composer",
       "url": "https://newfold-labs.github.io/satis/",
