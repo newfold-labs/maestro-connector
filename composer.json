@@ -10,20 +10,18 @@
     }
   ],
   "repositories": {
+    "maestro-module": {
+      "type": "path",
+      "url": "../wp-module-maestro/",
+      "options": {
+        "symlink": true
+      }
+    },
     "newfold": {
       "type": "composer",
       "url": "https://newfold-labs.github.io/satis/",
       "only": [
         "newfold-labs/*"
-      ]
-    },
-    "bluehost": {    
-      "type": "composer",
-      "url": "https://bluehost.github.io/satis/",
-      "only": [
-        "bluehost/*",
-        "mojoness/*",
-        "endurance/*"
       ]
     }
   },
@@ -33,15 +31,20 @@
     }
   },
   "require": {
-    "newfold-labs/wp-module-maestro": "^0.0.1"
+    "newfold-labs/wp-module-maestro": "@dev"
   },
   "require-dev": {
-    "bluehost/wp-php-standards": "^1.1"
+    "newfold-labs/wp-php-standards": "^1.1",
+    "wp-cli/i18n-command": "@stable",
+    "wp-cli/wp-cli-bundle": "@stable"
   },
   "config": {
     "optimize-autoloader": true,
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true
+    },
+    "platform": {
+      "php": "7.0.0"
     }
   },
   "scripts": {

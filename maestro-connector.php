@@ -46,6 +46,9 @@ add_action( 'admin_init', __NAMESPACE__ . '\\activation_redirect' );
 // Initialization hooks
 add_action( 'init', __NAMESPACE__ . '\\admin_init' );
 
+// Initialize the WP CLI
+add_action( 'init', __NAMESPACE__ . '\\cli_init' );
+
 /**
  * Plugin activation callback. Registers option to redirect on next admin load.
  *
@@ -90,6 +93,15 @@ function admin_init() {
 		return;
 	}
 	$admin = new Admin();
+}
+
+/**
+ * Initialize all the cli commands
+ *
+ * @since 1.1.2
+ */
+function cli_init() {
+	require __DIR__ . '/inc/WebProCliCommand.php';
 }
 
 /**
