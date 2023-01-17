@@ -42,10 +42,10 @@
   },
   "scripts": {
       "fix": [
-          "vendor/bin/phpcbf . --standard=Bluehost"
+          "vendor/bin/phpcbf . --standard=Newfold"
       ],
       "lint": [
-          "vendor/bin/phpcs . --standard=Bluehost -s"
+          "vendor/bin/phpcs . --standard=Newfold -s"
       ]
   },
   "scripts-descriptions": {
