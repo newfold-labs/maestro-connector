@@ -1,10 +1,10 @@
 === Maestro Connector ===
 Contributors: bluehost, earnjam, dryanpress, wpscholar
 Tags: security, authentication, sso, site-management
-Requires at least: 4.7
-Tested up to: 6.0
-Stable tag: 1.1.1
-Requires PHP: 5.3
+Requires at least: 5.7
+Tested up to: 6.1
+Stable tag: 1.2.0
+Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,6 +44,13 @@ You can always do this by going to the ‘Users’ section from the left hand na
 
 
 == Changelog ==
+
+= 1.2.0 =
+* Move the maestro functionalities to wp-module-maestro
+* Add theme management APIs
+* Add plugin management APIs
+* Add wordpress management APIs in conjunction with bluehost plugin for managing auto-updates etc.
+* Add a WP-CLI command to associate a web pro with the association key.
 
 = 1.1.1 =
 * Add support for a bounce parameter on SSO logins

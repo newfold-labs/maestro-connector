@@ -9,35 +9,43 @@
       "email": "wearnhardt@gmail.com"
     }
   ],
-  "repositories": [
-    {
+  "repositories": {
+    "newfold": {
       "type": "composer",
-      "url": "https://bluehost.github.io/satis/"
+      "url": "https://newfold-labs.github.io/satis/",
+      "only": [
+        "newfold-labs/*"
+      ]
     }
-  ],
+  },
   "autoload": {
     "psr-4": {
       "Bluehost\\Maestro\\": "inc/"
     }
   },
   "require": {
-    "firebase/php-jwt": "^5.0"
+    "newfold-labs/wp-module-maestro": "^1.0"
   },
   "require-dev": {
-    "bluehost/wp-php-standards": "^1.1"
+    "newfold-labs/wp-php-standards": "^1.1",
+    "wp-cli/i18n-command": "@stable",
+    "wp-cli/wp-cli-bundle": "@stable"
   },
   "config": {
     "optimize-autoloader": true,
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true
+    },
+    "platform": {
+      "php": "7.0.0"
     }
   },
   "scripts": {
       "fix": [
-          "vendor/bin/phpcbf . --standard=Bluehost"
+          "vendor/bin/phpcbf . --standard=Newfold"
       ],
       "lint": [
-          "vendor/bin/phpcs . --standard=Bluehost -s"
+          "vendor/bin/phpcs . --standard=Newfold -s"
       ]
   },
   "scripts-descriptions": {

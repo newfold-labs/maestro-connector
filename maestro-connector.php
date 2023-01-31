@@ -2,9 +2,9 @@
 /**
  * Plugin Name: Maestro Connector
  * Description: Give trusted web professionals admin access to your WordPress account. Revoke anytime.
- * Version: 1.1.1
- * Requires at least: 4.7
- * Requires PHP: 5.4
+ * Version: 1.2.0
+ * Requires at least: 5.7
+ * Requires PHP: 7.0
  * Author: Bluehost
  * Author URI: https://www.bluehost.com/
  * Text Domain: maestro-connector
@@ -17,7 +17,7 @@
 
 namespace Bluehost\Maestro;
 
-define( 'MAESTRO_VERSION', '1.1.1' );
+define( 'MAESTRO_VERSION', '1.2.0' );
 define( 'MAESTRO_FILE', __FILE__ );
 define( 'MAESTRO_PATH', plugin_dir_path( __FILE__ ) );
 define( 'MAESTRO_URL', plugin_dir_url( __FILE__ ) );
@@ -38,8 +38,6 @@ add_action(
 	}
 );
 
-// Other required files
-require __DIR__ . '/inc/sso.php';
 
 // Set up the activation redirect
 register_activation_hook( __FILE__, __NAMESPACE__ . '\\activate' );
@@ -47,7 +45,9 @@ add_action( 'admin_init', __NAMESPACE__ . '\\activation_redirect' );
 
 // Initialization hooks
 add_action( 'init', __NAMESPACE__ . '\\admin_init' );
-add_action( 'rest_api_init', __NAMESPACE__ . '\\rest_init' );
+
+// Initialize the WP CLI
+add_action( 'init', __NAMESPACE__ . '\\cli_init' );
 
 /**
  * Plugin activation callback. Registers option to redirect on next admin load.
@@ -93,6 +93,15 @@ function admin_init() {
 		return;
 	}
 	$admin = new Admin();
+}
+
+/**
+ * Initialize all the cli commands
+ *
+ * @since 1.1.2
+ */
+function cli_init() {
+	require __DIR__ . '/inc/WebProCliCommand.php';
 }
 
 /**
