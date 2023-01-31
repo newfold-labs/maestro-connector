@@ -24,7 +24,7 @@
     }
   },
   "require": {
-    "newfold-labs/wp-module-maestro": "@dev"
+    "newfold-labs/wp-module-maestro": "^1.0"
   },
   "require-dev": {
     "newfold-labs/wp-php-standards": "^1.1",
