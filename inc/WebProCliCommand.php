@@ -11,6 +11,8 @@ use NewfoldLabs\WP\Module\Maestro\Auth\WebPro;
 
 /**
  * Implements the webPro association as a WP CLI command
+ *
+ * @since 1.2.0
  */
 $associate_command = function ( $args, $assoc_args ) {
 	list( $secret_key ) = $args;
