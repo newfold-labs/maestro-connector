@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "60b8a10940a44beed669a13bbd1e5f9c",
+    "content-hash": "261d3594d96fe3d3377d6e06bd85ec8c",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -149,16 +149,16 @@
         },
         {
             "name": "newfold-labs/wp-module-maestro",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/newfold-labs/wp-module-maestro.git",
-                "reference": "2e12172dda0641ffa4d29799d5c2353b139767c9"
+                "reference": "b811e41963dda6916a79e464621873fe15043d81"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/newfold-labs/wp-module-maestro/zipball/2e12172dda0641ffa4d29799d5c2353b139767c9",
-                "reference": "2e12172dda0641ffa4d29799d5c2353b139767c9",
+                "url": "https://api.github.com/repos/newfold-labs/wp-module-maestro/zipball/b811e41963dda6916a79e464621873fe15043d81",
+                "reference": "b811e41963dda6916a79e464621873fe15043d81",
                 "shasum": ""
             },
             "require": {
@@ -196,10 +196,10 @@
             ],
             "description": "Maestro Newfold module for WordPress",
             "support": {
-                "source": "https://github.com/newfold-labs/wp-module-maestro/tree/1.0.1",
+                "source": "https://github.com/newfold-labs/wp-module-maestro/tree/1.0.2",
                 "issues": "https://github.com/newfold-labs/wp-module-maestro/issues"
             },
-            "time": "2023-02-01T21:34:56+00:00"
+            "time": "2023-02-03T01:06:23+00:00"
         },
         {
             "name": "wp-forge/collection",
