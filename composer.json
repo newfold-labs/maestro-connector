@@ -27,7 +27,7 @@
     "newfold-labs/wp-module-maestro": "^1.0.2"
   },
   "require-dev": {
-    "newfold-labs/wp-php-standards": "^1.1",
+    "newfold-labs/wp-php-standards": "^1.2",
     "wp-cli/i18n-command": "@stable",
     "wp-cli/wp-cli-bundle": "@stable"
   },
