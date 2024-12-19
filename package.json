@@ -20,7 +20,7 @@
   "homepage": "https://github.com/bluehost/wp-maestro#readme",
   "devDependencies": {
     "husky": "^4.2.5",
-    "lint-staged": "^10.2.0",
+    "lint-staged": "^15.2.11",
     "node-wp-i18n": "^1.2.3",
     "yaml-lint": "^1.2.4"
   },
