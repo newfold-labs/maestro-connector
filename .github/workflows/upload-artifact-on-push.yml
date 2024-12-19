@@ -76,7 +76,7 @@ jobs:
       - name: List Files
         run: ls -lah
 
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.package.outputs.PACKAGE }}
           path: ./
