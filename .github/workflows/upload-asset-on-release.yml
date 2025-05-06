@@ -13,7 +13,7 @@ jobs:
     steps:
 
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Set Package Name
         id: package
@@ -25,7 +25,7 @@ jobs:
         run: php --version
 
       - name: Set Node.js 12.x
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4.3.0
         with:
           node-version: 12.x
 
@@ -40,7 +40,7 @@ jobs:
         run: echo "dir=$(npm config get cache)" >> $GITHUB_OUTPUT
 
       - name: Cache node modules
-        uses: actions/cache@v4
+        uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
         with:
           path: ${{ steps.npm-cache.outputs.dir }}
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -61,7 +61,7 @@ jobs:
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache Composer vendor directory
-        uses: actions/cache@v1
+        uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -82,7 +82,7 @@ jobs:
 
       - name: Upload Release Asset
         id: upload-release-asset
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5 # v1.0.21
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
