@@ -4,10 +4,17 @@ on:
     types:
       - created
       - edited
+
+# Disable permissions for all available scopes by default.
+# Any needed permissions should be configured at the job level.
+permissions: {}
+
 jobs:
   tag:
     name: New tag
     runs-on: ubuntu-latest
+    permissions:
+      contents: read # Required to check out the repository. The plugin deploy action publishes to WordPress.org SVN using SVN_USERNAME/SVN_PASSWORD secrets (no GitHub API usage).
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Build
