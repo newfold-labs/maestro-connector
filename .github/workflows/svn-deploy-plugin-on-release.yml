@@ -13,6 +13,7 @@ jobs:
   tag:
     name: New tag
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     permissions:
       contents: read # Required to check out the repository. The plugin deploy action publishes to WordPress.org SVN using SVN_USERNAME/SVN_PASSWORD secrets (no GitHub API usage).
     steps:

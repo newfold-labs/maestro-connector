@@ -14,6 +14,7 @@ jobs:
   build:
     name: On Release
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     permissions:
       contents: write # Required by actions/upload-release-asset to upload the built zip to the GitHub release via the Releases API.
     steps:

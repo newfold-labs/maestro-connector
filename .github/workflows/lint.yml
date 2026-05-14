@@ -18,6 +18,7 @@ permissions: {}
 jobs:
   phpcs:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       contents: read # Required to check out the repository.
     steps:

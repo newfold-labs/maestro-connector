@@ -15,6 +15,7 @@ jobs:
   master:
     name: Push to master
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       contents: read # Required to check out the repository. The asset updater pushes to WordPress.org SVN using SVN_USERNAME/SVN_PASSWORD secrets (no GitHub API usage).
     steps:

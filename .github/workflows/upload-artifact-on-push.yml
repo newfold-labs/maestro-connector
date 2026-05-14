@@ -13,6 +13,7 @@ jobs:
   build:
     name: On Push to Master
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     permissions:
       contents: read # Required to check out the repository. actions/upload-artifact uses the Actions runtime API (not GITHUB_TOKEN) and needs no additional scopes.
     steps:
