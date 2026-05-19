@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/bluehost/wp-maestro#readme",
   "devDependencies": {
-    "husky": "^4.2.5",
+    "husky": "^4.3.8",
     "lint-staged": "^10.2.0",
     "node-wp-i18n": "^1.2.3",
     "yaml-lint": "^1.2.4"
